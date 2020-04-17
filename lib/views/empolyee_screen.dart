@@ -1,58 +1,86 @@
-import 'dart:io';
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'modal.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:geolocator/geolocator.dart';
+import '../views/bt_nav_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:intl/intl.dart';
-import 'package:device_info/device_info.dart';
+import 'package:flutter/services.dart';
+import 'dart:async';
+import 'dart:io' show Platform;
+import 'package:device_id/device_id.dart';
+import 'package:flutter/services.dart';
 
-final oCcy = new NumberFormat("#,##0.00", "en_US");
+final _kanit = 'Kanit';
 
 class EmployeeScreen extends StatefulWidget {
+  Map<String, dynamic> message;
+  EmployeeScreen({Key key, this.message}) : super(key: key);
+
   @override
   _EmployeeScreenState createState() => _EmployeeScreenState();
 }
 
 class _EmployeeScreenState extends State<EmployeeScreen> {
-  double distance;
-  String latitude = '';
-  String longtitude = '';
-  String place = '';
+  var latitude = '';
+  var place = '';
+  var longtitude = '';
+  var loctionID = '';
+  var far = '';
+  SharedPreferences sharedPreferences;
+  String _deviceid = 'Unknown';
+  String platform;
+  var message;
 
-  Modal modal = Modal();
+  setMessage() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    Map<String, dynamic> msg = jsonDecode(sharedPreferences.getString('userMsg'));
+    setState(() {
+      message = msg;
 
-  modalPlace() {
-    print('place');
+      
+    });
+    // print('msgUser: $msg');
   }
 
-  void _calDistance() async {
-    double distanceInMeters = await Geolocator().distanceBetween(13.7073418,
-        100.3539335, double.parse(latitude), double.parse(longtitude));
+  Future<void> initDeviceId() async {
+    String deviceid;
+    String imei;
+    String meid;
 
-    print(distanceInMeters);
-    Alert(
-      context: context,
-      type: AlertType.success,
-      title: "Distance",
-      desc: '${oCcy.format(distanceInMeters)} Meters',
-      buttons: [
-        DialogButton(
-          child: Text(
-            "OK",
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-          onPressed: () => Navigator.pop(context),
-          width: 120,
-        )
-      ],
-    ).show();
+    deviceid = await DeviceId.getID;
+    try {
+      imei = await DeviceId.getIMEI;
+      meid = await DeviceId.getMEID;
+    } on PlatformException catch (e) {
+      print(e.message);
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _deviceid = '$deviceid';
+    });
   }
 
-  selectPlace() {
-    print('select place');
+  getPT() {
+    if (Platform.isAndroid) {
+      setState(() {
+        platform = '1';
+      });
+    } else if (Platform.isIOS) {
+      setState(() {
+        platform = '2';
+      });
+    }else{
+      setState(() {
+        platform = 'unknow';
+      });
+    }
+  }
+
+  selectPlace(BuildContext context) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -64,9 +92,12 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              _createTile(context, 'Rinma', _rinma),
-              _createTile(context, 'Vichaivej', _vichaivej),
-              _createTile(context, 'Barrain', _barrain),
+              _createTile(
+                  context, widget.message['locationList'][0]['name'], _action1),
+              _createTile(
+                  context, widget.message['locationList'][1]['name'], _action2),
+              _createTile(
+                  context, widget.message['locationList'][2]['name'], _action3),
             ],
           );
         });
@@ -82,227 +113,244 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     );
   }
 
-  alert({distanses}) {
-    Alert(
-      context: context,
-      type: AlertType.success,
-      title: "Distance",
-      desc: '$distanses',
-      buttons: [
-        DialogButton(
-          child: Text(
-            "OK",
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-          onPressed: () => Navigator.pop(context),
-          width: 120,
-        )
-      ],
-    ).show();
-  }
 
-  _rinma() {
-    print('rinnma');
+  _action1() {
+    print(widget.message['locationList'][0]['name']);
     setState(() {
-      place = 'RINMA';
-      latitude = '13.705741';
-      longtitude = '100.3403874';
+      place = widget.message['locationList'][0]['name'];
+      latitude = widget.message['locationList'][0]['latitude'].toString();
+      longtitude = widget.message['locationList'][0]['longitude'].toString();
+      loctionID = widget.message['locationList'][0]['modelid'].toString();
+      far = widget.message['locationList'][0]['far'].toString();
     });
   }
 
-  _vichaivej() {
-    print('vichaiveg');
+  _action2() {
+    print(widget.message['locationList'][1]['name']);
     setState(() {
-      place = 'VICHAIVEJ';
-      latitude = '13.7074712';
-      longtitude = '100.3584725';
+      place = widget.message['locationList'][1]['name'];
+      latitude = widget.message['locationList'][1]['latitude'].toString();
+      longtitude = widget.message['locationList'][1]['longitude'].toString();
+      loctionID = widget.message['locationList'][1]['modelid'].toString();
+      far = widget.message['locationList'][1]['far'].toString();
     });
   }
 
-  _barrain() {
-    print('barrain');
+  _action3() {
+    print(widget.message['locationList'][2]['name']);
     setState(() {
-      place = 'BARRAIN';
-      latitude = '13.7076624';
-      longtitude = '100.3622219';
+      place = widget.message['locationList'][2]['name'];
+      latitude = widget.message['locationList'][2]['latitude'].toString();
+      longtitude = widget.message['locationList'][2]['longitude'].toString();
+      loctionID = widget.message['locationList'][2]['modelid'].toString();
+      far = widget.message['locationList'][2]['far'].toString();
     });
+  }
+
+  _checkin() async {
+    int fars = int.parse(far);
+    var userID = widget.message['cwiUser']['employeeId'];
+    print(loctionID);
+    if (fars <= 50) {
+      var data = {
+        'userId': userID,
+        'deviceId': '$_deviceid',
+        'osMobile': '$platform',
+        'locationId': loctionID,
+      };
+
+      var url = 'http://159.138.232.139/service/cwi/v1/user/checkin';
+
+      var response = await http.post(
+        url,
+        body: json.encode(data),
+        headers: {
+          "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+          "Content-Type": "application/json"
+        },
+      );
+      Map<String, dynamic> message = jsonDecode(response.body);
+      print(widget.message);
+      Alert(
+        context: context,
+        type: AlertType.success,
+        title: "",
+        desc: "บันทึกสำเร็จ",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "ตกลง",
+              style: TextStyle(
+                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            width: 120,
+          )
+        ],
+      ).show();
+    } else {
+      Alert(
+        context: context,
+        type: AlertType.error,
+        title: "",
+        desc: "บันทึกไม่สำเร็จ",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "ตกลง",
+              style: TextStyle(
+                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            width: 120,
+          )
+        ],
+      ).show();
+    }
+  }
+
+  _checkout() async {
+    int fars = int.parse(far);
+    var userID = message['cwiUser']['employeeId'];
+    print(loctionID);
+    if (fars <= 50) {
+      var data = {
+        'userId': userID,
+        'deviceId': '$_deviceid',
+        'osMobile': '$platform',
+        'locationId': loctionID,
+      };
+
+      var url = 'http://159.138.232.139/service/cwi/v1/user/checkout';
+
+      var response = await http.post(
+        url,
+        body: json.encode(data),
+        headers: {
+          "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+          "Content-Type": "application/json"
+        },
+      );
+      Map<String, dynamic> message = jsonDecode(response.body);
+      print(widget.message);
+      Alert(
+        context: context,
+        type: AlertType.success,
+        title: "",
+        desc: "บันทึกสำเร็จ",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "ตกลง",
+              style: TextStyle(
+                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            width: 120,
+          )
+        ],
+      ).show();
+    } else {
+      Alert(
+        context: context,
+        type: AlertType.error,
+        title: "",
+        desc: "บันทึกไม่สำเร็จ",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "ตกลง",
+              style: TextStyle(
+                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            width: 120,
+          )
+        ],
+      ).show();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initDeviceId();
+    getPT();
+    latitude = message['locationList'][0]['latitude'].toString();
+    longtitude = message['locationList'][0]['longitude'].toString();
+    place = message['locationList'][0]['name'].toString();
+    // setMessage();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+      child: Scaffold(
         appBar: AppBar(
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(
-                'Today',
-                textAlign: TextAlign.center,
-              ),
+              Text('Today'),
               IconButton(
-                icon: Icon(
-                  Icons.location_on,
-                  color: Colors.white,
-                ),
-                onPressed: selectPlace,
+                onPressed: () => selectPlace(context),
+                icon: Icon(Icons.location_on),
               ),
             ],
           ),
-          centerTitle: true,
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(),
-            
-Padding(
-  padding: const EdgeInsets.only(top: 20, bottom: 50),
-  child: Container(
-    child: Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            GestureDetector( 
-              onTap: _calDistance,
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.green,
-                ),
-                child: Icon(
-                  FontAwesomeIcons.arrowAltCircleDown,
-                  size: 80,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            SizedBox(width: 20),
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.red,
-              ),
-              child: Icon(
-                FontAwesomeIcons.arrowAltCircleDown,
-                size: 80,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 30),
-        Text(place),
-        SizedBox(height: 10),
-        Text('$latitude / $longtitude'),
-      ],
-    ),
-  ),
-),
-
-          ],
-        ));
-  }
-}
-
-class deviceInfo extends StatefulWidget {
-  @override
-  _deviceInfoState createState() => _deviceInfoState();
-}
-
-class _deviceInfoState extends State<deviceInfo> {
-  static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-  Map<String, dynamic> _deviceData = <String, dynamic>{};
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  Future<void> initPlatformState() async {
-    Map<String, dynamic> deviceData;
-
-    try {
-      if (Platform.isAndroid) {
-        deviceData = _readAndroidBuildData(await deviceInfoPlugin.androidInfo);
-      } else if (Platform.isIOS) {
-        deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
-      }
-    } on PlatformException {
-      deviceData = <String, dynamic>{
-        'Error:': 'Failed to get platform version.'
-      };
-    }
-
-    if (!mounted) return;
-
-    setState(() {
-      _deviceData = deviceData;
-    });
-  }
-
-  Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
-    return <String, dynamic>{
-      'id': build.id,
-      'model': build.model,
-    };
-  }
-
-  Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
-    return <String, dynamic>{
-      'name': data.name,
-      'systemName': data.systemName,
-      'systemVersion': data.systemVersion,
-      'model': data.model,
-      'localizedModel': data.localizedModel,
-      'identifierForVendor': data.identifierForVendor,
-      'isPhysicalDevice': data.isPhysicalDevice,
-      'utsname.sysname:': data.utsname.sysname,
-      'utsname.nodename:': data.utsname.nodename,
-      'utsname.release:': data.utsname.release,
-      'utsname.version:': data.utsname.version,
-    };
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      child: ListView(
-        children: _deviceData.keys.map(
-          (String property) {
-            return Column(
+            Column(
               children: <Widget>[
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text(
-                        property,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: _checkin,
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.green,
+                        ),
+                        child: Icon(
+                          FontAwesomeIcons.arrowAltCircleDown,
+                          size: 80,
+                          color: Colors.white,
                         ),
                       ),
                     ),
-                    Expanded(
-                        child: Container(
-                      padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
-                      child: Text(
-                        '${_deviceData[property]}',
-                        maxLines: 10,
-                        overflow: TextOverflow.ellipsis,
+                    SizedBox(width: 20),
+                    GestureDetector(
+                      onTap: _checkout,
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red,
+                        ),
+                        child: Icon(
+                          FontAwesomeIcons.arrowAltCircleDown,
+                          size: 80,
+                          color: Colors.white,
+                        ),
                       ),
-                    )),
+                    ),
                   ],
                 ),
+                SizedBox(height: 30),
+                Text(place),
+                SizedBox(height: 10),
+                Text('$latitude / $longtitude'),
+                SizedBox(height: 50),
               ],
-            );
-          },
-        ).toList(),
+            ),
+          ],
+        ),
       ),
     );
   }

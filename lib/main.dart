@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:workcheckin/views/json_demo.dart';
+import 'package:workcheckin/views/leave_screen.dart';
 import 'package:workcheckin/views/splash_screen.dart';
 
 void main() => runApp(MyApp());

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:workcheckin/views/empolyee_screen.dart';
+import 'package:workcheckin/views/bt_nav_bar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:workcheckin/views/empolyee_screen.dart';
+import 'package:workcheckin/views/home_screen.dart';
+
+final String _kanit = 'kanit';
 
 class SigninScreen extends StatefulWidget {
   @override
@@ -15,7 +20,9 @@ class _SigninScreenState extends State<SigninScreen> {
   TextEditingController _password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool securePWD = true;
-
+  var userMsg;
+  SharedPreferences sharedPreferences;
+  
   showPWD() {
     if (securePWD) {
       setState(() {
@@ -28,7 +35,14 @@ class _SigninScreenState extends State<SigninScreen> {
     }
   }
 
-  String msg = '';
+  var locationlist;
+  var msg;
+
+  getUserMsg(){
+    var msg = sharedPreferences.getString('userMsg');
+    print('pref: $msg');
+  }
+
   Future _login() async {
     String user = _username.text.trim();
     String pass = _password.text;
@@ -37,31 +51,57 @@ class _SigninScreenState extends State<SigninScreen> {
       var url = 'http://159.138.232.139/service/cwi/v1/user/login';
       var data = {'username': user, 'password': pass};
 
-    var response = await http.post(
-      url,
-      body: json.encode(data),
-      headers: {
-        "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-        "Content-Type": "application/json"
-      },
-    );
+      var response = await http.post(
+        url,
+        body: json.encode(data),
+        headers: {
+          "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+          "Content-Type": "application/json"
+        },
+      );
 
-    Map<String, dynamic> message = jsonDecode(response.body);
-    print('$url, $data');
-    var msg = message['responseCode'];
-    print('$msg');
+      Map<String, dynamic> message = jsonDecode(response.body);
 
-    if (msg == '000') {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => EmployeeScreen()));
-    } else {
-      print('error');
-    }
+      sharedPreferences = await SharedPreferences.getInstance();
+      setState(() {
+        sharedPreferences.setString('userMsg', jsonEncode(message));
+      });
+
+      
+
+      var msg = message['responseCode'];
+      setState(() {
+        locationlist = message;
+      });
+
+      if (msg == '000') {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(message: message)));
+      } else {
+        print('error');
+        Alert(
+          context: context,
+          type: AlertType.error,
+          title: "",
+          desc: "พบข้อผิดพลาดกรุณาทำรายการใหม่",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            )
+          ],
+        ).show();
+      }
     } catch (e) {
       print('message error: $e');
     }
-
-    
   }
 
   @override
@@ -76,14 +116,16 @@ class _SigninScreenState extends State<SigninScreen> {
             SingleChildScrollView(
               child: Column(
                 children: <Widget>[
+                  SizedBox(height: 20),
                   Image.asset(
-                    'assets/images/ecorp-lightblue.png',
+                    'assets/images/logo.png',
                     height: 200,
                   ),
-                  Text(
-                    'ECORP',
-                    style: TextStyle(fontSize: 50.0, color: Colors.white),
-                  ),
+                  SizedBox(height: 20),
+                  // Text(
+                  //   'ECORP',
+                  //   style: TextStyle(fontSize: 50.0, color: Colors.white),
+                  // ),
                   Padding(
                     padding: const EdgeInsets.only(left: 30, right: 30),
                     child: Card(
@@ -208,6 +250,10 @@ class _SigninScreenState extends State<SigninScreen> {
                             onPressed: _login,
                           ),
                           SizedBox(height: 20),
+                          RaisedButton(
+                            child: Text('aa'),
+                            onPressed: getUserMsg,
+                          ),
                         ],
                       ),
                     ),
