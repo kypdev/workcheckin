@@ -34,7 +34,6 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
   var message;
 
   setMessage() async {
-    print('setmessaage');
     sharedPreferences = await SharedPreferences.getInstance();
     Map<String, dynamic> msg = jsonDecode(sharedPreferences.getString('userMsg'));
     setState(() {
@@ -42,7 +41,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 
       
     });
-    print(message['locationList'][0]);
+    // print('msgUser: $msg');
   }
 
   Future<void> initDeviceId() async {
@@ -116,7 +115,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 
 
   _action1() {
-    print(widget.message['locationList'][2]['name']);
+    print(widget.message['locationList'][0]['name']);
     setState(() {
       place = widget.message['locationList'][0]['name'];
       latitude = widget.message['locationList'][0]['latitude'].toString();
@@ -212,7 +211,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 
   _checkout() async {
     int fars = int.parse(far);
-    var userID = widget.message['cwiUser']['employeeId'];
+    var userID = message['cwiUser']['employeeId'];
     print(loctionID);
     if (fars <= 50) {
       var data = {
@@ -277,9 +276,9 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     super.initState();
     initDeviceId();
     getPT();
-    latitude = widget.message['locationList'][0]['latitude'].toString();
-    longtitude = widget.message['locationList'][0]['longitude'].toString();
-    place = widget.message['locationList'][0]['name'].toString();
+    latitude = message['locationList'][0]['latitude'].toString();
+    longtitude = message['locationList'][0]['longitude'].toString();
+    place = message['locationList'][0]['name'].toString();
     // setMessage();
   }
 
@@ -303,10 +302,6 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(),
-            RaisedButton(
-              child: Text('aaa'),
-              onPressed: setMessage,
-            ),
             Column(
               children: <Widget>[
                 Row(
