@@ -17,29 +17,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
   var employee = 'พนักงาน';
   SharedPreferences sharedPreferences;
   var message;
-  
-
-  ListTile _createTile(BuildContext context, String name, Function action) {
-    return ListTile(
-      title: Text(name),
-      onTap: () {
-        Navigator.pop(context);
-        action();
-      },
-    );
-  }
-
-  _action1() {
-    setState(() {
-      employee = 'พนักงาน';
-    });
-  }
-
-  _action2() {
-    setState(() {
-      employee = 'หัวหน้า';
-    });
-  }
 
   getMsg() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -144,8 +121,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
     print(msg['trnLeaveList']);
   }
 
-  
-
   @override
   void initState() {
     getMsg();
@@ -166,32 +141,41 @@ class _HistoryScreenState extends State<HistoryScreen> {
           centerTitle: true,
         ),
         body: FutureBuilder(
-                future: _getLeave(),
-                builder: (BuildContext context, AsyncSnapshot snapshot){
-                  if(snapshot.data == null){
-                    return Center(
-              child: Visibility(
-                visible: true,
-                child: CircularProgressIndicator(),
-              ),
-            );
-                  }else{
-                    return ListView.builder(
-                      itemCount:  snapshot.data.length,
-                      itemBuilder: (BuildContext context, int index){
-                        return cardHistory(
-                          leaveDate: snapshot.data[index].leaveDate.toString().substring(0, 9),
-                          leaveHour: snapshot.data[index].leaveHour.toString(),
-                          remark: snapshot.data[index].remark.toString(),
-                          approveFlag: snapshot.data[index].approveFlag.toString() == 'null' ? 'รอการอนุมัติ' : '',
-                          approveRejectDate: snapshot.data[index].approveRejectDate.toString() == 'null' ? '' : '()',
-                          id: snapshot.data[index].modelid,
-                        );
-                      },
-                    );
-                  }
+          future: _getLeave(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.data == null) {
+              return Center(
+                child: Visibility(
+                  visible: true,
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            } else {
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return cardHistory(
+                    leaveDate: snapshot.data[index].leaveDate
+                        .toString()
+                        .substring(0, 9),
+                    leaveHour: snapshot.data[index].leaveHour.toString(),
+                    remark: snapshot.data[index].remark.toString(),
+                    approveFlag:
+                        snapshot.data[index].approveFlag.toString() == 'null'
+                            ? 'รอการอนุมัติ'
+                            : '',
+                    approveRejectDate:
+                        snapshot.data[index].approveRejectDate.toString() ==
+                                'null'
+                            ? ''
+                            : '()',
+                    id: snapshot.data[index].modelid,
+                  );
                 },
-              ),
+              );
+            }
+          },
+        ),
       ),
     );
   }
@@ -261,7 +245,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(left: 20,),
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -280,8 +266,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             fontSize: 13.0,
                           ),
                         ),
-                        
-
                         Text(
                           'สถานะการลา : $approveFlag$approveRejectDate',
                           style: TextStyle(
@@ -296,27 +280,26 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             fontSize: 13.0,
                           ),
                         ),
-
-                        
                       ],
                     ),
                   ),
                   Padding(
-                padding: const EdgeInsets.only(bottom: 4, right: 20),
-                child: Container(
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.blue,
+                    padding: const EdgeInsets.only(bottom: 4, right: 20),
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.blue,
+                      ),
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                  child: Icon(Icons.delete, color: Colors.white,),
-                ),
-              ),
-                  
                 ],
               ),
-              
             ],
           ),
         ),

@@ -25,7 +25,7 @@ var message;
     var userID = message['cwiUser']['modelid'];
     var data = {
       "bossId": "",
-      "userId": "15",
+      "userId": userID,
       "leaveDate": "19/04/2020",
       "leaveCode": ""
     };

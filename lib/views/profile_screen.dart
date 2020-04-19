@@ -55,58 +55,69 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'Org : ' + message['cwiUser']['orgId'].toString(),
+                            'องค์กร : ' + message['cwiUser']['orgId'].toString(),
                             style: TextStyle(
                               fontFamily: _kanit,
-                              fontSize: 13.0,
+                              fontSize: 18.0,
                             ),
                           ),
                           Text(
-                            'Branch : ' +
+                            'สาขา : ' +
                                 message['cwiUser']['branchId'].toString(),
                             style: TextStyle(
                               fontFamily: _kanit,
-                              fontSize: 13.0,
+                              fontSize: 18.0,
                             ),
                           ),
                           Text(
-                            'Branch : ' +
+                            'Username : ' +
                                 message['cwiUser']['username'].toString(),
                             style: TextStyle(
                               fontFamily: _kanit,
-                              fontSize: 13.0,
+                              fontSize: 18.0,
                             ),
                           ),
                           Text(
-                            'Branch : ' + message['cwiUser']['name'].toString(),
+                            'ชื่อ : ' + message['cwiUser']['name'].toString() + ' ' +  message['cwiUser']['lastname'].toString(),
                             style: TextStyle(
                               fontFamily: _kanit,
-                              fontSize: 13.0,
+                              fontSize: 18.0,
                             ),
                           ),
-                          Text(
-                            'Branch : ' +
-                                message['cwiUser']['lastname'].toString(),
+                         
+                         Text(
+                            'รหัสพนักงาน : ' +
+                                message['cwiUser']['employeeId'].toString(),
                             style: TextStyle(
                               fontFamily: _kanit,
-                              fontSize: 13.0,
+                              fontSize: 18.0,
                             ),
                           ),
                           Text(
-                            'Branch : ' +
+                            'ตำแหน่ง : ' +
                                 message['cwiUser']['position'].toString(),
                             style: TextStyle(
                               fontFamily: _kanit,
-                              fontSize: 13.0,
+                              fontSize: 18.0,
                             ),
                           ),
-                          Text(
-                            'Branch : ' +
-                                message['cwiUser']['bossId'].toString(),
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                'หัวหน้า : ',
                             style: TextStyle(
                               fontFamily: _kanit,
-                              fontSize: 13.0,
+                              fontSize: 18.0,
                             ),
+                          ),
+                              Text(
+                                    message['cwiUser']['bossId'].toString() == '0'? '': message['cwiUser']['bossId'].toString(),
+                                style: TextStyle(
+                                  fontFamily: _kanit,
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
