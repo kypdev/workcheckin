@@ -138,13 +138,13 @@ var message;
                             ],
                           ),
                           SizedBox(height: 10),
-                          Text(
-                            'ชื่อ : $userid',
-                            style: TextStyle(
-                              fontFamily: _kanit,
-                              fontSize: 13.0,
-                            ),
-                          ),
+                          // Text(
+                          //   'ชื่อ : $userid',
+                          //   style: TextStyle(
+                          //     fontFamily: _kanit,
+                          //     fontSize: 13.0,
+                          //   ),
+                          // ),
                           Text(
                             
                             'วันที่ : $leaveDate',
