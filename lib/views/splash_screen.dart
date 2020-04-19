@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:workcheckin/views/bt_nav_bar.dart';
 import 'package:workcheckin/views/home_screen.dart';
 import 'package:workcheckin/views/signin_screen.dart';
 

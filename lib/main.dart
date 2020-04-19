@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:workcheckin/views/json_demo.dart';
 import 'package:workcheckin/views/splash_screen.dart';
 
 void main() => runApp(MyApp());
@@ -11,7 +10,6 @@ class MyApp extends StatelessWidget {
       home: SplashScreen(),
       routes: <String, WidgetBuilder>{
         '/splash': (BuildContext context)=> SplashScreen(),
-        '/jsondemo': (BuildContext context) => JsonDemo(),
       },
     );
   }

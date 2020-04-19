@@ -47,7 +47,7 @@ class _NotiScreenState extends State<NotiScreen> {
       );
       noti.add(notificationModel);
     }
-    print(msg['trnLeaveList']);
+    
     return noti;
   }
 

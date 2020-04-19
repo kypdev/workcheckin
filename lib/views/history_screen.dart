@@ -160,9 +160,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     print(msg['trnLeaveList']);
   }
 
-  _userReject(int id) async {
-    print(id);
-  }
+  
 
   @override
   void initState() {
