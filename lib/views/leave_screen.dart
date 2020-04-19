@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 final _kanit = 'Kanit';
 
@@ -34,6 +35,8 @@ class _LeaveScreenState extends State<LeaveScreen> {
   TextEditingController remarkCtrl = TextEditingController();
   SharedPreferences sharedPreferences;
   var message;
+  int _currentInfIntValue = 1;
+  NumberPicker integerInfiniteNumberPicker;
 
   void _showDateTimePicker() {
     return DatePicker.showDatePicker(
@@ -96,13 +99,12 @@ class _LeaveScreenState extends State<LeaveScreen> {
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     setState(() {
       message = msg;
-      
     });
   }
+
   getUserid() {
     print(message['cwiUser']['modelid'].toString());
   }
-  
 
   _selectTypeLeave() {
     showModalBottomSheet(
@@ -170,7 +172,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
         "leaveId": "",
         "userId": userID,
         "leaveDate": dateStr,
-        "leaveHour": hrCtrl.text.trim(),
+        "leaveHour": _currentInfIntValue.toString(),
         "leaveCode": msgCode,
         "approveFlag": "",
         "remark": remarkCtrl.text
@@ -206,7 +208,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
             )
           ],
         ).show();
-      }else{
+      } else {
         Alert(
           context: context,
           type: AlertType.error,
@@ -226,6 +228,28 @@ class _LeaveScreenState extends State<LeaveScreen> {
         ).show();
       }
     }
+  }
+
+  Future _showInfIntDialog() async {
+    await showDialog<int>(
+      context: context,
+      builder: (BuildContext context) {
+        return new NumberPickerDialog.integer(
+          minValue: 1,
+          maxValue: 8,
+          step: 1,
+          initialIntegerValue: _currentInfIntValue,
+          infiniteLoop: true,
+        );
+      },
+    ).then((num value) {
+      if (value != null) {
+        setState(() {
+          _currentInfIntValue = value;
+          print(_currentInfIntValue);
+        });
+      }
+    });
   }
 
   @override
@@ -268,7 +292,11 @@ class _LeaveScreenState extends State<LeaveScreen> {
                         action: _selectTypeLeave,
                         leaveType: leaveTypeStr,
                       ),
-                      hoursLeave(hrsCtrl: hrCtrl, remarkCtrl: remarkCtrl),
+                      hoursLeave(
+                        hrsCtrl: hrCtrl,
+                        remarkCtrl: remarkCtrl,
+                        hours: _currentInfIntValue.toString(),
+                      ),
                       RaisedButton(
                         color: Colors.blueAccent,
                         onPressed: sendLeave,
@@ -287,12 +315,10 @@ class _LeaveScreenState extends State<LeaveScreen> {
                           ],
                         ),
                       ),
-
                       RaisedButton(
                         child: Text('aa'),
-                        onPressed: getUserid,
+                        onPressed: _showInfIntDialog,
                       ),
-                      
                     ],
                   ),
                 ),
@@ -319,12 +345,14 @@ class _LeaveScreenState extends State<LeaveScreen> {
           onTap: action,
           child: Row(
             children: <Widget>[
-              Text(
-                date,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: _kanit,
-                  color: Colors.black54,
+              Expanded(
+                child: Text(
+                  date,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: _kanit,
+                    color: Colors.black54,
+                  ),
                 ),
               ),
             ],
@@ -384,6 +412,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
   Widget hoursLeave({
     hrsCtrl,
     remarkCtrl,
+    hours,
   }) {
     return Form(
       key: _formKey,
@@ -399,15 +428,38 @@ class _LeaveScreenState extends State<LeaveScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          TextFormField(
-            controller: hrsCtrl,
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'ชั่วโมงการลาห้ามว่าง!!';
-              }
-              return null;
+          GestureDetector(
+            onTap: () {
+              _showInfIntDialog();
             },
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    hours,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: _kanit,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
+          Divider(
+            color: Colors.black54,
+            thickness: 1,
+          ),
+          // TextFormField(
+          //   controller: hrsCtrl,
+          //   validator: (value) {
+          //     if (value.isEmpty) {
+          //       return 'ชั่วโมงการลาห้ามว่าง!!';
+          //     }
+          //     return null;
+          //   },
+          // ),
           Text(
             'รายละเอียดการลา',
             textAlign: TextAlign.start,

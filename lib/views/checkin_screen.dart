@@ -18,7 +18,7 @@ class CheckinScreen extends StatefulWidget {
 
 class _CheckinScreenState extends State<CheckinScreen> {
   SharedPreferences sharedPreferences;
-  
+
   var message;
   var latitude = '';
   var place = '';
@@ -175,47 +175,46 @@ class _CheckinScreenState extends State<CheckinScreen> {
       Map<String, dynamic> msg = jsonDecode(response.body);
       print(msg['responseCode']);
       print(data);
-      
-      if(msg['responseCode'] == '000'){
+
+      if (msg['responseCode'] == '000') {
         print('success');
         Alert(
-        context: context,
-        type: AlertType.success,
-        title: "",
-        desc: "บันทึกสำเร็จ",
-        buttons: [
-          DialogButton(
-            child: Text(
-              "ตกลง",
-              style: TextStyle(
-                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
-            ),
-            onPressed: () => Navigator.pop(context),
-            width: 120,
-          )
-        ],
-      ).show();
-      }else{
+          context: context,
+          type: AlertType.success,
+          title: "",
+          desc: "บันทึกสำเร็จ",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            )
+          ],
+        ).show();
+      } else {
         Alert(
-        context: context,
-        type: AlertType.error,
-        title: "",
-        desc: msg['responseDesc'],
-        buttons: [
-          DialogButton(
-            child: Text(
-              "ตกลง",
-              style: TextStyle(
-                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
-            ),
-            onPressed: () => Navigator.pop(context),
-            width: 120,
-          )
-        ],
-      ).show();
+          context: context,
+          type: AlertType.error,
+          title: "",
+          desc: msg['responseDesc'],
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            )
+          ],
+        ).show();
       }
-
-    }else {
+    } else {
       Alert(
         context: context,
         type: AlertType.error,
@@ -236,7 +235,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
     }
   }
 
-   _checkout() async {
+  _checkout() async {
     int fars = int.parse(far);
     var userID = message['cwiUser']['modelid'];
     print(fars);
@@ -262,47 +261,46 @@ class _CheckinScreenState extends State<CheckinScreen> {
       Map<String, dynamic> msg = jsonDecode(response.body);
       print(msg['responseCode']);
       print(data);
-      
-      if(msg['responseCode'] == '000'){
+
+      if (msg['responseCode'] == '000') {
         print('success');
         Alert(
-        context: context,
-        type: AlertType.success,
-        title: "",
-        desc: "บันทึกสำเร็จ",
-        buttons: [
-          DialogButton(
-            child: Text(
-              "ตกลง",
-              style: TextStyle(
-                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
-            ),
-            onPressed: () => Navigator.pop(context),
-            width: 120,
-          )
-        ],
-      ).show();
-      }else{
+          context: context,
+          type: AlertType.success,
+          title: "",
+          desc: "บันทึกสำเร็จ",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            )
+          ],
+        ).show();
+      } else {
         Alert(
-        context: context,
-        type: AlertType.error,
-        title: "",
-        desc: "บันทึกไม่สำเร็จ",
-        buttons: [
-          DialogButton(
-            child: Text(
-              "ตกลง",
-              style: TextStyle(
-                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
-            ),
-            onPressed: () => Navigator.pop(context),
-            width: 120,
-          )
-        ],
-      ).show();
+          context: context,
+          type: AlertType.error,
+          title: "",
+          desc: "บันทึกไม่สำเร็จ",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            )
+          ],
+        ).show();
       }
-
-    }else {
+    } else {
       Alert(
         context: context,
         type: AlertType.error,
@@ -322,35 +320,18 @@ class _CheckinScreenState extends State<CheckinScreen> {
       ).show();
     }
   }
- 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(
-              'วันนี้',
-              style: TextStyle(
-                fontFamily: _kanit,
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.location_on),
-              onPressed: () => selectPlace(context),
-            ),
-          ],
-        ),
+        title: Text('วันนี้', style: TextStyle(fontFamily: _kanit),),
         centerTitle: true,
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          RaisedButton(
-            child: Text('aa'),
-            onPressed: getMsg,
-          ),
+          Container(),
           Column(
             children: <Widget>[
               Row(
@@ -392,9 +373,24 @@ class _CheckinScreenState extends State<CheckinScreen> {
                 ],
               ),
               SizedBox(height: 30),
-              Text(place),
+              GestureDetector(
+                onTap: ()=> selectPlace(context),
+                              child: Text(
+                  place,
+                  style: TextStyle(
+                    fontFamily: _kanit,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
               SizedBox(height: 10),
-              Text('$latitude / $longtitude'),
+              Text(
+                '$latitude / $longtitude',
+                style: TextStyle(
+                  fontFamily: _kanit,
+                  fontSize: 20,
+                ),
+              ),
               SizedBox(height: 50),
             ],
           ),

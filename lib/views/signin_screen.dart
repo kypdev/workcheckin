@@ -252,10 +252,7 @@ class _SigninScreenState extends State<SigninScreen> {
                             onPressed: _login,
                           ),
                           SizedBox(height: 20),
-                          RaisedButton(
-                            child: Text('aa'),
-                            onPressed: getUserMsg,
-                          ),
+                          
                         ],
                       ),
                     ),

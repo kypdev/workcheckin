@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               btnMenu(
-                btnName: 'ประวัติการลา',
+                btnName: 'ประวัติการลา(หัวหน้า)',
                 color: Colors.deepOrange,
                 action: _bossLeave,
               ),
