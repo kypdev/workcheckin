@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:workcheckin/models/notification_model.dart';
 
 final _kanit = 'Kanit';
 
-class NotiScreen extends StatefulWidget {
+class NotiBossScreen extends StatefulWidget {
   @override
-  _NotiScreenState createState() => _NotiScreenState();
+  _NotiBossScreenState createState() => _NotiBossScreenState();
 }
 
-class _NotiScreenState extends State<NotiScreen> {
-SharedPreferences sharedPreferences;
-var message;
+class _NotiBossScreenState extends State<NotiBossScreen> {
+  var message;
+  SharedPreferences sharedPreferences;
   getMsg() async {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
@@ -71,8 +71,10 @@ var message;
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'แจ้งเตือน',
-          style: TextStyle(fontFamily: _kanit),
+          'แจ้งเตือน(หัวหน้า)',
+          style: TextStyle(
+            fontFamily: _kanit,
+          ),
         ),
         centerTitle: true,
       ),

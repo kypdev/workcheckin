@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:workcheckin/models/boss_leave_model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
+import 'package:shared_preferences/shared_preferences.dart';
 final _kanit = 'Kanit';
 
 class BossScreen extends StatefulWidget {
@@ -11,6 +11,15 @@ class BossScreen extends StatefulWidget {
 }
 
 class _BossScreenState extends State<BossScreen> {
+var message;
+SharedPreferences sharedPreferences;
+  getMsg() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    var msg = jsonDecode(sharedPreferences.getString('userMsg'));
+    setState(() {
+      message = msg;
+    });
+  }
   Future<List<BossLeaveModel>> _getLeave() async {
     var data = {
       "bossId": "15",
@@ -58,6 +67,11 @@ class _BossScreenState extends State<BossScreen> {
     return leaveModels;
   }
 
+@override
+  void initState() {
+    getMsg();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +83,12 @@ class _BossScreenState extends State<BossScreen> {
         future: _getLeave(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null) {
-            return Text('loading...');
+            return Center(
+              child: Visibility(
+                visible: true,
+                child: CircularProgressIndicator(),
+              ),
+            );
           } else {
             return ListView.builder(
               itemCount: snapshot.data.length,

@@ -17,24 +17,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   var employee = 'พนักงาน';
   SharedPreferences sharedPreferences;
   var message;
-  _getEmployeeStr() {
-    showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        )),
-        context: context,
-        builder: (BuildContext context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              _createTile(context, 'พนักงาน', _action1),
-              _createTile(context, 'หัวหน้า', _action2),
-            ],
-          );
-        });
-  }
+  
 
   ListTile _createTile(BuildContext context, String name, Function action) {
     return ListTile(
@@ -114,9 +97,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   getdata() async {
+    var userID = message['cwiUser']['modelid'];
     var data = {
       "bossId": "",
-      "userId": "15",
+      "userId": userID,
       "leaveDate": "19/04/2020",
       "leaveCode": ""
     };
@@ -185,7 +169,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 future: _getLeave(),
                 builder: (BuildContext context, AsyncSnapshot snapshot){
                   if(snapshot.data == null){
-                    return Text('loading...');
+                    return Center(
+              child: Visibility(
+                visible: true,
+                child: CircularProgressIndicator(),
+              ),
+            );
                   }else{
                     return ListView.builder(
                       itemCount:  snapshot.data.length,

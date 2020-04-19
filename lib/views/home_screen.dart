@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workcheckin/views/boss_screen.dart';
 import 'package:workcheckin/views/checkin_screen.dart';
 import 'package:workcheckin/views/history_screen.dart';
+import 'package:workcheckin/views/noti_boss_screen.dart';
 import 'package:workcheckin/views/noti_screen.dart';
 import 'package:workcheckin/views/signin_screen.dart';
 import 'leave_screen.dart';
@@ -68,6 +69,10 @@ class _HomeScreenState extends State<HomeScreen> {
     print('aaaa: ' + jsonEncode(message));
   }
 
+  _notiBoss(){
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> NotiBossScreen()));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -108,6 +113,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 btnName: 'แจ้งเตือน',
                 color: Colors.deepOrange,
                 action: _noti,
+              ),
+
+              btnMenu(
+                btnName: 'แจ้งเตือน(หัวหน้า)',
+                color: Colors.deepOrange,
+                action: _notiBoss,
               ),
               
               btnMenu(
