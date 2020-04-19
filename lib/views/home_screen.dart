@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workcheckin/views/boss_screen.dart';
 import 'package:workcheckin/views/checkin_screen.dart';
-import 'package:workcheckin/views/empolyee_screen.dart';
 import 'package:workcheckin/views/history_screen.dart';
+import 'package:workcheckin/views/noti_screen.dart';
 import 'package:workcheckin/views/signin_screen.dart';
 import 'leave_screen.dart';
 
@@ -57,6 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
   _bossLeave(){
     Navigator.push(context, MaterialPageRoute(builder: (context)=>BossScreen()));
   }
+  _noti(){
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> NotiScreen()));
+  }
 
   setMessage() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -100,6 +103,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 btnName: 'ประวัติการลา(หัวหน้า)',
                 color: Colors.deepOrange,
                 action: _bossLeave,
+              ),
+
+              btnMenu(
+                btnName: 'แจ้งเตือน',
+                color: Colors.deepOrange,
+                action: _noti,
               ),
               
               btnMenu(
