@@ -7,6 +7,8 @@ import 'package:workcheckin/views/checkin_screen.dart';
 import 'package:workcheckin/views/history_screen.dart';
 import 'package:workcheckin/views/noti_boss_screen.dart';
 import 'package:workcheckin/views/noti_screen.dart';
+import 'package:workcheckin/views/profile_screen.dart';
+import 'package:workcheckin/views/register_screen.dart';
 import 'package:workcheckin/views/signin_screen.dart';
 import 'leave_screen.dart';
 
@@ -73,6 +75,14 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(context, MaterialPageRoute(builder: (context)=> NotiBossScreen()));
   }
 
+  _showProfile(){
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfileScreen()));
+  }
+
+  _register(){
+   Navigator.push(context, MaterialPageRoute(builder: (context)=> RegisterScreen()));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -119,6 +129,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 btnName: 'แจ้งเตือน(หัวหน้า)',
                 color: Colors.deepOrange,
                 action: _notiBoss,
+              ),
+
+              btnMenu(
+                btnName: 'ข้อมูลส่วนตัว',
+                color: Colors.deepOrange,
+                action: _showProfile,
+              ),
+
+              btnMenu(
+                btnName: 'สมัครสมาชิก',
+                color: Colors.deepOrange,
+                action: _register,
               ),
               
               btnMenu(
