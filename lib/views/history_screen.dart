@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:workcheckin/models/leave_model.dart';
 
 final _kanit = 'Kanit';
 
 class HistoryScreen extends StatefulWidget {
-  Map<String, dynamic> message;
-  HistoryScreen({Key key, this.message}) : super(key: key);
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
   var employee = 'พนักงาน';
+  SharedPreferences sharedPreferences;
+  var message;
   _getEmployeeStr() {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
@@ -52,10 +58,115 @@ class _HistoryScreenState extends State<HistoryScreen> {
     });
   }
 
-  _showList() {}
+  getMsg() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    var msg = jsonDecode(sharedPreferences.getString('userMsg'));
+    setState(() {
+      message = msg;
+    });
+  }
+
+  Future<List<LeaveModel>> _getLeave() async {
+    var data = {
+      "bossId": "",
+      "userId": "15",
+      "leaveDate": "19/04/2020",
+      "leaveCode": ""
+    };
+
+    var url =
+        'http://159.138.232.139/service/cwi/v1/user/request_leave_list_by_user';
+
+    var response = await http.post(
+      url,
+      body: json.encode(data),
+      headers: {
+        "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+        "Content-Type": "application/json"
+      },
+    );
+
+    Map<String, dynamic> msg = jsonDecode(response.body);
+    print(msg['trnLeaveList'][0]['modelid']);
+
+    List<LeaveModel> leaveModels = [];
+
+    for (var leave in msg['trnLeaveList']) {
+      LeaveModel leaveModel = LeaveModel(
+        leave['modelid'],
+        leave['userId'],
+        leave['leaveTypeCode'],
+        leave['leaveDate'],
+        leave['leaveHour'],
+        leave['remark'],
+        leave['approveFlag'],
+        leave['approveRejectDate'],
+        leave['approveRejectBy'],
+        leave['createDate'],
+        leave['createBy'],
+        leave['updateDate'],
+        leave['updateBy'],
+      );
+      leaveModels.add(leaveModel);
+    }
+    print(msg['trnLeaveList']);
+    return leaveModels;
+  }
+
+  getdata() async {
+    var data = {
+      "bossId": "",
+      "userId": "15",
+      "leaveDate": "19/04/2020",
+      "leaveCode": ""
+    };
+
+    var url =
+        'http://159.138.232.139/service/cwi/v1/user/request_leave_list_by_user';
+
+    var response = await http.post(
+      url,
+      body: json.encode(data),
+      headers: {
+        "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+        "Content-Type": "application/json"
+      },
+    );
+
+    Map<String, dynamic> msg = jsonDecode(response.body);
+    print(msg['trnLeaveList'][0]['modelid']);
+
+    List<LeaveModel> leaveModels = [];
+
+    for (var leave in msg['trnLeaveList']) {
+      LeaveModel leaveModel = LeaveModel(
+        leave['modelid'],
+        leave['userId'],
+        leave['leaveTypeCode'],
+        leave['leaveDate'],
+        leave['leaveHour'],
+        leave['remark'],
+        leave['approveFlag'],
+        leave['approveRejectDate'],
+        leave['approveRejectBy'],
+        leave['createDate'],
+        leave['createBy'],
+        leave['updateDate'],
+        leave['updateBy'],
+      );
+
+      leaveModels.add(leaveModel);
+    }
+    print(msg['trnLeaveList']);
+  }
+
+  _userReject(int id) async {
+    print(id);
+  }
 
   @override
   void initState() {
+    getMsg();
     super.initState();
   }
 
@@ -65,28 +176,35 @@ class _HistoryScreenState extends State<HistoryScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'รายงาน',
+            'ประวัติการลา',
             style: TextStyle(
               fontFamily: _kanit,
             ),
           ),
           centerTitle: true,
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            getEmpolyee(
-              title: 'ระดับพนักงาน',
-              employee: employee,
-              action: _getEmployeeStr,
-            ),
-            cardHistory(
-              name: 'admin',
-              leaveDetail: 'ป่วย',
-              dateLeave: '20/20/2020',
-            ),
-          ],
-        ),
+        body: FutureBuilder(
+                future: _getLeave(),
+                builder: (BuildContext context, AsyncSnapshot snapshot){
+                  if(snapshot.data == null){
+                    return Text('loading...');
+                  }else{
+                    return ListView.builder(
+                      itemCount:  snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index){
+                        return cardHistory(
+                          leaveDate: snapshot.data[index].leaveDate.toString().substring(0, 9),
+                          leaveHour: snapshot.data[index].leaveHour.toString(),
+                          remark: snapshot.data[index].remark.toString(),
+                          approveFlag: snapshot.data[index].approveFlag.toString() == 'null' ? 'รอการอนุมัติ' : '',
+                          approveRejectDate: snapshot.data[index].approveRejectDate.toString() == 'null' ? '' : '()',
+                          id: snapshot.data[index].modelid,
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
       ),
     );
   }
@@ -135,73 +253,83 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Widget cardHistory({
-    name,
-    leaveDetail,
-    dateLeave,
+    leaveDate,
+    leaveHour,
+    remark,
+    approveFlag,
+    approveRejectDate,
+    id,
   }) {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: Card(
         elevation: 5,
         child: Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          padding: const EdgeInsets.only(top: 20, bottom: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 20, right: 20, top: 20, bottom: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      name,
-                      style: TextStyle(
-                        fontFamily: _kanit,
-                        fontSize: 18.0,
-                      ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20,),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'วันที่ลา : $leaveDate',
+                          style: TextStyle(
+                            fontFamily: _kanit,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'ชั่วโมง : $leaveHour',
+                          style: TextStyle(
+                            fontFamily: _kanit,
+                            fontSize: 13.0,
+                          ),
+                        ),
+                        
+
+                        Text(
+                          'สถานะการลา : $approveFlag$approveRejectDate',
+                          style: TextStyle(
+                            fontFamily: _kanit,
+                            fontSize: 13.0,
+                          ),
+                        ),
+                        Text(
+                          'เหตุผล : $remark',
+                          style: TextStyle(
+                            fontFamily: _kanit,
+                            fontSize: 13.0,
+                          ),
+                        ),
+
+                        
+                      ],
                     ),
-                    Text(leaveDetail, style: TextStyle(
-                        fontFamily: _kanit,
-                        fontSize: 18.0,
-                      ),),
-                    Text(dateLeave, style: TextStyle(
-                        fontFamily: _kanit,
-                        fontSize: 18.0,
-                      ),),
-                  ],
+                  ),
+                  Padding(
+                padding: const EdgeInsets.only(bottom: 4, right: 20),
+                child: Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.blue,
+                  ),
+                  child: Icon(Icons.delete, color: Colors.white,),
                 ),
               ),
-              employee == 'พนักงาน'
-                  ? Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: RawMaterialButton(
-                        onPressed: (){
-
-                        },
-                        child: Icon(Icons.cancel,color: Colors.red, size: 50,),
-                      ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: Column(
-                        children: <Widget>[
-                          RawMaterialButton(
-                            onPressed: (){
-
-                            },
-                            child: Icon(Icons.check_circle, color: Colors.green, size: 50,),
-                          ),
-                          RawMaterialButton(
-                            onPressed: (){
-
-                            },
-                            child: Icon(Icons.cancel, color: Colors.red, size: 50,),
-                          ),
-                        ],
-                      ),
-                    ),
+                  
+                ],
+              ),
+              
             ],
           ),
         ),

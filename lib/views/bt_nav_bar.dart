@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-import 'package:workcheckin/views/empolyee_screen.dart';
+import 'package:workcheckin/views/checkin_screen.dart';
+import 'package:workcheckin/views/history_screen.dart';
+import 'package:workcheckin/views/home_screen.dart';
+import 'package:workcheckin/views/leave_screen.dart';
 
 class BtNavBar extends StatefulWidget {
   Map<String, dynamic> message;
@@ -35,12 +38,10 @@ class _BtNavBarState extends State<BtNavBar> {
               setState(() => _currentIndex = index);
             },
             children: <Widget>[
-              EmployeeScreen(),
-
-              Container(
-                alignment: Alignment.center,
-                color: Colors.greenAccent,
-                child: Text('Family'),)
+              CheckinScreen(),
+              LeaveScreen(),
+              HistoryScreen(),
+              HomeScreen(),
             ],
           ),
         ),

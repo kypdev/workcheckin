@@ -5,7 +5,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:workcheckin/views/empolyee_screen.dart';
 import 'package:workcheckin/views/home_screen.dart';
 
 final String _kanit = 'kanit';
@@ -75,10 +74,13 @@ class _SigninScreenState extends State<SigninScreen> {
       });
 
       if (msg == '000') {
+        setState(() {
+          sharedPreferences.setInt('loginFlag', 1);
+        });
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => HomeScreen(message: message)));
+                builder: (context) => HomeScreen()));
       } else {
         print('error');
         Alert(

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'modal.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../views/bt_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -10,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:device_id/device_id.dart';
-import 'package:flutter/services.dart';
 
 final _kanit = 'Kanit';
 
@@ -34,6 +31,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
   var message;
 
   setMessage() async {
+    print('setmessaage');
     sharedPreferences = await SharedPreferences.getInstance();
     Map<String, dynamic> msg = jsonDecode(sharedPreferences.getString('userMsg'));
     setState(() {
@@ -41,18 +39,15 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 
       
     });
-    // print('msgUser: $msg');
+    print(message['locationList'][0]);
   }
 
   Future<void> initDeviceId() async {
     String deviceid;
-    String imei;
-    String meid;
 
     deviceid = await DeviceId.getID;
     try {
-      imei = await DeviceId.getIMEI;
-      meid = await DeviceId.getMEID;
+      // todo
     } on PlatformException catch (e) {
       print(e.message);
     }
@@ -115,7 +110,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 
 
   _action1() {
-    print(widget.message['locationList'][0]['name']);
+    print(widget.message['locationList'][2]['name']);
     setState(() {
       place = widget.message['locationList'][0]['name'];
       latitude = widget.message['locationList'][0]['latitude'].toString();
@@ -170,7 +165,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
         },
       );
       Map<String, dynamic> message = jsonDecode(response.body);
-      print(widget.message);
+      print(message);
       Alert(
         context: context,
         type: AlertType.success,
@@ -211,7 +206,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 
   _checkout() async {
     int fars = int.parse(far);
-    var userID = message['cwiUser']['employeeId'];
+    var userID = widget.message['cwiUser']['employeeId'];
     print(loctionID);
     if (fars <= 50) {
       var data = {
@@ -232,7 +227,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
         },
       );
       Map<String, dynamic> message = jsonDecode(response.body);
-      print(widget.message);
+      print(message);
       Alert(
         context: context,
         type: AlertType.success,
@@ -276,9 +271,9 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     super.initState();
     initDeviceId();
     getPT();
-    latitude = message['locationList'][0]['latitude'].toString();
-    longtitude = message['locationList'][0]['longitude'].toString();
-    place = message['locationList'][0]['name'].toString();
+    latitude = widget.message['locationList'][0]['latitude'].toString();
+    longtitude = widget.message['locationList'][0]['longitude'].toString();
+    place = widget.message['locationList'][0]['name'].toString();
     // setMessage();
   }
 
@@ -302,6 +297,10 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(),
+            RaisedButton(
+              child: Text('aaa'),
+              onPressed: setMessage,
+            ),
             Column(
               children: <Widget>[
                 Row(

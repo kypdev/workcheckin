@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:workcheckin/views/boss_screen.dart';
+import 'package:workcheckin/views/checkin_screen.dart';
 import 'package:workcheckin/views/empolyee_screen.dart';
 import 'package:workcheckin/views/history_screen.dart';
 import 'package:workcheckin/views/signin_screen.dart';
@@ -10,8 +12,6 @@ import 'leave_screen.dart';
 final _kanit = 'Kanit';
 
 class HomeScreen extends StatefulWidget {
-  Map<String, dynamic> message;
-  HomeScreen({Key key, this.message}) : super(key: key);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -23,20 +23,15 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => EmployeeScreen(
-                  message: widget.message,
+            builder: (context) => CheckinScreen(
                 )));
-    print(widget.message);
+    
   }
 
   _leave() {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => LeaveScreen(
-                  message: widget.message,
-                )));
-    print(widget.message);
+        context, MaterialPageRoute(builder: (context) => LeaveScreen()));
+    
   }
 
   _history() {
@@ -44,17 +39,23 @@ class _HomeScreenState extends State<HomeScreen> {
         context,
         MaterialPageRoute(
             builder: (context) => HistoryScreen(
-                  message: widget.message,
                 )));
-    print(widget.message);
+  
   }
+
+  
 
   _logout() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
       sharedPreferences.clear();
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SigninScreen()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => SigninScreen()));
     });
+  }
+
+  _bossLeave(){
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>BossScreen()));
   }
 
   setMessage() async {
@@ -68,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-setMessage();
+    setMessage();
   }
 
   @override
@@ -90,17 +91,23 @@ setMessage();
                 action: _leave,
               ),
               btnMenu(
-                btnName: 'ประวัติ',
+                btnName: 'ประวัติการลา',
                 color: Colors.deepOrange,
                 action: _history,
               ),
 
               btnMenu(
+                btnName: 'ประวัติการลา',
+                color: Colors.deepOrange,
+                action: _bossLeave,
+              ),
+              
+              btnMenu(
                 btnName: 'logout',
                 color: Colors.deepOrange,
                 action: _logout,
               ),
-
+              
             ],
           ),
         ),

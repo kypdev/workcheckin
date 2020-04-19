@@ -5,12 +5,11 @@ import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final _kanit = 'Kanit';
 
 class LeaveScreen extends StatefulWidget {
-  Map<String, dynamic> message;
-  LeaveScreen({Key key, this.message}) : super(key: key);
   @override
   _LeaveScreenState createState() => _LeaveScreenState();
 }
@@ -29,12 +28,12 @@ class _LeaveScreenState extends State<LeaveScreen> {
   var leaveTypeStr = '';
   final _formKey = GlobalKey<FormState>();
   DateTimePickerLocale _locale = DateTimePickerLocale.en_us;
-  List<DateTimePickerLocale> _locales = DateTimePickerLocale.values;
   String _format = 'yyyy-MMMM-dd';
-  TextEditingController _formatCtrl = TextEditingController();
   DateTime _dateTime = DateTime.now();
   TextEditingController hrCtrl = TextEditingController();
   TextEditingController remarkCtrl = TextEditingController();
+  SharedPreferences sharedPreferences;
+  var message;
 
   void _showDateTimePicker() {
     return DatePicker.showDatePicker(
@@ -92,9 +91,18 @@ class _LeaveScreenState extends State<LeaveScreen> {
     });
   }
 
-  getUserid() {
-    print(widget.message['cwiUser']['modelid']);
+  getMsg() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    var msg = jsonDecode(sharedPreferences.getString('userMsg'));
+    setState(() {
+      message = msg;
+      
+    });
   }
+  getUserid() {
+    print(message['cwiUser']['modelid'].toString());
+  }
+  
 
   _selectTypeLeave() {
     showModalBottomSheet(
@@ -154,12 +162,13 @@ class _LeaveScreenState extends State<LeaveScreen> {
   }
 
   sendLeave() async {
+    var userID = message['cwiUser']['modelid'];
     print(remarkCtrl.text);
     var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave';
     if (_formKey.currentState.validate()) {
       var data = {
         "leaveId": "",
-        "userId": widget.message['cwiUser']['modelid'],
+        "userId": userID,
         "leaveDate": dateStr,
         "leaveHour": hrCtrl.text.trim(),
         "leaveCode": msgCode,
@@ -223,6 +232,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
   void initState() {
     super.initState();
     _getLeaveType();
+    getMsg();
   }
 
   @override
@@ -276,6 +286,11 @@ class _LeaveScreenState extends State<LeaveScreen> {
                             ),
                           ],
                         ),
+                      ),
+
+                      RaisedButton(
+                        child: Text('aa'),
+                        onPressed: getUserid,
                       ),
                       
                     ],
