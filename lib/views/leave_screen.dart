@@ -315,10 +315,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
                           ],
                         ),
                       ),
-                      RaisedButton(
-                        child: Text('aa'),
-                        onPressed: _showInfIntDialog,
-                      ),
+                      
                     ],
                   ),
                 ),

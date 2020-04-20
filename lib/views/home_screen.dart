@@ -118,11 +118,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.deepOrange,
                   action: _bossLeave,
                 ),
-                btnMenu(
-                  btnName: 'แจ้งเตือน',
-                  color: Colors.deepOrange,
-                  action: _noti,
-                ),
+                // btnMenu(
+                //   btnName: 'แจ้งเตือน',
+                //   color: Colors.deepOrange,
+                //   action: _noti,
+                // ),
                 btnMenu(
                   btnName: 'แจ้งเตือน(หัวหน้า)',
                   color: Colors.deepOrange,
