@@ -152,14 +152,16 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontFamily: _kanit,
-                                              color: Colors.green)),
+                                              color: Colors.green,
+                                              fontSize: 12.0)),
                                     ),
                                     Container(
                                       child: Text('ออก',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontFamily: _kanit,
-                                              color: Colors.red)),
+                                              color: Colors.red,
+                                              fontSize: 12.0)),
                                     ),
                                   ],
                                 ),
@@ -175,25 +177,37 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
                                 TableRow(
                                   children: [
                                     Container(
-                                      child: Text('$checkinDate',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily: _kanit,
-                                              color: Colors.green)),
+                                      child: Text(
+                                        '$checkinDate',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontFamily: _kanit,
+                                          color: Colors.green,
+                                          fontSize: 18.0,
+                                        ),
+                                      ),
                                     ),
                                     Container(
-                                      child: Text('$checinTime',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily: _kanit,
-                                              color: Colors.green)),
+                                      child: Text(
+                                        '$checinTime',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontFamily: _kanit,
+                                          color: Colors.green,
+                                          fontSize: 18.0,
+                                        ),
+                                      ),
                                     ),
                                     Container(
-                                      child: Text('$checkoutTime',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily: _kanit,
-                                              color: Colors.red)),
+                                      child: Text(
+                                        '$checkoutTime',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontFamily: _kanit,
+                                          color: Colors.red,
+                                          fontSize: 18.0,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
