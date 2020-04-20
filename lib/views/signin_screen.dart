@@ -20,7 +20,7 @@ class _SigninScreenState extends State<SigninScreen> {
   bool securePWD = true;
   var userMsg;
   SharedPreferences sharedPreferences;
-  
+
   showPWD() {
     if (securePWD) {
       setState(() {
@@ -36,72 +36,70 @@ class _SigninScreenState extends State<SigninScreen> {
   var locationlist;
   var msg;
 
-  getUserMsg(){
+  getUserMsg() {
     var msg = sharedPreferences.getString('userMsg');
     print('pref: $msg');
   }
 
   Future _login() async {
-    String user = _username.text.trim();
-    String pass = _password.text;
+    if (_formKey.currentState.validate()) {
+      String user = _username.text.trim();
+      String pass = _password.text;
 
-    try {
-      var url = 'http://159.138.232.139/service/cwi/v1/user/login';
-      var data = {'username': user, 'password': pass};
+      try {
+        var url = 'http://159.138.232.139/service/cwi/v1/user/login';
+        var data = {'username': user, 'password': pass};
 
-      var response = await http.post(
-        url,
-        body: json.encode(data),
-        headers: {
-          "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-          "Content-Type": "application/json"
-        },
-      );
+        var response = await http.post(
+          url,
+          body: json.encode(data),
+          headers: {
+            "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+            "Content-Type": "application/json"
+          },
+        );
 
-      Map<String, dynamic> message = jsonDecode(response.body);
+        Map<String, dynamic> message = jsonDecode(response.body);
 
-      sharedPreferences = await SharedPreferences.getInstance();
-      setState(() {
-        sharedPreferences.setString('userMsg', jsonEncode(message));
-      });
-
-      
-
-      var msg = message['responseCode'];
-      setState(() {
-        locationlist = message;
-      });
-
-      if (msg == '000') {
+        sharedPreferences = await SharedPreferences.getInstance();
         setState(() {
-          sharedPreferences.setInt('loginFlag', 1);
+          sharedPreferences.setString('userMsg', jsonEncode(message));
         });
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => HomeScreen()));
-      } else {
-        print('error');
-        Alert(
-          context: context,
-          type: AlertType.error,
-          title: "",
-          desc: "พบข้อผิดพลาดกรุณาทำรายการใหม่",
-          buttons: [
-            DialogButton(
-              child: Text(
-                "ตกลง",
-                style: TextStyle(
-                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
-              ),
-              onPressed: () => Navigator.pop(context),
-              width: 120,
-            )
-          ],
-        ).show();
+
+        var msg = message['responseCode'];
+        setState(() {
+          locationlist = message;
+        });
+
+        if (msg == '000') {
+          setState(() {
+            sharedPreferences.setInt('loginFlag', 1);
+          });
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        } else {
+          print('error');
+          Alert(
+            context: context,
+            type: AlertType.error,
+            title: "",
+            desc: "พบข้อผิดพลาดกรุณาทำรายการใหม่",
+            buttons: [
+              DialogButton(
+                child: Text(
+                  "ตกลง",
+                  style: TextStyle(
+                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                ),
+                onPressed: () => Navigator.pop(context),
+                width: 120,
+              )
+            ],
+          ).show();
+        }
+      } catch (e) {
+        print('message error: $e');
       }
-    } catch (e) {
-      print('message error: $e');
     }
   }
 
@@ -251,7 +249,6 @@ class _SigninScreenState extends State<SigninScreen> {
                             onPressed: _login,
                           ),
                           SizedBox(height: 20),
-                          
                         ],
                       ),
                     ),

@@ -5,13 +5,13 @@ class BossLeaveModel {
   String leaveDate;
   int leaveHour;
   String remark;
-  String approveFlag;
+  int approveFlag;
   String approveRejectDate;
-  String approveRejectBy;
+  int approveRejectBy;
   String createDate;
   int createBy;
   String updateDate;
-  String updateBy;
+  int updateBy;
 
   BossLeaveModel(
       this.modelid,

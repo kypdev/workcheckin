@@ -12,8 +12,8 @@ class NotiScreen extends StatefulWidget {
 }
 
 class _NotiScreenState extends State<NotiScreen> {
-SharedPreferences sharedPreferences;
-var message;
+  SharedPreferences sharedPreferences;
+  var message;
   getMsg() async {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
@@ -21,6 +21,7 @@ var message;
       message = msg;
     });
   }
+
   Future<List<NotificationModel>> _getLeave() async {
     var userID = message['cwiUser']['modelid'];
     var data = {
@@ -42,7 +43,6 @@ var message;
     );
 
     Map<String, dynamic> msg = jsonDecode(response.body);
-    
 
     List<NotificationModel> noti = [];
 
@@ -57,15 +57,16 @@ var message;
       );
       noti.add(notificationModel);
     }
-    
+
     return noti;
   }
 
-@override
+  @override
   void initState() {
     getMsg();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,14 +121,16 @@ var message;
                       left: 20,
                     ),
                     child: Container(
-                      width: MediaQuery.of(context).size.width*0.8,
+                      width: MediaQuery.of(context).size.width * 0.8,
                       child: Column(
-                        
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Row(
                             children: <Widget>[
-                              Icon(Icons.notifications, color: Colors.amber,),
+                              Icon(
+                                Icons.notifications,
+                                color: Colors.amber,
+                              ),
                               Text(
                                 noti.substring(0, 36).toString(),
                                 style: TextStyle(
@@ -146,7 +149,6 @@ var message;
                           //   ),
                           // ),
                           Text(
-                            
                             'วันที่ : $leaveDate',
                             style: TextStyle(
                               fontFamily: _kanit,

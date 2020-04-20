@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workcheckin/views/boss_screen.dart';
 import 'package:workcheckin/views/checkin_screen.dart';
+import 'package:workcheckin/views/history_checkin.dart';
 import 'package:workcheckin/views/history_screen.dart';
 import 'package:workcheckin/views/noti_boss_screen.dart';
 import 'package:workcheckin/views/noti_screen.dart';
@@ -24,29 +25,18 @@ class _HomeScreenState extends State<HomeScreen> {
   var message;
   _employee() {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => CheckinScreen(
-                )));
-    
+        context, MaterialPageRoute(builder: (context) => CheckinScreen()));
   }
 
   _leave() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => LeaveScreen()));
-    
   }
 
   _history() {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => HistoryScreen(
-                )));
-  
+        context, MaterialPageRoute(builder: (context) => HistoryScreen()));
   }
-
-  
 
   _logout() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -57,11 +47,14 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  _bossLeave(){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>BossScreen()));
+  _bossLeave() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BossScreen()));
   }
-  _noti(){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> NotiScreen()));
+
+  _noti() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => NotiScreen()));
   }
 
   setMessage() async {
@@ -71,16 +64,23 @@ class _HomeScreenState extends State<HomeScreen> {
     print('aaaa: ' + jsonEncode(message));
   }
 
-  _notiBoss(){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> NotiBossScreen()));
+  _notiBoss() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => NotiBossScreen()));
   }
 
-  _showProfile(){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfileScreen()));
+  _showProfile() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ProfileScreen()));
   }
 
-  _register(){
-   Navigator.push(context, MaterialPageRoute(builder: (context)=> RegisterScreen()));
+  _register() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => RegisterScreen()));
+  }
+  _historyCheckin(){
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => HistoryCheckin()));
   }
 
   @override
@@ -94,62 +94,64 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              btnMenu(
-                btnName: 'ลงเวลาการทำงาน',
-                color: Colors.blueAccent,
-                action: _employee,
-              ),
-              btnMenu(
-                btnName: 'ลางาน',
-                color: Colors.greenAccent,
-                action: _leave,
-              ),
-              btnMenu(
-                btnName: 'ประวัติการลา',
-                color: Colors.deepOrange,
-                action: _history,
-              ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                btnMenu(
+                  btnName: 'ลงเวลาการทำงาน',
+                  color: Colors.blueAccent,
+                  action: _employee,
+                ),
+                btnMenu(
+                  btnName: 'ลางาน',
+                  color: Colors.greenAccent,
+                  action: _leave,
+                ),
+                btnMenu(
+                  btnName: 'ประวัติการลา',
+                  color: Colors.deepOrange,
+                  action: _history,
+                ),
+                btnMenu(
+                  btnName: 'ประวัติการลา(หัวหน้า)',
+                  color: Colors.deepOrange,
+                  action: _bossLeave,
+                ),
+                btnMenu(
+                  btnName: 'แจ้งเตือน',
+                  color: Colors.deepOrange,
+                  action: _noti,
+                ),
+                btnMenu(
+                  btnName: 'แจ้งเตือน(หัวหน้า)',
+                  color: Colors.deepOrange,
+                  action: _notiBoss,
+                ),
+                btnMenu(
+                  btnName: 'ข้อมูลส่วนตัว',
+                  color: Colors.deepOrange,
+                  action: _showProfile,
+                ),
+                btnMenu(
+                  btnName: 'สมัครสมาชิก',
+                  color: Colors.deepOrange,
+                  action: _register,
+                ),
 
-              btnMenu(
-                btnName: 'ประวัติการลา(หัวหน้า)',
-                color: Colors.deepOrange,
-                action: _bossLeave,
-              ),
+                btnMenu(
+                  btnName: 'ประวัติลงเวลา',
+                  color: Colors.deepOrange,
+                  action: _historyCheckin,
+                ),
 
-              btnMenu(
-                btnName: 'แจ้งเตือน',
-                color: Colors.deepOrange,
-                action: _noti,
-              ),
-
-              btnMenu(
-                btnName: 'แจ้งเตือน(หัวหน้า)',
-                color: Colors.deepOrange,
-                action: _notiBoss,
-              ),
-
-              btnMenu(
-                btnName: 'ข้อมูลส่วนตัว',
-                color: Colors.deepOrange,
-                action: _showProfile,
-              ),
-
-              btnMenu(
-                btnName: 'สมัครสมาชิก',
-                color: Colors.deepOrange,
-                action: _register,
-              ),
-              
-              btnMenu(
-                btnName: 'logout',
-                color: Colors.deepOrange,
-                action: _logout,
-              ),
-              
-            ],
+                btnMenu(
+                  btnName: 'logout',
+                  color: Colors.deepOrange,
+                  action: _logout,
+                ),
+              ],
+            ),
           ),
         ),
       ),
