@@ -8,6 +8,7 @@ import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:device_id/device_id.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 final _kanit = 'Kanit';
 
@@ -22,9 +23,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
   var message;
   var latitude = '';
   var place = '';
-  var longtitude = '';
-  var loctionID = '';
-  var far = '';
+  var longtitude;
+  var loctionID;
+  var far;
   String _deviceid = 'Unknown';
   String platform;
 
@@ -71,38 +72,61 @@ class _CheckinScreenState extends State<CheckinScreen> {
         });
   }
 
-  _action1() {
+  _action1() async {
     print(message['locationList'][2]['name']);
+    
     setState(() {
       place = message['locationList'][0]['name'];
-      latitude = message['locationList'][0]['latitude'].toString();
-      longtitude = message['locationList'][0]['longitude'].toString();
+      latitude = message['locationList'][0]['latitude'].toString().substring(0, 8);
+      longtitude = message['locationList'][0]['longitude'].toString().substring(0, 8);
       loctionID = message['locationList'][0]['modelid'].toString();
-      far = message['locationList'][0]['far'].toString();
-      print(far);
+      
+      
     });
+    
+    double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
+    setState(() {
+      far = distanceInMeters;
+    });
+    
+    
+    print(far);
   }
 
-  _action2() {
+  _action2() async {
     print(message['locationList'][1]['name']);
     setState(() {
       place = message['locationList'][1]['name'];
-      latitude = message['locationList'][1]['latitude'].toString();
-      longtitude = message['locationList'][1]['longitude'].toString();
+      latitude = message['locationList'][1]['latitude'].toString().substring(0, 8);
+      longtitude = message['locationList'][1]['longitude'].toString().substring(0, 8);
       loctionID = message['locationList'][1]['modelid'].toString();
-      far = message['locationList'][1]['far'].toString();
+      
     });
+    double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
+    setState(() {
+      far = distanceInMeters;
+    });
+    
+    
+    print(far);
   }
 
-  _action3() {
+  _action3() async {
     print(message['locationList'][2]['name']);
     setState(() {
       place = message['locationList'][2]['name'];
-      latitude = message['locationList'][2]['latitude'].toString();
-      longtitude = message['locationList'][2]['longitude'].toString();
+      latitude = message['locationList'][2]['latitude'].toString().substring(0, 8);
+      longtitude = message['locationList'][2]['longitude'].toString().substring(0, 8);
       loctionID = message['locationList'][2]['modelid'].toString();
       far = message['locationList'][2]['far'].toString();
     });
+    double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
+    setState(() {
+      far = distanceInMeters;
+    });
+    
+    
+    print(far);
   }
 
   Future<void> initDeviceId() async {
@@ -150,7 +174,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
   }
 
   _checkin() async {
-    int fars = int.parse(far);
+    double fars = far;
     var userID = message['cwiUser']['modelid'];
     print(fars);
     print(loctionID);
@@ -236,7 +260,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
   }
 
   _checkout() async {
-    int fars = int.parse(far);
+    double fars = far;
     var userID = message['cwiUser']['modelid'];
     print(fars);
     print(loctionID);
@@ -325,13 +349,27 @@ class _CheckinScreenState extends State<CheckinScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('วันนี้', style: TextStyle(fontFamily: _kanit),),
+        title: Text(
+          'วันนี้',
+          style: TextStyle(fontFamily: _kanit),
+        ),
         centerTitle: true,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(),
+          RaisedButton(
+            color: Colors.lightBlue,
+            onPressed: ()=>selectPlace(context),
+            child: Text('เลือกสถานที่', style: TextStyle(fontFamily: _kanit, fontSize: 18, color: Colors.white,
+            ),),
+          ),
+          RaisedButton(
+            child: Text('asd'),
+            onPressed: () async {
+              
+            },
+          ),
           Column(
             children: <Widget>[
               Row(
@@ -374,8 +412,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
               ),
               SizedBox(height: 30),
               GestureDetector(
-                onTap: ()=> selectPlace(context),
-                              child: Text(
+                onTap: () {},
+                child: Text(
                   place,
                   style: TextStyle(
                     fontFamily: _kanit,
