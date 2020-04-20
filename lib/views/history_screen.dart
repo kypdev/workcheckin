@@ -16,7 +16,7 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   var employee = 'พนักงาน';
   SharedPreferences sharedPreferences;
-  var message;
+  Map<String, dynamic> message;
 
   getMsg() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -24,12 +24,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
     setState(() {
       message = msg;
     });
+    
   }
 
   Future<List<LeaveModel>> _getLeave() async {
+    var userID = message['cwiUser']['modelid'];
     var data = {
       "bossId": "",
-      "userId": "15",
+      "userId": userID,
       "leaveDate": "19/04/2020",
       "leaveCode": ""
     };
@@ -47,7 +49,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
 
     Map<String, dynamic> msg = jsonDecode(response.body);
-    print(msg['trnLeaveList'][0]['modelid']);
 
     List<LeaveModel> leaveModels = [];
 
@@ -69,7 +70,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
       );
       leaveModels.add(leaveModel);
     }
-    print(msg['trnLeaveList']);
     return leaveModels;
   }
 
@@ -95,7 +95,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
 
     Map<String, dynamic> msg = jsonDecode(response.body);
-    print(msg['trnLeaveList'][0]['modelid']);
 
     List<LeaveModel> leaveModels = [];
 
@@ -118,13 +117,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
       leaveModels.add(leaveModel);
     }
-    print(msg['trnLeaveList']);
   }
 
   @override
   void initState() {
-    getMsg();
+    
     super.initState();
+    getMsg();
   }
 
   @override
