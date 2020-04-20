@@ -12,20 +12,19 @@ class BossScreen extends StatefulWidget {
 }
 
 class _BossScreenState extends State<BossScreen> {
-  Map<String, dynamic> message;
+  var bossID;
   SharedPreferences sharedPreferences;
   getMsg() async {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     setState(() {
-      message = msg;
+      bossID = msg['cwiUser']['bossId'];
     });
-    print('msg: $msg');
   }
 
   Future<List<BossLeaveModel>> _getLeave() async {
     var data = {
-      "bossId": "2",
+      "bossId": bossID,
       "userId": "",
       "leaveDate": "19/04/2020",
       "leaveCode": ""

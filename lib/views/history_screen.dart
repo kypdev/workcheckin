@@ -25,7 +25,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
     setState(() {
       userID = msg['cwiUser']['modelid'];
     });
-    print('userID: $userID');
     
   }
 
@@ -75,7 +74,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   getdata() async {
-    var userID = message['cwiUser']['modelid'];
     var data = {
       "bossId": "",
       "userId": userID,
