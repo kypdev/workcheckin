@@ -13,18 +13,17 @@ class HistoryCheckin extends StatefulWidget {
 
 class _HistoryCheckinState extends State<HistoryCheckin> {
   SharedPreferences sharedPreferences;
-  var message;
+  var userID;
   getMsg() async {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     setState(() {
-      message = msg;
+      userID= msg['cwiUser']['modelid'];
     });
   }
 
   Future<List<CheckinHistory>> _getLeave() async {
-    var userID = message['cwiUser']['modelid'];
-    var data = {"userId": "15"};
+    var data = {"userId": userID};
 
     var url = 'http://159.138.232.139/service/cwi/v1/user/history_checkin';
 
@@ -67,8 +66,8 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
 
   @override
   void initState() {
-    getMsg();
     super.initState();
+    getMsg();
   }
 
   @override
