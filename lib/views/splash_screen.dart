@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //กำหนดค่า LoginFlag
     setState(() {
       loginFlag = sharedPreferences.getInt('loginFlag');
-      print(loginFlag);
+      
       if(loginFlag == 1){
         Navigator.pushReplacement(
           context,

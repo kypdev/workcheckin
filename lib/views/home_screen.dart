@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = sharedPreferences.getString('userMsg');
     message = jsonDecode(msg);
-    print('aaaa: ' + jsonEncode(message));
+    
   }
 
   _notiBoss() {
