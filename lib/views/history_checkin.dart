@@ -139,7 +139,7 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
                           children: <Widget>[
                             Table(
                               columnWidths: {
-                                0: FlexColumnWidth(3.0),
+                                0: FlexColumnWidth(4.0),
                                 1: FlexColumnWidth(3.0),
                                 2: FlexColumnWidth(3.0),
                               },

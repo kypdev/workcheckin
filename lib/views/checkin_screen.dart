@@ -62,11 +62,11 @@ class _CheckinScreenState extends State<CheckinScreen> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               _createTile(context,
-                  message['locationList'][0]['name'].toString(), _action1),
+                  'สถานที่1', _action1),
               _createTile(context,
-                  message['locationList'][1]['name'].toString(), _action2),
+                  'สถานที่2'.toString(), _action2),
               _createTile(context,
-                  message['locationList'][2]['name'].toString(), _action3),
+                  'สถานที่ test', _action3),
             ],
           );
         });
@@ -76,7 +76,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
     print(message['locationList'][2]['name']);
     
     setState(() {
-      place = message['locationList'][0]['name'];
+      place = 'สถานที่1';
       latitude = message['locationList'][0]['latitude'].toString().substring(0, 8);
       longtitude = message['locationList'][0]['longitude'].toString().substring(0, 8);
       loctionID = message['locationList'][0]['modelid'].toString();
@@ -96,7 +96,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
   _action2() async {
     print(message['locationList'][1]['name']);
     setState(() {
-      place = message['locationList'][1]['name'];
+      place = 'สถานที่2';
       latitude = message['locationList'][1]['latitude'].toString().substring(0, 8);
       longtitude = message['locationList'][1]['longitude'].toString().substring(0, 8);
       loctionID = message['locationList'][1]['modelid'].toString();
@@ -114,7 +114,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
   _action3() async {
     print(message['locationList'][2]['name']);
     setState(() {
-      place = message['locationList'][2]['name'];
+      place = 'สถานที่ test';
       latitude = message['locationList'][2]['latitude'].toString().substring(0, 8);
       longtitude = message['locationList'][2]['longitude'].toString().substring(0, 8);
       loctionID = message['locationList'][2]['modelid'].toString();
@@ -122,7 +122,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
     });
     double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
     setState(() {
-      far = distanceInMeters;
+      far = double.parse(distanceInMeters.toString());
     });
     
     
@@ -174,10 +174,11 @@ class _CheckinScreenState extends State<CheckinScreen> {
   }
 
   _checkin() async {
-    double fars = far;
+    print('far: $far');
+    double fars = double.parse(far);
     var userID = message['cwiUser']['modelid'];
-    print(fars);
-    print(loctionID);
+    
+    
     if (fars <= 50) {
       var data = {
         'userId': userID,
@@ -358,18 +359,19 @@ class _CheckinScreenState extends State<CheckinScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+          Container(),
           RaisedButton(
             color: Colors.lightBlue,
             onPressed: ()=>selectPlace(context),
             child: Text('เลือกสถานที่', style: TextStyle(fontFamily: _kanit, fontSize: 18, color: Colors.white,
             ),),
           ),
-          RaisedButton(
-            child: Text('asd'),
-            onPressed: () async {
+          // RaisedButton(
+          //   child: Text('asd'),
+          //   onPressed: () async {
               
-            },
-          ),
+          //   },
+          // ),
           Column(
             children: <Widget>[
               Row(
