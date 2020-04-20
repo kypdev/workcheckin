@@ -17,18 +17,19 @@ class _HistoryScreenState extends State<HistoryScreen> {
   var employee = 'พนักงาน';
   SharedPreferences sharedPreferences;
   Map<String, dynamic> message;
+  var userID;
 
   getMsg() async {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     setState(() {
-      message = msg;
+      userID = msg['cwiUser']['modelid'];
     });
+    print('userID: $userID');
     
   }
 
   Future<List<LeaveModel>> _getLeave() async {
-    var userID = message['cwiUser']['modelid'];
     var data = {
       "bossId": "",
       "userId": userID,

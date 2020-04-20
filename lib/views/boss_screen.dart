@@ -3,6 +3,7 @@ import 'package:workcheckin/models/boss_leave_model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
 final _kanit = 'Kanit';
 
 class BossScreen extends StatefulWidget {
@@ -11,15 +12,17 @@ class BossScreen extends StatefulWidget {
 }
 
 class _BossScreenState extends State<BossScreen> {
-var message;
-SharedPreferences sharedPreferences;
+  Map<String, dynamic> message;
+  SharedPreferences sharedPreferences;
   getMsg() async {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     setState(() {
       message = msg;
     });
+    print('msg: $msg');
   }
+
   Future<List<BossLeaveModel>> _getLeave() async {
     var data = {
       "bossId": "2",
@@ -41,7 +44,6 @@ SharedPreferences sharedPreferences;
     );
 
     Map<String, dynamic> msg = jsonDecode(response.body);
-    print(msg['trnLeaveList'][0]['modelid']);
 
     List<BossLeaveModel> leaveModels = [];
 
@@ -63,15 +65,15 @@ SharedPreferences sharedPreferences;
       );
       leaveModels.add(leaveModel);
     }
-    print(msg['trnLeaveList']);
     return leaveModels;
   }
 
-@override
+  @override
   void initState() {
-    getMsg();
     super.initState();
+    getMsg();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
