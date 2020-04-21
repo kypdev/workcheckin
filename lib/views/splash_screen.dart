@@ -13,12 +13,14 @@ class _SplashScreenState extends State<SplashScreen> {
   var loginFlag;
 
   _getLoginFlag() async{
+    
     sharedPreferences = await SharedPreferences.getInstance();
-    //กำหนดค่า LoginFlag
+    
     setState(() {
       loginFlag = sharedPreferences.getInt('loginFlag');
       
       if(loginFlag == 1){
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -27,7 +29,9 @@ class _SplashScreenState extends State<SplashScreen> {
             }),
           ),
         );
+
       }else{
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -38,6 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
         );
       }
     });
+
   }
 
   @override
@@ -51,7 +56,12 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('Loading...'),
+        child: Container(
+          child: Visibility(
+            visible: true,
+            child: CircularProgressIndicator(),
+          ),
+        ),
       ),
     );
   }
