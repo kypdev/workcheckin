@@ -60,11 +60,16 @@ class _SigninScreenState extends State<SigninScreen> {
         );
 
         Map<String, dynamic> message = jsonDecode(response.body);
-
+        var userData;
         sharedPreferences = await SharedPreferences.getInstance();
         setState(() {
           sharedPreferences.setString('userMsg', jsonEncode(message));
+          userData = sharedPreferences.setString('userData', jsonEncode(data));
         });
+        var userDatas = sharedPreferences.getString('userData');
+        print(message['cwiUser']['changeDeviceFlag']);
+        var userDatass = jsonDecode(userDatas);
+        print(userDatass['password']);
 
         var msg = message['responseCode'];
         setState(() {
@@ -72,11 +77,43 @@ class _SigninScreenState extends State<SigninScreen> {
         });
 
         if (msg == '000') {
-          setState(() {
+          
+          if (message['cwiUser']['changeDeviceFlag'] == 0) {
+            setState(() {
             sharedPreferences.setInt('loginFlag', 1);
           });
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => HomeScreen()));
+          } else {
+            Alert(
+              context: context,
+              type: AlertType.warning,
+              title: "คุณต้องการเปลี่ยนโทรศัพท์ใช่หรือไม่ ?",
+              desc: "",
+              
+              buttons: [
+                DialogButton(
+                  child: Text(
+                    "ใช่",
+                    style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                  color: Color.fromRGBO(0, 179, 134, 1.0),
+                ),
+                DialogButton(
+                  child: Text(
+                    "ไม่ใช่",
+                    style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                  gradient: LinearGradient(colors: [
+                    Color.fromRGBO(116, 116, 191, 1.0),
+                    Color.fromRGBO(52, 138, 199, 1.0)
+                  ]),
+                )
+              ],
+            ).show();
+          }
         } else {
           print('error');
           Alert(
