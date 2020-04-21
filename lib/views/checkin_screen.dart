@@ -23,11 +23,12 @@ class _CheckinScreenState extends State<CheckinScreen> {
   var message;
   var latitude = '';
   var place = '';
-  var longtitude;
-  var loctionID;
+  var longtitude = '';
+  var loctionID = '';
   var far;
   String _deviceid = 'Unknown';
   String platform;
+  bool visible;
 
   @override
   void initState() {
@@ -35,6 +36,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
     getMsg();
     initDeviceId();
     getPT();
+    visible = false;
   }
 
   getMsg() async {
@@ -42,9 +44,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     setState(() {
       message = msg;
-      latitude = message['locationList'][0]['latitude'].toString();
-      longtitude = message['locationList'][0]['longitude'].toString();
-      place = message['locationList'][0]['name'].toString();
     });
   }
 
@@ -69,7 +68,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
   }
 
   _action1() async {
-    print(message['locationList'][2]['name']);
 
     setState(() {
       place = 'สถานที่1';
@@ -86,11 +84,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
       far = distanceInMeters.toString();
     });
 
-    print(far);
   }
 
   _action2() async {
-    print(message['locationList'][1]['name']);
     setState(() {
       place = 'สถานที่2';
       latitude =
@@ -102,14 +98,11 @@ class _CheckinScreenState extends State<CheckinScreen> {
     double distanceInMeters = await Geolocator().distanceBetween(
         13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
     setState(() {
-      far = distanceInMeters;
+      far = distanceInMeters.toString();
     });
-
-    print(far);
   }
 
   _action3() async {
-    print(message['locationList'][2]['name']);
     setState(() {
       place = 'สถานที่ test';
       latitude =
@@ -122,10 +115,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
     double distanceInMeters = await Geolocator().distanceBetween(
         13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
     setState(() {
-      far = double.parse(distanceInMeters.toString());
+      far = distanceInMeters.toString();
     });
 
-    print(far);
   }
 
   Future<void> initDeviceId() async {
@@ -172,30 +164,36 @@ class _CheckinScreenState extends State<CheckinScreen> {
   }
 
   _checkin() async {
-
     if (far == null) {
+
       Alert(
-            context: context,
-            type: AlertType.warning,
-            title: "",
-            desc: "กรุณาเลือกสถานที่",
-            buttons: [
-              DialogButton(
-                child: Text(
-                  "ตกลง",
-                  style: TextStyle(
-                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
-                ),
-                onPressed: () => Navigator.pop(context),
-                width: 120,
-              )
-            ],
-          ).show();
+        context: context,
+        type: AlertType.warning,
+        title: "",
+        desc: "กรุณาเลือกสถานที่",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "ตกลง",
+              style: TextStyle(
+                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            width: 120,
+          )
+        ],
+      ).show();
+
     } else {
+
       double fars = double.parse(far);
       var userID = message['cwiUser']['modelid'];
 
       if (fars <= 50) {
+
+        setState(() {
+          visible = true;
+        });
         var data = {
           'userId': userID,
           'deviceId': _deviceid,
@@ -214,11 +212,128 @@ class _CheckinScreenState extends State<CheckinScreen> {
           },
         );
         Map<String, dynamic> msg = jsonDecode(response.body);
-        print(msg['responseCode']);
-        print(data);
 
         if (msg['responseCode'] == '000') {
-          print('success');
+          
+          setState(() {
+            visible = false;
+          });
+          
+          Alert(
+            context: context,
+            type: AlertType.success,
+            title: "",
+            desc: "บันทึกสำเร็จ",
+            buttons: [
+              DialogButton(
+                child: Text(
+                  "ตกลง",
+                  style: TextStyle(
+                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                ),
+                onPressed: () => Navigator.pop(context),
+                width: 120,
+              )
+            ],
+          ).show();
+        
+        } else {
+
+          setState(() {
+            visible = false;
+          });
+
+          Alert(
+            context: context,
+            type: AlertType.error,
+            title: "",
+            desc: msg['responseDesc'],
+            buttons: [
+              DialogButton(
+                child: Text(
+                  "ตกลง",
+                  style: TextStyle(
+                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                ),
+                onPressed: () => Navigator.pop(context),
+                width: 120,
+              )
+            ],
+          ).show();
+        }
+
+      } else {
+
+        setState(() {
+          visible = false;
+        });
+
+        Alert(
+          context: context,
+          type: AlertType.error,
+          title: "",
+          desc: "เกิน 50 เมตร",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            )
+          ],
+        ).show();
+        
+      }
+    }
+  }
+
+  _checkout() async {
+    if (far == null) {
+      Alert(
+        context: context,
+        type: AlertType.warning,
+        title: "",
+        desc: "กรุณาเลือกสถานที่",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "ตกลง",
+              style: TextStyle(
+                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            width: 120,
+          )
+        ],
+      ).show();
+    } else {
+      double fars = double.parse(far);
+      var userID = message['cwiUser']['modelid'];
+      if (fars <= 50) {
+        var data = {
+          'userId': userID,
+          'deviceId': _deviceid,
+          'osMobile': platform,
+          'locationId': loctionID,
+        };
+
+        var url = 'http://159.138.232.139/service/cwi/v1/user/checkout';
+
+        var response = await http.post(
+          url,
+          body: json.encode(data),
+          headers: {
+            "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+            "Content-Type": "application/json"
+          },
+        );
+        Map<String, dynamic> msg = jsonDecode(response.body);
+
+        if (msg['responseCode'] == '000') {
+
           Alert(
             context: context,
             type: AlertType.success,
@@ -241,7 +356,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
             context: context,
             type: AlertType.error,
             title: "",
-            desc: msg['responseDesc'],
+            desc: "บันทึกไม่สำเร็จ",
             buttons: [
               DialogButton(
                 child: Text(
@@ -277,92 +392,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
     }
   }
 
-  _checkout() async {
-    double fars = far;
-    var userID = message['cwiUser']['modelid'];
-    print(fars);
-    print(loctionID);
-    if (fars <= 50) {
-      var data = {
-        'userId': userID,
-        'deviceId': _deviceid,
-        'osMobile': platform,
-        'locationId': loctionID,
-      };
-
-      var url = 'http://159.138.232.139/service/cwi/v1/user/checkout';
-
-      var response = await http.post(
-        url,
-        body: json.encode(data),
-        headers: {
-          "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-          "Content-Type": "application/json"
-        },
-      );
-      Map<String, dynamic> msg = jsonDecode(response.body);
-      print(msg['responseCode']);
-      print(data);
-
-      if (msg['responseCode'] == '000') {
-        print('success');
-        Alert(
-          context: context,
-          type: AlertType.success,
-          title: "",
-          desc: "บันทึกสำเร็จ",
-          buttons: [
-            DialogButton(
-              child: Text(
-                "ตกลง",
-                style: TextStyle(
-                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
-              ),
-              onPressed: () => Navigator.pop(context),
-              width: 120,
-            )
-          ],
-        ).show();
-      } else {
-        Alert(
-          context: context,
-          type: AlertType.error,
-          title: "",
-          desc: "บันทึกไม่สำเร็จ",
-          buttons: [
-            DialogButton(
-              child: Text(
-                "ตกลง",
-                style: TextStyle(
-                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
-              ),
-              onPressed: () => Navigator.pop(context),
-              width: 120,
-            )
-          ],
-        ).show();
-      }
-    } else {
-      Alert(
-        context: context,
-        type: AlertType.error,
-        title: "",
-        desc: "เกิน 50 เมตร",
-        buttons: [
-          DialogButton(
-            child: Text(
-              "ตกลง",
-              style: TextStyle(
-                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
-            ),
-            onPressed: () => Navigator.pop(context),
-            width: 120,
-          )
-        ],
-      ).show();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -373,89 +402,138 @@ class _CheckinScreenState extends State<CheckinScreen> {
         ),
         centerTitle: true,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Stack(
+        alignment: Alignment.center,
         children: <Widget>[
-          Container(),
-          RaisedButton(
-            color: Colors.lightBlue,
-            onPressed: () => selectPlace(context),
-            child: Text(
-              'เลือกสถานที่',
-              style: TextStyle(
-                fontFamily: _kanit,
-                fontSize: 18,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          // RaisedButton(
-          //   child: Text('asd'),
-          //   onPressed: () async {
-
-          //   },
-          // ),
           Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Container(),
+              Column(
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: _checkin,
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.green,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      RaisedButton(
+                        color: Colors.lightBlue,
+                        onPressed: () => selectPlace(context),
+                        child: Text(
+                          'เลือกสถานที่',
+                          style: TextStyle(
+                            fontFamily: _kanit,
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                      child: Icon(
-                        FontAwesomeIcons.arrowAltCircleDown,
-                        size: 80,
-                        color: Colors.white,
+                      SizedBox(
+                        width: 20,
                       ),
-                    ),
+                      Text(
+                        place == '' ? 'เลือกสถานที่ก่อน' : place,
+                        style: place == ''
+                            ? TextStyle(
+                                fontFamily: _kanit,
+                                fontSize: 18.0,
+                                color: Colors.red)
+                            : TextStyle(
+                                fontFamily: _kanit,
+                                fontSize: 18.0,
+                                color: Colors.black),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 20),
-                  GestureDetector(
-                    onTap: _checkout,
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.red,
+                  SizedBox(height: 20.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        latitude == ''
+                            ? 'latitude / '
+                            : latitude.toString() + ' / ',
+                        style: place == ''
+                            ? TextStyle(
+                                fontFamily: _kanit,
+                                fontSize: 18.0,
+                                color: Colors.red)
+                            : TextStyle(
+                                fontFamily: _kanit,
+                                fontSize: 18.0,
+                                color: Colors.black),
                       ),
-                      child: Icon(
-                        FontAwesomeIcons.arrowAltCircleDown,
-                        size: 80,
-                        color: Colors.white,
+                      Text(
+                        latitude == '' ? 'longitude' : latitude.toString(),
+                        style: place == ''
+                            ? TextStyle(
+                                fontFamily: _kanit,
+                                fontSize: 18.0,
+                                color: Colors.red)
+                            : TextStyle(
+                                fontFamily: _kanit,
+                                fontSize: 18.0,
+                                color: Colors.black),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
-              SizedBox(height: 30),
-              GestureDetector(
-                onTap: () {},
-                child: Text(
-                  place,
-                  style: TextStyle(
-                    fontFamily: _kanit,
-                    fontSize: 20,
+              // RaisedButton(
+              //   child: Text('asd'),
+              //   onPressed: () async {
+
+              //   },
+              // ),
+              Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: _checkin,
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.green,
+                          ),
+                          child: Icon(
+                            FontAwesomeIcons.arrowAltCircleDown,
+                            size: 80,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      GestureDetector(
+                        onTap: _checkout,
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.red,
+                          ),
+                          child: Icon(
+                            FontAwesomeIcons.arrowAltCircleDown,
+                            size: 80,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                  SizedBox(height: MediaQuery.of(context).size.height / 4),
+                ],
               ),
-              SizedBox(height: 10),
-              Text(
-                '$latitude / $longtitude',
-                style: TextStyle(
-                  fontFamily: _kanit,
-                  fontSize: 20,
-                ),
-              ),
-              SizedBox(height: 50),
             ],
+          ),
+        
+          Container(
+            child: Visibility(
+              visible: visible,
+              child: CircularProgressIndicator(),
+            ),
           ),
         ],
       ),
