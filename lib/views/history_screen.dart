@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:workcheckin/models/leave_model.dart';
 
 final _kanit = 'Kanit';
@@ -25,27 +25,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
     setState(() {
       userID = msg['cwiUser']['modelid'];
     });
-    
   }
 
   Future<List<LeaveModel>> _getLeave() async {
-    var data = {
-      "bossId": "",
-      "userId": userID,
-      "leaveDate": "19/04/2020",
-      "leaveCode": ""
-    };
+    var data = {"bossId": "", "userId": userID, "leaveDate": "19/04/2020", "leaveCode": ""};
 
-    var url =
-        'http://159.138.232.139/service/cwi/v1/user/request_leave_list_by_user';
+    var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave_list_by_user';
 
     var response = await http.post(
       url,
       body: json.encode(data),
-      headers: {
-        "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-        "Content-Type": "application/json"
-      },
+      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
     );
 
     Map<String, dynamic> msg = jsonDecode(response.body);
@@ -74,23 +64,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   getdata() async {
-    var data = {
-      "bossId": "",
-      "userId": userID,
-      "leaveDate": "19/04/2020",
-      "leaveCode": ""
-    };
+    var data = {"bossId": "", "userId": userID, "leaveDate": "19/04/2020", "leaveCode": ""};
 
-    var url =
-        'http://159.138.232.139/service/cwi/v1/user/request_leave_list_by_user';
+    var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave_list_by_user';
 
     var response = await http.post(
       url,
       body: json.encode(data),
-      headers: {
-        "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-        "Content-Type": "application/json"
-      },
+      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
     );
 
     Map<String, dynamic> msg = jsonDecode(response.body);
@@ -120,7 +101,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   void initState() {
-    
     super.initState();
     getMsg();
   }
@@ -138,41 +118,118 @@ class _HistoryScreenState extends State<HistoryScreen> {
           ),
           centerTitle: true,
         ),
-        body: FutureBuilder(
-          future: _getLeave(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.data == null) {
-              return Center(
-                child: Visibility(
-                  visible: true,
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            } else {
-              return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return cardHistory(
-                    leaveDate: snapshot.data[index].leaveDate
-                        .toString()
-                        .substring(0, 9),
-                    leaveHour: snapshot.data[index].leaveHour.toString(),
-                    remark: snapshot.data[index].remark.toString(),
-                    approveFlag:
-                        snapshot.data[index].approveFlag.toString() == 'null'
-                            ? 'รอการอนุมัติ'
-                            : '',
-                    approveRejectDate:
-                        snapshot.data[index].approveRejectDate.toString() ==
-                                'null'
-                            ? ''
-                            : '()',
-                    id: snapshot.data[index].modelid,
-                  );
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(),
+              FutureBuilder(
+                future: _getLeave(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.data != null) {
+                    return Container(
+                      height: MediaQuery.of(context).size.height,
+                      child: ListView.builder(
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 20, right: 20),
+                            child: Card(
+                              elevation: 5.0,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: <Widget>[
+                                    Container(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            'วันที่ลา : ' + snapshot.data[index].leaveDate.toString(),
+                                            style: TextStyle(
+                                              fontFamily: _kanit,
+                                              fontSize: 16.0,
+                                            ),
+                                          ),
+                                          SizedBox(height: 10.0),
+                                          Text(
+                                            'ชั่วโมง : ' + snapshot.data[index].leaveHour.toString(),
+                                            style: TextStyle(
+                                              fontFamily: _kanit,
+                                              fontSize: 13.0,
+                                            ),
+                                          ),
+                                          Text(
+                                            'ชั่วโมง : ' + snapshot.data[index].leaveHour.toString(),
+                                            style: TextStyle(
+                                              fontFamily: _kanit,
+                                              fontSize: 13.0,
+                                            ),
+                                          ),
+                                          Text(
+                                            snapshot.data[index].approveFlag.toString() == 'null' ? 'สถานะการลา รอการอนุมัติ' : '',
+                                            style: TextStyle(
+                                              fontFamily: _kanit,
+                                              fontSize: 13.0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: RawMaterialButton(
+                                        padding: EdgeInsets.all(10),
+                                        shape: CircleBorder(
+                                          side: BorderSide(color: Colors.transparent),
+                                        ),
+                                        fillColor: Colors.blue,
+                                        onPressed: () async {
+                                          var userID = snapshot.data[index].userId.toString();
+                                          var leaveDate = snapshot.data[index].leaveDate.toString();
+                                          var leaveHour = snapshot.data[index].leaveHour.toString();
+                                          var leaveTypeCode = snapshot.data[index].leaveTypeCode.toString();
+                                          var approveFlag = "9";
+                                          var remark = snapshot.data[index].remark.toString();
+                                          var url = 'http://159.138.232.139/service/cwi/v1/user/login';
+
+                                          var jsonData = {"leaveId": "", "userId": userID, "leaveDate": leaveDate, "leaveHour": leaveHour, "leaveCode": leaveTypeCode, "approveFlag": approveFlag, "remark": remark};
+
+                                          print('jsonData: ' + jsonEncode(jsonData));
+
+                                          var response = await http.post(
+                                            url,
+                                            body: json.encode(jsonData),
+                                            headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+                                          );
+                                        },
+                                        child: Icon(
+                                          FontAwesomeIcons.trashAlt,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  } else {
+                    return Center(
+                      child: Visibility(
+                        visible: true,
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
                 },
-              );
-            }
-          },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -203,8 +260,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               children: <Widget>[
                 Text(
                   employee,
-                  style: TextStyle(
-                      fontSize: 18, fontFamily: _kanit, color: Colors.black54),
+                  style: TextStyle(fontSize: 18, fontFamily: _kanit, color: Colors.black54),
                 ),
                 IconButton(
                   onPressed: action,
