@@ -448,15 +448,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
             color: Colors.black54,
             thickness: 1,
           ),
-          // TextFormField(
-          //   controller: hrsCtrl,
-          //   validator: (value) {
-          //     if (value.isEmpty) {
-          //       return 'ชั่วโมงการลาห้ามว่าง!!';
-          //     }
-          //     return null;
-          //   },
-          // ),
+          
           Text(
             'รายละเอียดการลา',
             textAlign: TextAlign.start,

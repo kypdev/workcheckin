@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workcheckin/views/boss_screen.dart';
@@ -7,7 +6,6 @@ import 'package:workcheckin/views/checkin_screen.dart';
 import 'package:workcheckin/views/history_checkin.dart';
 import 'package:workcheckin/views/history_screen.dart';
 import 'package:workcheckin/views/noti_boss_screen.dart';
-import 'package:workcheckin/views/noti_screen.dart';
 import 'package:workcheckin/views/profile_screen.dart';
 import 'package:workcheckin/views/register_screen.dart';
 import 'package:workcheckin/views/signin_screen.dart';
@@ -52,11 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
         context, MaterialPageRoute(builder: (context) => BossScreen()));
   }
 
-  _noti() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => NotiScreen()));
-  }
-
   setMessage() async {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = sharedPreferences.getString('userMsg');
@@ -78,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => RegisterScreen()));
   }
+ 
   _historyCheckin(){
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => HistoryCheckin()));
@@ -118,11 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.deepOrange,
                   action: _bossLeave,
                 ),
-                // btnMenu(
-                //   btnName: 'แจ้งเตือน',
-                //   color: Colors.deepOrange,
-                //   action: _noti,
-                // ),
+                
                 btnMenu(
                   btnName: 'แจ้งเตือน(หัวหน้า)',
                   color: Colors.deepOrange,
