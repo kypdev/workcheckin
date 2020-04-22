@@ -18,6 +18,7 @@ class CheckinScreen extends StatefulWidget {
 }
 
 class _CheckinScreenState extends State<CheckinScreen> {
+
   SharedPreferences sharedPreferences;
 
   var message;
@@ -77,7 +78,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
           message['locationList'][0]['longitude'].toString().substring(0, 8);
       loctionID = message['locationList'][0]['modelid'].toString();
     });
-
+    
     double distanceInMeters = await Geolocator().distanceBetween(
         13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
     setState(() {
@@ -540,3 +541,5 @@ class _CheckinScreenState extends State<CheckinScreen> {
     );
   }
 }
+
+

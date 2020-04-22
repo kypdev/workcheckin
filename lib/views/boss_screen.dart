@@ -12,17 +12,22 @@ class BossScreen extends StatefulWidget {
 }
 
 class _BossScreenState extends State<BossScreen> {
+
   var bossID;
   SharedPreferences sharedPreferences;
+
   getMsg() async {
+
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     setState(() {
       bossID = msg['cwiUser']['bossId'];
     });
+
   }
 
   Future<List<BossLeaveModel>> _getLeave() async {
+
     var data = {
       "bossId": bossID,
       "userId": "",
@@ -47,6 +52,7 @@ class _BossScreenState extends State<BossScreen> {
     List<BossLeaveModel> leaveModels = [];
 
     for (var leave in msg['trnLeaveList']) {
+
       BossLeaveModel leaveModel = BossLeaveModel(
         leave['modelid'],
         leave['userId'],
@@ -76,24 +82,30 @@ class _BossScreenState extends State<BossScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
-        title: Text('boss'),
+        title: Text('ใบลา(หัวหน้า)', style: TextStyle(fontFamily: _kanit)),
         centerTitle: true,
       ),
+
       body: FutureBuilder(
         future: _getLeave(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null) {
+
             return Center(
               child: Visibility(
                 visible: true,
                 child: CircularProgressIndicator(),
               ),
             );
+
           } else {
+
             return ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int index) {
+
                 return cardHistory(
                   leaveDate:
                       snapshot.data[index].leaveDate.toString().substring(0, 9),
@@ -111,12 +123,14 @@ class _BossScreenState extends State<BossScreen> {
                   id: snapshot.data[index].modelid,
                   userid: snapshot.data[index].userId.toString(),
                 );
+
               },
             );
           }
         },
       ),
     );
+    
   }
 
   Widget cardHistory({
