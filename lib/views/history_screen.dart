@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +19,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   SharedPreferences sharedPreferences;
   Map<String, dynamic> message;
   var userID;
+  bool visible = false;
 
   getMsg() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -119,114 +121,170 @@ class _HistoryScreenState extends State<HistoryScreen> {
           centerTitle: true,
         ),
         body: SingleChildScrollView(
-          child: Column(
+          child: Stack(
+            alignment: Alignment.center,
             children: <Widget>[
-              Container(),
-              FutureBuilder(
-                future: _getLeave(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.data != null) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height,
-                      child: ListView.builder(
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
-                            child: Card(
-                              elevation: 5.0,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: <Widget>[
-                                    Container(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            'วันที่ลา : ' + snapshot.data[index].leaveDate.toString(),
-                                            style: TextStyle(
-                                              fontFamily: _kanit,
-                                              fontSize: 16.0,
-                                            ),
+              Column(
+                children: <Widget>[
+                  Container(),
+                  FutureBuilder(
+                    future: _getLeave(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.data != null) {
+                        return Container(
+                          height: MediaQuery.of(context).size.height,
+                          child: ListView.builder(
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(left: 20, right: 20),
+                                child: Card(
+                                  elevation: 5.0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: <Widget>[
+                                        Container(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                'วันที่ลา : ' + snapshot.data[index].leaveDate.toString(),
+                                                style: TextStyle(
+                                                  fontFamily: _kanit,
+                                                  fontSize: 16.0,
+                                                ),
+                                              ),
+                                              SizedBox(height: 10.0),
+                                              Text(
+                                                'ชั่วโมง : ' + snapshot.data[index].leaveHour.toString(),
+                                                style: TextStyle(
+                                                  fontFamily: _kanit,
+                                                  fontSize: 13.0,
+                                                ),
+                                              ),
+                                              Text(
+                                                'ชั่วโมง : ' + snapshot.data[index].leaveHour.toString(),
+                                                style: TextStyle(
+                                                  fontFamily: _kanit,
+                                                  fontSize: 13.0,
+                                                ),
+                                              ),
+                                              Text(
+                                                snapshot.data[index].approveFlag.toString() == 'null' ? 'สถานะการลา รอการอนุมัติ' : '',
+                                                style: TextStyle(
+                                                  fontFamily: _kanit,
+                                                  fontSize: 13.0,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          SizedBox(height: 10.0),
-                                          Text(
-                                            'ชั่วโมง : ' + snapshot.data[index].leaveHour.toString(),
-                                            style: TextStyle(
-                                              fontFamily: _kanit,
-                                              fontSize: 13.0,
-                                            ),
-                                          ),
-                                          Text(
-                                            'ชั่วโมง : ' + snapshot.data[index].leaveHour.toString(),
-                                            style: TextStyle(
-                                              fontFamily: _kanit,
-                                              fontSize: 13.0,
-                                            ),
-                                          ),
-                                          Text(
-                                            snapshot.data[index].approveFlag.toString() == 'null' ? 'สถานะการลา รอการอนุมัติ' : '',
-                                            style: TextStyle(
-                                              fontFamily: _kanit,
-                                              fontSize: 13.0,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: RawMaterialButton(
-                                        padding: EdgeInsets.all(10),
-                                        shape: CircleBorder(
-                                          side: BorderSide(color: Colors.transparent),
                                         ),
-                                        fillColor: Colors.blue,
-                                        onPressed: () async {
-                                          var userID = snapshot.data[index].userId.toString();
-                                          var leaveDate = snapshot.data[index].leaveDate.toString();
-                                          var leaveHour = snapshot.data[index].leaveHour.toString();
-                                          var leaveTypeCode = snapshot.data[index].leaveTypeCode.toString();
-                                          var approveFlag = "9";
-                                          var remark = snapshot.data[index].remark.toString();
-                                          var url = 'http://159.138.232.139/service/cwi/v1/user/login';
+                                        Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: RawMaterialButton(
+                                            padding: EdgeInsets.all(10),
+                                            shape: CircleBorder(
+                                              side: BorderSide(color: Colors.transparent),
+                                            ),
+                                            fillColor: Colors.blue,
+                                            onPressed: () async {
+                                              setState(() {
+                                                visible = true;
+                                              });
 
-                                          var jsonData = {"leaveId": "", "userId": userID, "leaveDate": leaveDate, "leaveHour": leaveHour, "leaveCode": leaveTypeCode, "approveFlag": approveFlag, "remark": remark};
+                                              var userID = snapshot.data[index].userId.toString();
+                                              var leaveDate = snapshot.data[index].leaveDate.toString();
+                                              var leaveHour = snapshot.data[index].leaveHour.toString();
+                                              var leaveTypeCode = snapshot.data[index].leaveTypeCode.toString();
+                                              var approveFlag = "9";
+                                              var remark = snapshot.data[index].remark.toString();
+                                              var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave';
 
-                                          print('jsonData: ' + jsonEncode(jsonData));
+                                              var jsonData = {"leaveId": "", "userId": userID, "leaveDate": leaveDate, "leaveHour": leaveHour, "leaveCode": leaveTypeCode, "approveFlag": approveFlag, "remark": remark};
 
-                                          var response = await http.post(
-                                            url,
-                                            body: json.encode(jsonData),
-                                            headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
-                                          );
-                                        },
-                                        child: Icon(
-                                          FontAwesomeIcons.trashAlt,
-                                          color: Colors.white,
+                                              var response = await http.post(
+                                                url,
+                                                body: json.encode(jsonData),
+                                                headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+                                              );
+
+                                              Map<String, dynamic> message = jsonDecode(response.body);
+
+                                              print('res: $message');
+
+                                              if (message['responseCode'] == '000') {
+                                                // Success
+
+                                                setState(() {
+                                                  visible = false;
+                                                });
+                                                Alert(context: context, type: AlertType.success, title: "ลบใบลาสำเร็จ", desc: "", buttons: [
+                                                  DialogButton(
+                                                    child: Text(
+                                                      "ตกลง",
+                                                      style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                                                    ),
+                                                    onPressed: () => Navigator.pop(context),
+                                                    color: Colors.green,
+                                                  ),
+                                                ]).show();
+                                              } else {
+                                                // Failed to process
+                                                setState(() {
+                                                  visible = false;
+                                                });
+                                                Alert(
+                                                  context: context,
+                                                  type: AlertType.warning,
+                                                  title: "ทำายการไม่สำเร็จกรุณาลองอีกครั้ง",
+                                                  desc: "",
+                                                  buttons: [
+                                                    DialogButton(
+                                                      child: Text(
+                                                        "ตกลง",
+                                                        style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                                                      ),
+                                                      onPressed: () => Navigator.pop(context),
+                                                      color: Colors.red,
+                                                    )
+                                                  ],
+                                                ).show();
+                                              }
+                                            },
+                                            child: Icon(
+                                              FontAwesomeIcons.trashAlt,
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  } else {
-                    return Center(
-                      child: Visibility(
-                        visible: true,
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  }
-                },
+                              );
+                            },
+                          ),
+                        );
+                      } else {
+                        return Center(
+                          child: Visibility(
+                            visible: true,
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
+              Center(
+                child: Visibility(
+                  visible: visible,
+                  child: CircularProgressIndicator(),
+                ),
               ),
             ],
           ),
