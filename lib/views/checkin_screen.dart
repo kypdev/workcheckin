@@ -9,7 +9,6 @@ import 'dart:io' show Platform;
 import 'package:device_id/device_id.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:workcheckin/models/user_locationlist_model.dart';
 
 final _kanit = 'Kanit';
 
@@ -20,22 +19,20 @@ class CheckinScreen extends StatefulWidget {
 
 class _CheckinScreenState extends State<CheckinScreen> {
   SharedPreferences sharedPreferences;
-  var message;
+  var msg;
   var latitude = '';
   var place = '';
   var longtitude = '';
   var loctionID = '';
   var far;
-  var msg;
   String _deviceid = 'Unknown';
   String platform;
   bool visible;
   GlobalKey<AnimatedListState> animatedListKey = GlobalKey<AnimatedListState>();
   AnimationController emptyListController;
   List<dynamic> ddDatas;
-  List<DropdownMenuItem<String>> ddDataToDD = [];
-  String ddDataSelected;
-  int index;
+  List<String> item = [];
+  int _item;
 
   @override
   void initState() {
@@ -56,102 +53,22 @@ class _CheckinScreenState extends State<CheckinScreen> {
     });
   }
 
-  Future<List<UserLocationListModel>> _getLocations() async {
-    print('msg: $msg');
-    List<UserLocationListModel> listlos = [];
-    for (var l in msg['locationList']) {
-      UserLocationListModel usermodel = UserLocationListModel(
-        l['modelid'],
-        l['name'],
-        l['orgId'],
-        l['branchId'],
-        l['latitude'],
-        l['longitude'],
-        l['far'],
-        l['status'],
-        l['createDate'],
-        l['createBy'],
-        l['updateDate'],
-        l['updateBy'],
-        l['defaultInTime'],
-        l['defaultOutTime'],
-      );
-      print(l['name']);
-      listlos.add(usermodel);
-    }
-    return listlos;
-  }
-
   selectPlace() {
     setState(() {
       ddDatas = msg['locationList'];
+      _item =0;
     });
 
     for (int i = 0; i < ddDatas.length; i++) {
       for (int j = i; j <= i; j++) {
-        // datalist.add(value)
-        // print('lo: ' + ddDatas[i]['name'] + ' ');
-        ddDataToDD.add(
-          DropdownMenuItem(
-            child: Center(
-              child: Text(
-                ddDatas[i]['name'],
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: _kanit,
-                ),
-              ),
-            ),
-            value: ddDatas[i]['name'].toString(),
-          ),
-        );
-        ddDataSelected = ddDatas[i]['name'];
+          item.add(ddDatas[i]['name']);
       }
-    }
-  }
-
-  _action1() async {
-    setState(() {
-      place = 'สถานที่1';
-      latitude = message['locationList'][0]['latitude'].toString().substring(0, 8);
-      longtitude = message['locationList'][0]['longitude'].toString().substring(0, 8);
-      loctionID = message['locationList'][0]['modelid'].toString();
-    });
-
-    double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
-    setState(() {
-      far = distanceInMeters.toString();
-    });
-  }
-
-  _action2() async {
-    setState(() {
-      place = 'สถานที่2';
-      latitude = message['locationList'][1]['latitude'].toString().substring(0, 8);
-      longtitude = message['locationList'][1]['longitude'].toString().substring(0, 8);
-      loctionID = message['locationList'][1]['modelid'].toString();
-    });
-    double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
-    setState(() {
-      far = distanceInMeters.toString();
-    });
-  }
-
-  _action3() async {
-    setState(() {
-      place = 'สถานที่ test';
-      latitude = message['locationList'][2]['latitude'].toString().substring(0, 8);
-      longtitude = message['locationList'][2]['longitude'].toString().substring(0, 8);
-      loctionID = message['locationList'][2]['modelid'].toString();
-      far = message['locationList'][2]['far'].toString();
-    });
-    double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
-    setState(() {
-      far = distanceInMeters.toString();
-    });
+    }    print(item);
+    place = msg['locationList'][_item]['name'].toString();
+    latitude = msg['locationList'][_item]['latitude'].toString();
+    longtitude = msg['locationList'][_item]['longitude'].toString().substring(0, 8);
+    loctionID = msg['locationList'][_item]['modelid'].toString();
+    print('$latitude $longtitude');
   }
 
   Future<void> initDeviceId() async {
@@ -187,17 +104,13 @@ class _CheckinScreenState extends State<CheckinScreen> {
     }
   }
 
-  ListTile _createTile(BuildContext context, String name, Function action) {
-    return ListTile(
-      title: Text(name),
-      onTap: () {
-        Navigator.pop(context);
-        action();
-      },
-    );
-  }
+  
 
   _checkin() async {
+    double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
+    far = distanceInMeters.toString();
+
+    print('far: $far');
     if (far == null) {
       Alert(
         context: context,
@@ -217,7 +130,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
       ).show();
     } else {
       double fars = double.parse(far);
-      var userID = message['cwiUser']['modelid'];
+      var userID = msg['cwiUser']['modelid'];
 
       if (fars <= 50) {
         setState(() {
@@ -308,6 +221,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
   }
 
   _checkout() async {
+    double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
+    far = distanceInMeters.toString();
     if (far == null) {
       Alert(
         context: context,
@@ -327,7 +242,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
       ).show();
     } else {
       double fars = double.parse(far);
-      var userID = message['cwiUser']['modelid'];
+      var userID = msg['cwiUser']['modelid'];
       if (fars <= 50) {
         var data = {
           'userId': userID,
@@ -430,39 +345,44 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           fontSize: 25.0,
                           fontWeight: FontWeight.bold,
                         )),
+                    
+                    
+                    
+
+                    place=='' ?
                     Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 20),
-                        child: Center(
-                          child: DropdownButtonHideUnderline(
-                            child: Center(
-                                child: ddDataToDD != null
-                                    ? DropdownButton(
-                                        items: ddDataToDD,
-                                        value: ddDataSelected,
-                                        isExpanded: true,
-                                        onChanged: (data) async {
-                                          print(data);
-                                          setState(() {
-                                            ddDataSelected = data;
-
-                                            place = 'สถานที่1';
-                                            latitude = msg['locationList'][0]['latitude'].toString().substring(0, 8);
-                                            longtitude = msg['locationList'][0]['longitude'].toString().substring(0, 8);
-                                            loctionID = msg['locationList'][0]['modelid'].toString();
-                                          });
-                                          double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
-
-                                          far = distanceInMeters.toString();
-                                        },
-                                      )
-                                    : Center(
-                                        child: Visibility(visible: true, child: CircularProgressIndicator()),
-                                      )),
-                          ),
-                        ),
+                      child: Visibility(
+                        visible: true,
+                        child: CircularProgressIndicator(),
                       ),
+                    ):
+                    DropdownButton<String>(
+                       hint: new Text(place),
+                       value: _item == null ? null : item[_item],
+                       items: item.map((String value){
+                         return DropdownMenuItem<String>(
+                           value: value,
+                           child: Text(value),
+                         );
+                       }).toList(),
+                       onChanged: (value){
+                         setState(() {
+                           // get index
+                           _item = item.indexOf(value);
+
+                           // set location
+                           place = msg['locationList'][_item]['name'].toString();
+                          latitude = msg['locationList'][_item]['latitude'].toString().substring(0, 8);
+                          longtitude = msg['locationList'][_item]['longitude'].toString().substring(0, 8);
+                          loctionID = msg['locationList'][_item]['modelid'].toString();
+                         });
+
+                         print('$place $latitude, $longtitude $loctionID');
+                       },
                     ),
+                    
+   
+              
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
