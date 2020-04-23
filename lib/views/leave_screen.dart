@@ -37,27 +37,25 @@ class _LeaveScreenState extends State<LeaveScreen> {
   var message;
   int _currentInfIntValue = 1;
   NumberPicker integerInfiniteNumberPicker;
+  List<String> item = [];
+  int _item;
+  List<dynamic> leaveDDdata;
+  var msgobj;
 
   void _showDateTimePicker() {
     return DatePicker.showDatePicker(
       context,
       pickerTheme: DateTimePickerTheme(
         showTitle: _showTitle,
-        confirm: Text('ตกลง',
-            style: TextStyle(color: Colors.red, fontFamily: _kanit)),
-        cancel: Text('ยกเลิก',
-            style: TextStyle(color: Colors.cyan, fontFamily: _kanit)),
+        confirm: Text('ตกลง', style: TextStyle(color: Colors.red, fontFamily: _kanit)),
+        cancel: Text('ยกเลิก', style: TextStyle(color: Colors.cyan, fontFamily: _kanit)),
       ),
       initialDateTime: _dateTime,
       dateFormat: _format,
       locale: _locale,
       onClose: () {
         setState(() {
-          dateStr = _dateTime.day.toString() +
-              '/' +
-              _dateTime.month.toString() +
-              '/' +
-              _dateTime.year.toString();
+          dateStr = _dateTime.day.toString() + '/' + _dateTime.month.toString() + '/' + _dateTime.year.toString();
         });
       },
       onCancel: () => print('onCancel'),
@@ -80,18 +78,31 @@ class _LeaveScreenState extends State<LeaveScreen> {
     var response = await http.post(
       url,
       body: '{}',
-      headers: {
-        "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-        "Content-Type": "application/json"
-      },
+      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
     );
 
-    Map<String, dynamic> message = jsonDecode(response.body);
+    Map<String, dynamic> messages = jsonDecode(response.body);
 
-    print('levae: $message');
     setState(() {
-      msgStr = message;
+      msgStr = messages;
     });
+  }
+
+  _setDDdata() {
+    print(msgStr['leaveTypeList'][0]['name']);
+    setState(() {
+      msgobj = msgStr['leaveTypeList'];
+    });
+    print(msgobj[0]['name']);
+
+    for (int i = 0; i < msgobj.length; i++) {
+      for (int j = i; j <= i; j++) {
+        item.add(msgobj[i]['name']);
+        print('s');
+      }
+    }
+    print(item);
+    leaveTypeStr = msgStr['leaveTypeList'][0]['name'];
   }
 
   getMsg() async {
@@ -106,85 +117,17 @@ class _LeaveScreenState extends State<LeaveScreen> {
     print(message['cwiUser']['modelid'].toString());
   }
 
-  _selectTypeLeave() {
-    showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        )),
-        context: context,
-        builder: (BuildContext context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              _createTile(
-                  context, msgStr['leaveTypeList'][0]['description'], _action1),
-              _createTile(
-                  context, msgStr['leaveTypeList'][1]['description'], _action2),
-              _createTile(
-                  context, msgStr['leaveTypeList'][2]['description'], _action3),
-            ],
-          );
-        });
-  }
-
-  _action1() {
-    setState(() {
-      msgCode = msgStr['leaveTypeList'][0]['code'].toString();
-      leaveTypeStr = msgStr['leaveTypeList'][0]['description'].toString();
-      print(msgCode);
-    });
-  }
-
-  _action2() {
-    setState(() {
-      msgCode = msgStr['leaveTypeList'][1]['code'].toString();
-      leaveTypeStr = msgStr['leaveTypeList'][1]['description'].toString();
-      print(msgCode);
-    });
-  }
-
-  _action3() {
-    setState(() {
-      msgCode = msgStr['leaveTypeList'][2]['code'].toString();
-      leaveTypeStr = msgStr['leaveTypeList'][2]['description'].toString();
-      print(msgCode);
-    });
-  }
-
-  ListTile _createTile(BuildContext context, String name, Function action) {
-    return ListTile(
-      title: Text(name),
-      onTap: () {
-        Navigator.pop(context);
-        action();
-      },
-    );
-  }
-
   sendLeave() async {
     var userID = message['cwiUser']['modelid'];
     print(remarkCtrl.text);
     var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave';
     if (_formKey.currentState.validate()) {
-      var data = {
-        "leaveId": "",
-        "userId": userID,
-        "leaveDate": dateStr,
-        "leaveHour": _currentInfIntValue.toString(),
-        "leaveCode": msgCode,
-        "approveFlag": "",
-        "remark": remarkCtrl.text
-      };
+      var data = {"leaveId": "", "userId": userID, "leaveDate": dateStr, "leaveHour": _currentInfIntValue.toString(), "leaveCode": msgCode, "approveFlag": "", "remark": remarkCtrl.text.trim()};
 
       var response = await http.post(
         url,
         body: json.encode(data),
-        headers: {
-          "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-          "Content-Type": "application/json"
-        },
+        headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
       );
 
       Map<String, dynamic> message = jsonDecode(response.body);
@@ -200,8 +143,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
             DialogButton(
               child: Text(
                 "ตกลง",
-                style: TextStyle(
-                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
               ),
               onPressed: () => Navigator.pop(context),
               width: 120,
@@ -218,8 +160,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
             DialogButton(
               child: Text(
                 "ตกลง",
-                style: TextStyle(
-                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
               ),
               onPressed: () => Navigator.pop(context),
               width: 120,
@@ -257,71 +198,68 @@ class _LeaveScreenState extends State<LeaveScreen> {
     super.initState();
     _getLeaveType();
     getMsg();
+    Future.delayed(Duration(milliseconds: 1000), () {
+      _setDDdata();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              'ลางาน',
-              style: TextStyle(
-                fontFamily: _kanit,
+        appBar: AppBar(
+          title: Text(
+            'ลางาน',
+            style: TextStyle(
+              fontFamily: _kanit,
+            ),
+          ),
+          centerTitle: true,
+        ),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  showDate(
+                    date: dateStr,
+                    action: _showDateTimePicker,
+                  ),
+                  getTypeLeave(
+                    action: () {},
+                    leaveType: leaveTypeStr,
+                  ),
+                  hoursLeave(
+                    hrsCtrl: hrCtrl,
+                    remarkCtrl: remarkCtrl,
+                    hours: _currentInfIntValue.toString(),
+                  ),
+                  RaisedButton(
+                    color: Colors.blueAccent,
+                    onPressed: sendLeave,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'ตกลง',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: _kanit,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-            centerTitle: true,
           ),
-          body: SingleChildScrollView(
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      showDate(
-                        date: dateStr,
-                        action: _showDateTimePicker,
-                      ),
-                      getTypeLeave(
-                        action: _selectTypeLeave,
-                        leaveType: leaveTypeStr,
-                      ),
-                      hoursLeave(
-                        hrsCtrl: hrCtrl,
-                        remarkCtrl: remarkCtrl,
-                        hours: _currentInfIntValue.toString(),
-                      ),
-                      RaisedButton(
-                        color: Colors.blueAccent,
-                        onPressed: sendLeave,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'ตกลง',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: _kanit,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )),
+        ),
+      ),
     );
   }
 
@@ -335,8 +273,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
         SizedBox(height: 20),
         Text(
           'วันที่',
-          style: TextStyle(
-              fontFamily: _kanit, fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(fontFamily: _kanit, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         GestureDetector(
           onTap: action,
@@ -367,42 +304,46 @@ class _LeaveScreenState extends State<LeaveScreen> {
     action,
     leaveType,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'ประเภทการลา',
-          textAlign: TextAlign.start,
-          style: TextStyle(
-            fontFamily: _kanit,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(
-              '$leaveType',
-              style: TextStyle(
-                fontFamily: _kanit,
-                color: Colors.black54,
-                fontSize: 18.0,
-              ),
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            'ประเภทการลา',
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontFamily: _kanit,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
-            GestureDetector(
-                onTap: action,
-                child: Icon(
-                  Icons.arrow_drop_down,
-                  color: Colors.black54,
-                )),
-          ],
-        ),
-        Divider(
-          color: Colors.black54,
-          thickness: 1,
-        ),
-      ],
+          ),
+          DropdownButton<String>(
+            isExpanded: true,
+            hint: new Text(leaveTypeStr),
+            value: _item == null ? null : item[_item],
+            items: item.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                // get index
+                _item = item.indexOf(value);
+                msgCode = msgStr['leaveTypeList'][_item]['code'].toString();
+                leaveTypeStr = msgStr['leaveTypeList'][_item]['description'].toString();
+                print(msgCode);
+              });
+            },
+          ),
+          Divider(
+            color: Colors.black54,
+            thickness: 1,
+          ),
+        ],
+      ),
     );
   }
 
@@ -448,7 +389,6 @@ class _LeaveScreenState extends State<LeaveScreen> {
             color: Colors.black54,
             thickness: 1,
           ),
-          
           Text(
             'รายละเอียดการลา',
             textAlign: TextAlign.start,
