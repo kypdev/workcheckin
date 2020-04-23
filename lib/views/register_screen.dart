@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:workcheckin/models/branch_list.dart';
-
 final _kanit = 'Kanit';
 
 class RegisterScreen extends StatefulWidget {
@@ -20,75 +18,77 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController positionCtrl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool obpass, obconpass;
-  var org = 'องค์การโทรศัพท์';
-  List<BranchList> branchItem = [];
-  int position = 1;
+  var org = '';
+  List<dynamic> orgData;
+  List<String> orgItem = [];
+  int indexOrd;
+  var resOrgList;
+  var ordId;
+  List<dynamic> branchData;
+  List<String> branchItem = [];
+  int branchIndex;
+  var branchName;
+  var position;
+  var resBranshlist;
+  var branchid;
 
-  _register() {
-    if (_formKey.currentState.validate()) {}
-  }
-
-  Future<List<BranchList>> _getBrahch() async {
-
-    var url = 'http://159.138.232.139/service/cwi/v1/master/getBranchList';
-    var data = {"orgId": "1"};
+  _getOrg() async {
+    var url = 'http://159.138.232.139/service/cwi/v1/master/getOrgList';
 
     var response = await http.post(
       url,
-      body: json.encode(data),
-      headers: {
-        "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-        "Content-Type": "application/json"
-      },
+      body: '{}',
+      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
     );
+    Map<String, dynamic> messages = jsonDecode(response.body);
+    var msg = messages;
+    setState(() => indexOrd = 0);
+    setState(() => resOrgList = messages);
+    orgData = msg['orgList'];
 
-    Map<String, dynamic> msg = jsonDecode(response.body);
-
-    print(msg['branchList'][0]);
-
-    List<BranchList> branchList = [];
-    for (var bl in msg['branchList']) {
-      BranchList branchLists = BranchList(
-        bl['modelid'],
-        bl['name'],
-        bl['status'],
-        bl['orgId'],
-        bl['createDate'],
-        bl['createBy'],
-        bl['updateDate'],
-        bl['updateBy'],
-      );
-      branchList.add(branchLists);
+    for (int i = 0; i < orgData.length; i++) {
+      for (int j = i; j <= i; j++) {
+        orgItem.add(orgData[i]['name']);
+      }
     }
-      print(branchList);
-    return branchList;
+    print(orgItem);
+    _getBranch();
   }
 
-  _showBranchModal() {
-    
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context){
-        return Container(
-          child: FutureBuilder(
-            future: _getBrahch(),
-            builder: (BuildContext context, AsyncSnapshot sn){
-              ListView.builder(
-                itemCount: sn.data.length,
-                itemBuilder: (BuildContext context, int index){
-                  if(sn.data == null){
-                    return Text('nodata');
-                  }
-                  return Text(
-                    sn.data[index].modelid.toString(),
-                  );
-                },
-              );
-            }
-          ),
-        );
-      },
+  _getBranch() async {
+    var url = 'http://159.138.232.139/service/cwi/v1/master/getBranchList';
+    var data = {'orgId': ordId};
+    var response = await http.post(
+      url,
+      body: jsonEncode(data),
+      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
     );
+    print(branchItem);
+    Map<String, dynamic> messages = jsonDecode(response.body);
+    setState(() => resBranshlist = messages);
+    setState(() => branchIndex = 0);
+    setState(() => branchName = 0);
+    branchData = resBranshlist['branchList'];
+    branchItem.clear();
+
+    for (int i = 0; i < branchData.length; i++) {
+      for (int j = i; j <= i; j++) {
+        branchItem.add(branchData[i]['name']);
+      }
+    }
+
+    print('$branchItem');
+  }
+
+  _cleardata() {
+    branchItem.clear();
+    print('$branchItem');
+    branchItem.add('');
+    _getBranch();
+  }
+
+  _register() {
+    if (_formKey.currentState.validate()) {}
   }
 
   @override
@@ -96,6 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     obconpass = true;
     obpass = true;
     super.initState();
+    _getOrg();
   }
 
   @override
@@ -112,23 +113,81 @@ class _RegisterScreenState extends State<RegisterScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
+              RaisedButton(
+                child: Text('test'),
+                onPressed: () {
+                  _getBranch();
+                },
+              ),
+              RaisedButton(
+                child: Text('test2'),
+                onPressed: () {
+                  _cleardata();
+                },
+              ),
               Form(
                 key: _formKey,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-
                       dropdown(
-                        value: org,
                         title: 'องค์กร',
                       ),
-
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: DropdownButton<String>(
+                          isExpanded: true,
+                          value: indexOrd == null ? null : orgItem[indexOrd],
+                          items: orgItem.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: TextStyle(fontFamily: _kanit),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              // get index
+                              indexOrd = orgItem.indexOf(value);
+                              org = resOrgList['orgList'][indexOrd]['name'];
+                              ordId = resOrgList['orgList'][indexOrd]['modelid'];
+                            });
+                            print('$indexOrd, $org $ordId');
+                            _cleardata();
+                          },
+                        ),
+                      ),
                       dropdown(
-                        value: org,
                         title: 'สาขา',
                       ),
-
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: DropdownButton<String>(
+                          isExpanded: true,
+                          value: branchIndex == null ? null : branchItem[branchIndex],
+                          items: branchItem.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: TextStyle(fontFamily: _kanit),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              // get index
+                              branchName = resBranshlist['branchList'][branchIndex]['name'].toString();
+                              branchid = resBranshlist['branchList'][branchIndex]['modelid'].toString();
+                              print('$branchName, $branchid');
+                            });
+                          },
+                        ),
+                      ),
                       form(
                         visible: false,
                         ctrl: usernameCtrl,
@@ -141,16 +200,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           return null;
                         },
                       ),
-
                       form(
                         visible: obpass,
                         ctrl: passwordCtrl,
                         labeltext: 'รหัสผ่าน',
                         prefixicon: Icon(Icons.lock),
                         sufficicon: IconButton(
-                          icon: obpass
-                              ? Icon(Icons.visibility)
-                              : Icon(Icons.visibility_off),
+                          icon: obpass ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
                           onPressed: () {
                             if (obpass) {
                               setState(() {
@@ -170,16 +226,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           return null;
                         },
                       ),
-                     
                       form(
                         visible: obconpass,
                         ctrl: conPasswordCtrl,
                         labeltext: 'ยืนยันรหัสผ่าน',
                         prefixicon: Icon(Icons.lock),
                         sufficicon: IconButton(
-                          icon: obconpass
-                              ? Icon(Icons.visibility)
-                              : Icon(Icons.visibility_off),
+                          icon: obconpass ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
                           onPressed: () {
                             if (obconpass) {
                               setState(() {
@@ -199,7 +252,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           return null;
                         },
                       ),
-                      
                       form(
                         visible: false,
                         ctrl: nameCtrl,
@@ -212,7 +264,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           return null;
                         },
                       ),
-                      
                       form(
                         visible: false,
                         ctrl: lastnameCtrl,
@@ -225,12 +276,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           return null;
                         },
                       ),
-                      
                       dropdown(
                         title: 'ตำแหน่ง',
-                        value: position.toString(),
                       ),
-
                     ],
                   ),
                 ),
@@ -245,10 +293,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 onPressed: _register,
-              ),
-              RaisedButton(
-                child: Text('asdf'),
-                onPressed: _showBranchModal,
               ),
             ],
           ),
@@ -293,7 +337,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget dropdown({
-    value,
     title,
   }) {
     return Padding(
@@ -309,45 +352,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                value,
-                style: TextStyle(
-                  fontFamily: _kanit,
-                  fontSize: 18.0,
-                ),
-              ),
-              Icon(
-                Icons.arrow_drop_down,
-              ),
-            ],
-          ),
         ],
       ),
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // #####################################################
 
