@@ -9,6 +9,7 @@ import 'dart:io' show Platform;
 import 'package:device_id/device_id.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:workcheckin/models/user_locationlist_model.dart';
 
 final _kanit = 'Kanit';
 
@@ -18,18 +19,23 @@ class CheckinScreen extends StatefulWidget {
 }
 
 class _CheckinScreenState extends State<CheckinScreen> {
-
   SharedPreferences sharedPreferences;
-
   var message;
   var latitude = '';
   var place = '';
   var longtitude = '';
   var loctionID = '';
   var far;
+  var msg;
   String _deviceid = 'Unknown';
   String platform;
   bool visible;
+  GlobalKey<AnimatedListState> animatedListKey = GlobalKey<AnimatedListState>();
+  AnimationController emptyListController;
+  List<dynamic> ddDatas;
+  List<DropdownMenuItem<String>> ddDataToDD = [];
+  String ddDataSelected;
+  int index;
 
   @override
   void initState() {
@@ -38,66 +44,97 @@ class _CheckinScreenState extends State<CheckinScreen> {
     initDeviceId();
     getPT();
     visible = false;
+    Future.delayed(Duration(milliseconds: 500), () {
+      selectPlace();
+    });
   }
 
   getMsg() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     setState(() {
-      message = msg;
+      msg = jsonDecode(sharedPreferences.getString('userMsg'));
     });
   }
 
-  selectPlace(BuildContext context) {
-    showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        )),
-        context: context,
-        builder: (BuildContext context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              _createTile(context, 'สถานที่1', _action1),
-              _createTile(context, 'สถานที่2'.toString(), _action2),
-              _createTile(context, 'สถานที่ test', _action3),
-            ],
-          );
-        });
+  Future<List<UserLocationListModel>> _getLocations() async {
+    print('msg: $msg');
+    List<UserLocationListModel> listlos = [];
+    for (var l in msg['locationList']) {
+      UserLocationListModel usermodel = UserLocationListModel(
+        l['modelid'],
+        l['name'],
+        l['orgId'],
+        l['branchId'],
+        l['latitude'],
+        l['longitude'],
+        l['far'],
+        l['status'],
+        l['createDate'],
+        l['createBy'],
+        l['updateDate'],
+        l['updateBy'],
+        l['defaultInTime'],
+        l['defaultOutTime'],
+      );
+      print(l['name']);
+      listlos.add(usermodel);
+    }
+    return listlos;
+  }
+
+  selectPlace() {
+    setState(() {
+      ddDatas = msg['locationList'];
+    });
+
+    for (int i = 0; i < ddDatas.length; i++) {
+      for (int j = i; j <= i; j++) {
+        // datalist.add(value)
+        // print('lo: ' + ddDatas[i]['name'] + ' ');
+        ddDataToDD.add(
+          DropdownMenuItem(
+            child: Center(
+              child: Text(
+                ddDatas[i]['name'],
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: _kanit,
+                ),
+              ),
+            ),
+            value: ddDatas[i]['name'].toString(),
+          ),
+        );
+        ddDataSelected = ddDatas[i]['name'];
+      }
+    }
   }
 
   _action1() async {
-
     setState(() {
       place = 'สถานที่1';
-      latitude =
-          message['locationList'][0]['latitude'].toString().substring(0, 8);
-      longtitude =
-          message['locationList'][0]['longitude'].toString().substring(0, 8);
+      latitude = message['locationList'][0]['latitude'].toString().substring(0, 8);
+      longtitude = message['locationList'][0]['longitude'].toString().substring(0, 8);
       loctionID = message['locationList'][0]['modelid'].toString();
     });
-    
-    double distanceInMeters = await Geolocator().distanceBetween(
-        13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
+
+    double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
     setState(() {
       far = distanceInMeters.toString();
     });
-
   }
 
   _action2() async {
     setState(() {
       place = 'สถานที่2';
-      latitude =
-          message['locationList'][1]['latitude'].toString().substring(0, 8);
-      longtitude =
-          message['locationList'][1]['longitude'].toString().substring(0, 8);
+      latitude = message['locationList'][1]['latitude'].toString().substring(0, 8);
+      longtitude = message['locationList'][1]['longitude'].toString().substring(0, 8);
       loctionID = message['locationList'][1]['modelid'].toString();
     });
-    double distanceInMeters = await Geolocator().distanceBetween(
-        13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
+    double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
     setState(() {
       far = distanceInMeters.toString();
     });
@@ -106,19 +143,15 @@ class _CheckinScreenState extends State<CheckinScreen> {
   _action3() async {
     setState(() {
       place = 'สถานที่ test';
-      latitude =
-          message['locationList'][2]['latitude'].toString().substring(0, 8);
-      longtitude =
-          message['locationList'][2]['longitude'].toString().substring(0, 8);
+      latitude = message['locationList'][2]['latitude'].toString().substring(0, 8);
+      longtitude = message['locationList'][2]['longitude'].toString().substring(0, 8);
       loctionID = message['locationList'][2]['modelid'].toString();
       far = message['locationList'][2]['far'].toString();
     });
-    double distanceInMeters = await Geolocator().distanceBetween(
-        13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
+    double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
     setState(() {
       far = distanceInMeters.toString();
     });
-
   }
 
   Future<void> initDeviceId() async {
@@ -166,7 +199,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
 
   _checkin() async {
     if (far == null) {
-
       Alert(
         context: context,
         type: AlertType.warning,
@@ -176,22 +208,18 @@ class _CheckinScreenState extends State<CheckinScreen> {
           DialogButton(
             child: Text(
               "ตกลง",
-              style: TextStyle(
-                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
             ),
             onPressed: () => Navigator.pop(context),
             width: 120,
           )
         ],
       ).show();
-
     } else {
-
       double fars = double.parse(far);
       var userID = message['cwiUser']['modelid'];
 
       if (fars <= 50) {
-
         setState(() {
           visible = true;
         });
@@ -207,19 +235,15 @@ class _CheckinScreenState extends State<CheckinScreen> {
         var response = await http.post(
           url,
           body: json.encode(data),
-          headers: {
-            "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-            "Content-Type": "application/json"
-          },
+          headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
         );
         Map<String, dynamic> msg = jsonDecode(response.body);
 
         if (msg['responseCode'] == '000') {
-          
           setState(() {
             visible = false;
           });
-          
+
           Alert(
             context: context,
             type: AlertType.success,
@@ -229,17 +253,14 @@ class _CheckinScreenState extends State<CheckinScreen> {
               DialogButton(
                 child: Text(
                   "ตกลง",
-                  style: TextStyle(
-                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                  style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
                 ),
                 onPressed: () => Navigator.pop(context),
                 width: 120,
               )
             ],
           ).show();
-        
         } else {
-
           setState(() {
             visible = false;
           });
@@ -253,8 +274,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
               DialogButton(
                 child: Text(
                   "ตกลง",
-                  style: TextStyle(
-                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                  style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
                 ),
                 onPressed: () => Navigator.pop(context),
                 width: 120,
@@ -262,9 +282,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
             ],
           ).show();
         }
-
       } else {
-
         setState(() {
           visible = false;
         });
@@ -278,15 +296,13 @@ class _CheckinScreenState extends State<CheckinScreen> {
             DialogButton(
               child: Text(
                 "ตกลง",
-                style: TextStyle(
-                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
               ),
               onPressed: () => Navigator.pop(context),
               width: 120,
             )
           ],
         ).show();
-        
       }
     }
   }
@@ -302,8 +318,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
           DialogButton(
             child: Text(
               "ตกลง",
-              style: TextStyle(
-                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
             ),
             onPressed: () => Navigator.pop(context),
             width: 120,
@@ -326,15 +341,11 @@ class _CheckinScreenState extends State<CheckinScreen> {
         var response = await http.post(
           url,
           body: json.encode(data),
-          headers: {
-            "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-            "Content-Type": "application/json"
-          },
+          headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
         );
         Map<String, dynamic> msg = jsonDecode(response.body);
 
         if (msg['responseCode'] == '000') {
-
           Alert(
             context: context,
             type: AlertType.success,
@@ -344,8 +355,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
               DialogButton(
                 child: Text(
                   "ตกลง",
-                  style: TextStyle(
-                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                  style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
                 ),
                 onPressed: () => Navigator.pop(context),
                 width: 120,
@@ -362,8 +372,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
               DialogButton(
                 child: Text(
                   "ตกลง",
-                  style: TextStyle(
-                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                  style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
                 ),
                 onPressed: () => Navigator.pop(context),
                 width: 120,
@@ -381,8 +390,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
             DialogButton(
               child: Text(
                 "ตกลง",
-                style: TextStyle(
-                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
               ),
               onPressed: () => Navigator.pop(context),
               width: 120,
@@ -403,143 +411,165 @@ class _CheckinScreenState extends State<CheckinScreen> {
         ),
         centerTitle: true,
       ),
-      body: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(),
-              Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      RaisedButton(
-                        color: Colors.lightBlue,
-                        onPressed: () => selectPlace(context),
-                        child: Text(
-                          'เลือกสถานที่',
-                          style: TextStyle(
-                            fontFamily: _kanit,
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Text(
-                        place == '' ? 'เลือกสถานที่ก่อน' : place,
-                        style: place == ''
-                            ? TextStyle(
-                                fontFamily: _kanit,
-                                fontSize: 18.0,
-                                color: Colors.red)
-                            : TextStyle(
-                                fontFamily: _kanit,
-                                fontSize: 18.0,
-                                color: Colors.black),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        latitude == ''
-                            ? 'latitude / '
-                            : latitude.toString() + ' / ',
-                        style: place == ''
-                            ? TextStyle(
-                                fontFamily: _kanit,
-                                fontSize: 18.0,
-                                color: Colors.red)
-                            : TextStyle(
-                                fontFamily: _kanit,
-                                fontSize: 18.0,
-                                color: Colors.black),
-                      ),
-                      Text(
-                        latitude == '' ? 'longitude' : latitude.toString(),
-                        style: place == ''
-                            ? TextStyle(
-                                fontFamily: _kanit,
-                                fontSize: 18.0,
-                                color: Colors.red)
-                            : TextStyle(
-                                fontFamily: _kanit,
-                                fontSize: 18.0,
-                                color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              // RaisedButton(
-              //   child: Text('asd'),
-              //   onPressed: () async {
+      body: Center(
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text('เลือกสถานที่',
+                        style: TextStyle(
+                          fontFamily: _kanit,
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Center(
+                          child: DropdownButtonHideUnderline(
+                            child: Center(
+                                child: ddDataToDD != null
+                                    ? DropdownButton(
+                                        items: ddDataToDD,
+                                        value: ddDataSelected,
+                                        isExpanded: true,
+                                        onChanged: (data) async {
+                                          print(data);
+                                          setState(() {
+                                            ddDataSelected = data;
 
-              //   },
-              // ),
-              Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: _checkin,
-                        child: Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.green,
-                          ),
-                          child: Icon(
-                            FontAwesomeIcons.arrowAltCircleDown,
-                            size: 80,
-                            color: Colors.white,
+                                            place = 'สถานที่1';
+                                            latitude = msg['locationList'][0]['latitude'].toString().substring(0, 8);
+                                            longtitude = msg['locationList'][0]['longitude'].toString().substring(0, 8);
+                                            loctionID = msg['locationList'][0]['modelid'].toString();
+                                          });
+                                          double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
+
+                                          far = distanceInMeters.toString();
+                                        },
+                                      )
+                                    : Center(
+                                        child: Visibility(visible: true, child: CircularProgressIndicator()),
+                                      )),
                           ),
                         ),
                       ),
-                      SizedBox(width: 20),
-                      GestureDetector(
-                        onTap: _checkout,
-                        child: Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.red,
-                          ),
-                          child: Icon(
-                            FontAwesomeIcons.arrowAltCircleDown,
-                            size: 80,
-                            color: Colors.white,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Text(
+                          place == '' ? 'เลือกสถานที่ก่อน' : place,
+                          style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          latitude == '' ? 'latitude / ' : latitude.toString() + ' / ',
+                          style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
+                        ),
+                        Text(
+                          latitude == '' ? 'longitude' : latitude.toString(),
+                          style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                // RaisedButton(
+                //   child: Text('asd'),
+                //   onPressed: () async {
+
+                //   },
+                // ),
+                Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: _checkin,
+                          child: Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.green,
+                            ),
+                            child: Icon(
+                              FontAwesomeIcons.arrowAltCircleDown,
+                              size: 80,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height / 4),
-                ],
-              ),
-            ],
-          ),
-        
-          Container(
-            child: Visibility(
-              visible: visible,
-              child: CircularProgressIndicator(),
+                        SizedBox(width: 20),
+                        GestureDetector(
+                          onTap: _checkout,
+                          child: Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.red,
+                            ),
+                            child: Icon(
+                              FontAwesomeIcons.arrowAltCircleDown,
+                              size: 80,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height / 4),
+                  ],
+                ),
+              ],
             ),
-          ),
-        ],
+            Container(
+              child: Visibility(
+                visible: visible,
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-
+// showmodalsheet
+// showModalBottomSheet(
+//         shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.only(
+//           topLeft: Radius.circular(30),
+//           topRight: Radius.circular(30),
+//         )),
+//         context: context,
+//         builder: (BuildContext context) {
+//           return Column(
+//             mainAxisSize: MainAxisSize.min,
+//             children: <Widget>[
+//               _createTile(context, 'สถานที่1', _action1),
+//               _createTile(context, 'สถานที่2'.toString(), _action2),
+//               _createTile(context, 'สถานที่ test', _action3),
+//             ],
+//           );
+//         });
