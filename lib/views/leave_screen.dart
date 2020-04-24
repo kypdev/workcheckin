@@ -141,7 +141,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
           context: context,
           type: AlertType.success,
           title: "",
-          desc: "บันทึกสำเร้จ",
+          desc: "บันทึกใบลาสำเร็จ",
           buttons: [
             DialogButton(
               child: Text(

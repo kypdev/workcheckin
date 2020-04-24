@@ -141,7 +141,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
           'osMobile': platform,
           'locationId': loctionID,
         };
-
+        print(data);
         var url = 'http://159.138.232.139/service/cwi/v1/user/checkin';
 
         var response = await http.post(
@@ -264,7 +264,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
             context: context,
             type: AlertType.success,
             title: "",
-            desc: "บันทึกสำเร็จ",
+            desc: msg['responseDesc'].toString(),
             buttons: [
               DialogButton(
                 child: Text(
@@ -281,7 +281,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
             context: context,
             type: AlertType.error,
             title: "",
-            desc: "บันทึกไม่สำเร็จ",
+            desc: msg['responseDesc'].toString(),
             buttons: [
               DialogButton(
                 child: Text(
