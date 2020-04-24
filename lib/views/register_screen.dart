@@ -21,9 +21,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   var org = '';
   List<dynamic> orgData;
   List<String> orgItem = [];
-  int indexOrd;
+  int indexOrg;
   var resOrgList;
-  var ordId;
+  var orgId = 3;
   List<dynamic> branchData;
   List<String> branchItem = [];
   int branchIndex;
@@ -37,6 +37,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   var bossName;
   var resBossList;
   var bossId;
+  List<dynamic> positionData;
+  List<String> positionItem = [];
+  int positionIndexDD;
+  var positionName;
+  var resPositionList;
+  var positionId;
 
   _getOrg() async {
     var url = 'http://159.138.232.139/service/cwi/v1/master/getOrgList';
@@ -48,12 +54,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
     Map<String, dynamic> messages = jsonDecode(response.body);
     var msg = messages;
-    setState(() => indexOrd = 0);
+    setState(() => indexOrg = 0);
     setState(() => resOrgList = messages);
     orgData = msg['orgList'];
 
     for (int i = 0; i < orgData.length; i++) {
       for (int j = i; j <= i; j++) {
+        print(i);
         orgItem.add(orgData[i]['name']);
       }
     }
@@ -63,39 +70,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   _getBranch() async {
     var url = 'http://159.138.232.139/service/cwi/v1/master/getBranchList';
-    var data = {'orgId': ordId};
+    var data = {'orgId': orgId};
     var response = await http.post(
       url,
       body: jsonEncode(data),
       headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
     );
-    print(branchItem);
     Map<String, dynamic> messages = jsonDecode(response.body);
     setState(() => resBranshlist = messages);
     setState(() => branchIndex = 0);
     setState(() => branchName = '');
     branchData = resBranshlist['branchList'];
-    branchItem.clear();
+    branchItem = [];
 
     for (int i = 0; i < branchData.length; i++) {
       for (int j = i; j <= i; j++) {
         branchItem.add(branchData[i]['name']);
       }
     }
-
-    print('$branchItem');
-  }
-
-  _cleardata() {
-    branchItem.clear();
-    print('$branchItem');
-    branchItem.add('');
-    _getBranch();
   }
 
   _getBossList() async {
     var url = 'http://159.138.232.139/service/cwi/v1/master/getBossList?';
-    var data = {'orgId': "1"};
+    var data = {'orgId': orgId};
     var response = await http.post(
       url,
       body: jsonEncode(data),
@@ -107,18 +104,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() => bossIndexDD = 0);
     setState(() => bossName = '');
     setState(() => bossData = messages['bossList']);
+    setState(() => bossItem = []);
 
-    for (int i = 0; i < bossData.length; i++) {
-      for (int j = i; j <= i; j++) {
-        bossItem.add(bossData[i]['name']);
+    if (resBossList['bossList'].isEmpty) {
+      bossItem.add('ไม่พบข้อมูล');
+    } else {
+      setState(() => bossItem = []);
+      for (int i = 0; i < bossData.length; i++) {
+        for (int j = i; j <= i; j++) {
+          bossItem.add(bossData[i]['name']);
+        }
       }
     }
 
     print(bossItem);
   }
 
+  _getPositionList() {
+    positionItem = ['แอดมิน', "หัวหน้า", "พนักงาน"];
+    setState(() {
+      positionIndexDD = 0;
+    });
+    print(positionItem);
+  }
+
   _register() {
-    if (_formKey.currentState.validate()) {}
+    var data = {"employeeId": "", "username": "", "password": "", "passwordConfirm": "", "name": "", "lastname": "", "position": positionId, "orgId": orgId, "branchId": branchid, "status": 0, "bossId": bossId, "deviceId": "23423420"};
+    print('data: $data');
   }
 
   @override
@@ -127,6 +139,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     obpass = true;
     super.initState();
     _getOrg();
+    _getPositionList();
+    _getBossList();
   }
 
   @override
@@ -145,18 +159,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: <Widget>[
               RaisedButton(
                 child: Text('test3'),
-                onPressed: _getBossList,
-              ),
-              RaisedButton(
-                child: Text('test'),
                 onPressed: () {
-                  _getBranch();
-                },
-              ),
-              RaisedButton(
-                child: Text('test2'),
-                onPressed: () {
-                  _cleardata();
+                  _register();
                 },
               ),
               Form(
@@ -169,11 +173,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       dropdown(
                         title: 'องค์กร',
                       ),
+                      // org dropdown
                       Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         child: DropdownButton<String>(
                           isExpanded: true,
-                          value: indexOrd == null ? null : orgItem[indexOrd],
+                          value: indexOrg == null ? null : orgItem[indexOrg],
                           items: orgItem.map((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
@@ -186,18 +191,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           onChanged: (value) {
                             setState(() {
                               // get index
-                              indexOrd = orgItem.indexOf(value);
-                              org = resOrgList['orgList'][indexOrd]['name'];
-                              ordId = resOrgList['orgList'][indexOrd]['modelid'];
+                              indexOrg = orgItem.indexOf(value);
+
+                              org = resOrgList['orgList'][indexOrg]['name'];
+                              orgId = resOrgList['orgList'][indexOrg]['modelid'];
+
+                              branchid = '';
+                              bossId = '';
                             });
-                            print('$indexOrd, $org $ordId');
-                            _cleardata();
+                            _getBranch();
+                            _getBossList();
+                            print('orgId: $orgId');
+                            print('branchId: $branchid');
                           },
                         ),
                       ),
                       dropdown(
                         title: 'สาขา',
                       ),
+
                       Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         child: DropdownButton<String>(
@@ -215,10 +227,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           onChanged: (value) {
                             setState(() {
                               // get index
+                              branchIndex = branchItem.indexOf(value);
                               branchName = resBranshlist['branchList'][branchIndex]['name'].toString();
                               branchid = resBranshlist['branchList'][branchIndex]['modelid'].toString();
-                              print('$branchName, $branchid');
                             });
+                            print('$branchName, $branchid');
                           },
                         ),
                       ),
@@ -313,12 +326,70 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       dropdown(
                         title: 'ตำแหน่ง',
                       ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: DropdownButton<String>(
+                          isExpanded: true,
+                          value: positionIndexDD == null ? null : positionItem[positionIndexDD],
+                          items: positionItem.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: TextStyle(fontFamily: _kanit),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              positionIndexDD = positionItem.indexOf(value);
+                              if (positionIndexDD == 0) {
+                                positionId = 1;
+                              } else if (positionIndexDD == 1) {
+                                positionId = 2;
+                              } else {
+                                positionId = 3;
+                              }
+                            });
+                            print('positionindex: $positionIndexDD');
+                            print(positionId);
+                          },
+                        ),
+                      ),
+
+                      dropdown(
+                        title: 'หัวหน้า',
+                      ),
+
+                      // boss dropdown
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: DropdownButton<String>(
+                          isExpanded: true,
+                          value: bossIndexDD == null ? null : bossItem[bossIndexDD],
+                          items: bossItem.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: TextStyle(fontFamily: _kanit),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            print(value);
+                            setState(() {
+                              bossIndexDD = bossItem.indexOf(value);
+                              bossId = resBossList['bossList'][bossIndexDD]['modelid'].toString();
+                            });
+                            print('bossid: $bossId');
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ),
-              dropdown(
-                title: 'หัวหน้า',
               ),
               RaisedButton(
                 color: Colors.blue,
