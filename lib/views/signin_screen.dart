@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workcheckin/views/home_screen.dart';
-import 'dart:io' show Platform;
 import 'package:device_id/device_id.dart';
 import 'package:flutter/services.dart';
 
@@ -72,18 +71,24 @@ class _SigninScreenState extends State<SigninScreen> {
           locationlist = message;
         });
         print(message);
+        setState(() {
+          sharedPreferences.setString('userMsg', jsonEncode(message));
+          userData = sharedPreferences.setString('userData', jsonEncode(data));
+
+          visible = false;
+        });
 
         if (msg == '000') {
           if (message['cwiUser']['changeDeviceFlag'] == 0) {
             setState(() {
-              sharedPreferences.setString('userMsg', jsonEncode(message));
-              userData = sharedPreferences.setString('userData', jsonEncode(data));
               sharedPreferences.setInt('loginFlag', 1);
               visible = false;
             });
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
           } else {
-            setState(() => visible = false);
+            setState(() {
+              visible = false;
+            });
             Alert(
               context: context,
               type: AlertType.warning,
@@ -95,7 +100,35 @@ class _SigninScreenState extends State<SigninScreen> {
                     "ใช่",
                     style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
                   ),
-                  onPressed: _changeDeviceID,
+                  onPressed: () async {
+                    var changdvid = await _changeDeviceID();
+                    print(changdvid);
+                    if (changdvid['responseCode'] == '000') {
+                      print('change ok');
+                      sharedPreferences.setInt('loginFlag', 1);
+                      print(sharedPreferences.getInt('loginFlag'));
+                      Navigator.pop(context);
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                    } else {
+                      sharedPreferences.clear();
+                      Alert(
+                        context: context,
+                        type: AlertType.error,
+                        title: "",
+                        desc: changdvid['responseDesc'].toString(),
+                        buttons: [
+                          DialogButton(
+                            child: Text(
+                              "ตกลง",
+                              style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                            ),
+                            onPressed: () => Navigator.pop(context),
+                            width: 120,
+                          )
+                        ],
+                      ).show();
+                    }
+                  },
                   color: Color.fromRGBO(0, 179, 134, 1.0),
                 ),
                 DialogButton(
@@ -103,7 +136,10 @@ class _SigninScreenState extends State<SigninScreen> {
                     "ไม่ใช่",
                     style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
                   ),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    sharedPreferences.clear();
+                    Navigator.pop(context);
+                  },
                   gradient: LinearGradient(colors: [Color.fromRGBO(116, 116, 191, 1.0), Color.fromRGBO(52, 138, 199, 1.0)]),
                 )
               ],
@@ -152,8 +188,8 @@ class _SigninScreenState extends State<SigninScreen> {
     });
   }
 
-  _changeDeviceID() async {
-    userID = locationlist['cwiUser']['changeDeviceFlag'];
+  Future _changeDeviceID() async {
+    userID = locationlist['cwiUser']['modelid'];
     var url = 'http://159.138.232.139/service/cwi/v1/user/change_device_id';
     var data = {"userId": userID, "deviceId": _deviceid};
 
@@ -167,10 +203,11 @@ class _SigninScreenState extends State<SigninScreen> {
 
     print(message);
 
-    if (message['responseCode'] == '0020') {
-      print(message['responseDesc']);
+    if (message['responseCode'] == '000') {
+      return message;
     } else {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      print('no change');
+      return message;
     }
   }
 
