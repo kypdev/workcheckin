@@ -56,14 +56,15 @@ class _CheckinScreenState extends State<CheckinScreen> {
   selectPlace() {
     setState(() {
       ddDatas = msg['locationList'];
-      _item =0;
+      _item = 0;
     });
 
     for (int i = 0; i < ddDatas.length; i++) {
       for (int j = i; j <= i; j++) {
-          item.add(ddDatas[i]['name']);
+        item.add(ddDatas[i]['name']);
       }
-    }    print(item);
+    }
+    print(item);
     place = msg['locationList'][_item]['name'].toString();
     latitude = msg['locationList'][_item]['latitude'].toString();
     longtitude = msg['locationList'][_item]['longitude'].toString().substring(0, 8);
@@ -103,8 +104,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
       });
     }
   }
-
-  
 
   _checkin() async {
     double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
@@ -326,150 +325,134 @@ class _CheckinScreenState extends State<CheckinScreen> {
         ),
         centerTitle: true,
       ),
-      body: Center(
-        child: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Text('เลือกสถานที่',
-                        style: TextStyle(
-                          fontFamily: _kanit,
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    
-                    
-                    
+      body: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('เลือกสถานที่',
+                  style: TextStyle(
+                    fontFamily: _kanit,
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                  )),
 
-                    place=='' ?
-                    Center(
+              place == ''
+                  ? Center(
                       child: Visibility(
                         visible: true,
                         child: CircularProgressIndicator(),
                       ),
-                    ):
-                    DropdownButton<String>(
-                       hint: new Text(place),
-                       value: _item == null ? null : item[_item],
-                       items: item.map((String value){
-                         return DropdownMenuItem<String>(
-                           value: value,
-                           child: Text(value),
-                         );
-                       }).toList(),
-                       onChanged: (value){
-                         setState(() {
-                           // get index
-                           _item = item.indexOf(value);
+                    )
+                  : DropdownButton<String>(
+                      isExpanded: true,
+                      hint: new Text(
+                        place,
+                      ),
+                      value: _item == null ? null : item[_item],
+                      items: item.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Center(
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                fontFamily: _kanit,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          // get index
+                          _item = item.indexOf(value);
 
-                           // set location
-                           place = msg['locationList'][_item]['name'].toString();
-                          latitude = msg['locationList'][_item]['latitude'].toString().substring(0, 8);
-                          longtitude = msg['locationList'][_item]['longitude'].toString().substring(0, 8);
+                          // set location
+                          place = msg['locationList'][_item]['name'].toString();
+                          latitude = msg['locationList'][_item]['latitude'].toString();
+                          longtitude = msg['locationList'][_item]['longitude'].toString();
                           loctionID = msg['locationList'][_item]['modelid'].toString();
-                         });
+                        });
 
-                         print('$place $latitude, $longtitude $loctionID');
-                       },
+                        print('$place $latitude, $longtitude $loctionID');
+                      },
                     ),
-                    
-   
-              
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          place == '' ? 'เลือกสถานที่ก่อน' : place,
-                          style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          latitude == '' ? 'latitude / ' : latitude.toString() + ' / ',
-                          style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
-                        ),
-                        Text(
-                          latitude == '' ? 'longitude' : latitude.toString(),
-                          style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                // RaisedButton(
-                //   child: Text('asd'),
-                //   onPressed: () async {
 
-                //   },
-                // ),
-                Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: _checkin,
-                          child: Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.green,
-                            ),
-                            child: Icon(
-                              FontAwesomeIcons.arrowAltCircleDown,
-                              size: 80,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 20),
-                        GestureDetector(
-                          onTap: _checkout,
-                          child: Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.red,
-                            ),
-                            child: Icon(
-                              FontAwesomeIcons.arrowAltCircleDown,
-                              size: 80,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height / 4),
-                  ],
-                ),
-              ],
-            ),
-            Container(
-              child: Visibility(
-                visible: visible,
-                child: CircularProgressIndicator(),
+              SizedBox(height: 20.0),
+              Text(
+                place == '' ? 'เลือกสถานที่ก่อน' : place,
+                style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 20.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 20.0, color: Colors.black),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    latitude == '' ? 'latitude / ' : latitude.toString() + ' / ',
+                    style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
+                  ),
+                  Text(
+                    latitude == '' ? 'longitude' : latitude.toString(),
+                    style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
+                  ),
+                ],
+              ),
+              // RaisedButton(
+              //   child: Text('asd'),
+              //   onPressed: () async {
+
+              //   },
+              // ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: _checkin,
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.green,
+                      ),
+                      child: Icon(
+                        FontAwesomeIcons.arrowAltCircleDown,
+                        size: 80,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  GestureDetector(
+                    onTap: _checkout,
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.red,
+                      ),
+                      child: Icon(
+                        FontAwesomeIcons.arrowAltCircleDown,
+                        size: 80,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height / 4),
+            ],
+          ),
+          Container(
+            child: Visibility(
+              visible: visible,
+              child: CircularProgressIndicator(),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
