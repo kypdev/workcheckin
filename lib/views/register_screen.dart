@@ -162,101 +162,79 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String lastname = lastnameCtrl.text.trim();
     String employeeid = employeeCtrl.text.trim();
 
-    if(_formKey.currentState.validate()){
-      if(passwords!=conpasswords){
-      Alert(
-              context: context,
-              type: AlertType.warning,
-              title: "รหัสผ่านไม่ตรงกันกรุณาตรวจสอบ",
-              desc: "",
-              buttons: [
-                DialogButton(
-                  child: Text(
-                    "ตกลง",
-                    style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  color: Colors.red,
-                )
-              ],
-            ).show();
-    }else{
+    if (_formKey.currentState.validate()) {
+      if (passwords != conpasswords) {
+        Alert(
+          context: context,
+          type: AlertType.warning,
+          title: "รหัสผ่านไม่ตรงกันกรุณาตรวจสอบ",
+          desc: "",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              color: Colors.red,
+            )
+          ],
+        ).show();
+      } else {
+        var data = {"employeeId": employeeid, "username": username, "password": passwords, "passwordConfirm": conpasswords, "name": firstname, "lastname": lastname, "position": positionId, "orgId": orgId, "branchId": branchid, "status": 0, "bossId": bossId, "deviceId": _deviceid};
 
-      var data = {
-      "employeeId": employeeid,
-      "username": username,
-      "password": passwords,
-      "passwordConfirm": conpasswords,
-      "name": firstname,
-      "lastname": lastname,
-      "position": positionId,
-      "orgId": orgId,
-      "branchId": branchid,
-      "status": 0,
-      "bossId": bossId,
-      "deviceId": _deviceid
-      };
+        print('ok');
+        print('data: $data');
 
-      print('ok');
-      print('data: $data');
+        var url = 'http://159.138.232.139/service/cwi/v1/user/register';
 
-      var url = 'http://159.138.232.139/service/cwi/v1/user/register';
-
-      var response = await http.post(
+        var response = await http.post(
           url,
           body: json.encode(data),
-          headers: {
-            "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-            "Content-Type": "application/json"
-          },
+          headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
         );
 
-      Map<String, dynamic> message = jsonDecode(response.body);
+        Map<String, dynamic> message = jsonDecode(response.body);
 
-      print(message);
+        print(message);
 
-      if(message['responseCode']=='000'){
-        Alert(
-              context: context,
-              type: AlertType.warning,
-              title: "สมัครสมาชิกสำเร็จ",
-              desc: "",
-              buttons: [
-                DialogButton(
-                  child: Text(
-                    "ตกลง",
-                    style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  color: Colors.green,
-                )
-              ],
-            ).show();
-      }else{
-        Alert(
-              context: context,
-              type: AlertType.warning,
-              title: "สมัครสมาชิกwไม่สำเร็จ กรุณาทำรายการใหม่",
-              desc: "",
-              buttons: [
-                DialogButton(
-                  child: Text(
-                    "ตกลง",
-                    style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  color: Colors.red,
-                )
-              ],
-            ).show();
+        if (message['responseCode'] == '000') {
+          Alert(
+            context: context,
+            type: AlertType.warning,
+            title: message['responseDesc'].toString(),
+            desc: "",
+            buttons: [
+              DialogButton(
+                child: Text(
+                  "ตกลง",
+                  style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                ),
+                onPressed: () => Navigator.pop(context),
+                color: Colors.green,
+              )
+            ],
+          ).show();
+        } else {
+          Alert(
+            context: context,
+            type: AlertType.warning,
+            title: message['responseDesc'].toString(),
+            desc: "",
+            buttons: [
+              DialogButton(
+                child: Text(
+                  "ตกลง",
+                  style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                ),
+                onPressed: () => Navigator.pop(context),
+                color: Colors.red,
+              )
+            ],
+          ).show();
+        }
       }
-
-      
-
     }
-    }
-     
-    
   }
 
   @override
@@ -284,7 +262,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              
               Form(
                 key: _formKey,
                 child: Padding(
@@ -357,7 +334,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           },
                         ),
                       ),
-
 
                       form(
                         visible: false,
