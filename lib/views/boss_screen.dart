@@ -28,7 +28,8 @@ class _BossScreenState extends State<BossScreen> {
   }
 
   Future<List<BossLeaveModel>> _getLeave() async {
-    var data = {"bossId": bossID, "userId": "", "leaveDate": "19/04/2020", "leaveCode": ""};
+    var data = {"bossId": bossID};
+    print(bossID);
 
     var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave_list_by_boss';
 
@@ -39,6 +40,8 @@ class _BossScreenState extends State<BossScreen> {
     );
 
     Map<String, dynamic> msg = jsonDecode(response.body);
+
+    print('msgbosslist: $msg');
 
     List<BossLeaveModel> leaveModels = [];
 
@@ -117,7 +120,7 @@ class _BossScreenState extends State<BossScreen> {
                                     var leavecode = snapshot.data[index].leaveHour.toString();
                                     var approveflag = snapshot.data[index].approveFlag.toString();
                                     var remark = snapshot.data[index].remark.toString();
-
+                                    print(userid);
                                     var jsonData = {"leaveId": "", "userId": userid, "leaveDate": leavedate, "leaveHour": leavehour, "leaveCode": leavecode, "approveFlag": "1", "remark": remark};
                                     print('index: $index ok');
                                     print('userJson: ' + jsonEncode(jsonData));

@@ -20,6 +20,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Map<String, dynamic> message;
   var userID;
   bool visible = false;
+  @override
+  void initState() {
+    super.initState();
+    getMsg();
+  }
 
   getMsg() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -30,9 +35,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Future<List<LeaveModel>> _getLeave() async {
-    var data = {"bossId": "", "userId": userID, "leaveDate": "19/04/2020", "leaveCode": ""};
-
     var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave_list_by_user';
+
+    var data = {"userId": userID};
 
     var response = await http.post(
       url,
@@ -63,48 +68,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
       leaveModels.add(leaveModel);
     }
     return leaveModels;
-  }
-
-  getdata() async {
-    var data = {"bossId": "", "userId": userID, "leaveDate": "19/04/2020", "leaveCode": ""};
-
-    var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave_list_by_user';
-
-    var response = await http.post(
-      url,
-      body: json.encode(data),
-      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
-    );
-
-    Map<String, dynamic> msg = jsonDecode(response.body);
-
-    List<LeaveModel> leaveModels = [];
-
-    for (var leave in msg['trnLeaveList']) {
-      LeaveModel leaveModel = LeaveModel(
-        leave['modelid'],
-        leave['userId'],
-        leave['leaveTypeCode'],
-        leave['leaveDate'],
-        leave['leaveHour'],
-        leave['remark'],
-        leave['approveFlag'],
-        leave['approveRejectDate'],
-        leave['approveRejectBy'],
-        leave['createDate'],
-        leave['createBy'],
-        leave['updateDate'],
-        leave['updateBy'],
-      );
-
-      leaveModels.add(leaveModel);
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getMsg();
   }
 
   @override
