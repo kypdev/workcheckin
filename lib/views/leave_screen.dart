@@ -120,12 +120,12 @@ class _LeaveScreenState extends State<LeaveScreen> {
 
   sendLeave() async {
     var userID = message['cwiUser']['modelid'];
-    print(remarkCtrl.text);
+
     var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave';
     if (_formKey.currentState.validate()) {
       setState(() => visible = true);
-      var data = {"leaveId": "", "userId": userID, "leaveDate": dateStr, "leaveHour": _currentInfIntValue.toString(), "leaveCode": msgCode, "approveFlag": "", "remark": remarkCtrl.text.trim()};
-
+      var data = {"leaveId": "", "userId": userID, "leaveDate": dateStr, "leaveHour": _currentInfIntValue.toString(), "leaveCode": msgCode, "approveFlag": "0", "remark": remarkCtrl.text.trim()};
+      print(data);
       var response = await http.post(
         url,
         body: json.encode(data),
@@ -186,6 +186,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
     setState(() {
       dateStr = _dateTime.day.toString() + '/' + _dateTime.month.toString() + '/' + _dateTime.year.toString();
       visible = false;
+      msgCode = '1';
     });
   }
 
