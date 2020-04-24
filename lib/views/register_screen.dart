@@ -21,6 +21,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController nameCtrl = TextEditingController();
   TextEditingController lastnameCtrl = TextEditingController();
   TextEditingController positionCtrl = TextEditingController();
+  TextEditingController employeeCtrl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool obpass, obconpass;
   var org = '';
@@ -159,8 +160,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String conpasswords = conPasswordCtrl.text;
     String firstname = nameCtrl.text.trim();
     String lastname = lastnameCtrl.text.trim();
+    String employeeid = employeeCtrl.text.trim();
 
-    if(passwords!=conpasswords){
+    if(_formKey.currentState.validate()){
+      if(passwords!=conpasswords){
       Alert(
               context: context,
               type: AlertType.warning,
@@ -180,7 +183,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }else{
 
       var data = {
-      "employeeId": "2541",
+      "employeeId": employeeid,
       "username": username,
       "password": passwords,
       "passwordConfirm": conpasswords,
@@ -251,6 +254,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       
 
     }
+    }
      
     
   }
@@ -280,12 +284,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              RaisedButton(
-                child: Text('test3'),
-                onPressed: () {
-                  _register();
-                },
-              ),
+              
               Form(
                 key: _formKey,
                 child: Padding(
@@ -358,6 +357,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           },
                         ),
                       ),
+
+
+                      form(
+                        visible: false,
+                        ctrl: employeeCtrl,
+                        labeltext: 'employee id',
+                        prefixicon: Icon(Icons.vpn_key),
+                        val: (value) {
+                          if (value.isEmpty || value.length < 4) {
+                            return 'รหัสพนักงานห้มต่ำกว่า 5 ตัวอักษร';
+                          }
+                          return null;
+                        },
+                      ),
+
                       form(
                         visible: false,
                         ctrl: usernameCtrl,
