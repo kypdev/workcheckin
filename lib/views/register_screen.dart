@@ -1,6 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:flutter/services.dart';
+import 'dart:async';
+import 'dart:io' show Platform;
+import 'package:device_id/device_id.dart';
 
 final _kanit = 'Kanit';
 
@@ -43,6 +48,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   var positionName;
   var resPositionList;
   var positionId;
+
+  String _deviceid = 'Unknown';
 
   _getOrg() async {
     var url = 'http://159.138.232.139/service/cwi/v1/master/getOrgList';
@@ -128,9 +135,124 @@ class _RegisterScreenState extends State<RegisterScreen> {
     print(positionItem);
   }
 
-  _register() {
-    var data = {"employeeId": "", "username": "", "password": "", "passwordConfirm": "", "name": "", "lastname": "", "position": positionId, "orgId": orgId, "branchId": branchid, "status": 0, "bossId": bossId, "deviceId": "23423420"};
-    print('data: $data');
+  Future<void> initDeviceId() async {
+    String deviceid;
+
+    deviceid = await DeviceId.getID;
+    try {
+      // todo
+    } on PlatformException catch (e) {
+      print(e.message);
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _deviceid = '$deviceid';
+    });
+    print('deviceid: $_deviceid');
+  }
+
+  _register() async {
+    String username = usernameCtrl.text.trim();
+    String passwords = passwordCtrl.text;
+    String conpasswords = conPasswordCtrl.text;
+    String firstname = nameCtrl.text.trim();
+    String lastname = lastnameCtrl.text.trim();
+
+    if(passwords!=conpasswords){
+      Alert(
+              context: context,
+              type: AlertType.warning,
+              title: "รหัสผ่านไม่ตรงกันกรุณาตรวจสอบ",
+              desc: "",
+              buttons: [
+                DialogButton(
+                  child: Text(
+                    "ตกลง",
+                    style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                  color: Colors.red,
+                )
+              ],
+            ).show();
+    }else{
+
+      var data = {
+      "employeeId": "2541",
+      "username": username,
+      "password": passwords,
+      "passwordConfirm": conpasswords,
+      "name": firstname,
+      "lastname": lastname,
+      "position": positionId,
+      "orgId": orgId,
+      "branchId": branchid,
+      "status": 0,
+      "bossId": bossId,
+      "deviceId": _deviceid
+      };
+
+      print('ok');
+      print('data: $data');
+
+      var url = 'http://159.138.232.139/service/cwi/v1/user/register';
+
+      var response = await http.post(
+          url,
+          body: json.encode(data),
+          headers: {
+            "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+            "Content-Type": "application/json"
+          },
+        );
+
+      Map<String, dynamic> message = jsonDecode(response.body);
+
+      print(message);
+
+      if(message['responseCode']=='000'){
+        Alert(
+              context: context,
+              type: AlertType.warning,
+              title: "สมัครสมาชิกสำเร็จ",
+              desc: "",
+              buttons: [
+                DialogButton(
+                  child: Text(
+                    "ตกลง",
+                    style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                  color: Colors.green,
+                )
+              ],
+            ).show();
+      }else{
+        Alert(
+              context: context,
+              type: AlertType.warning,
+              title: "สมัครสมาชิกwไม่สำเร็จ กรุณาทำรายการใหม่",
+              desc: "",
+              buttons: [
+                DialogButton(
+                  child: Text(
+                    "ตกลง",
+                    style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                  color: Colors.red,
+                )
+              ],
+            ).show();
+      }
+
+      
+
+    }
+     
+    
   }
 
   @override
@@ -141,6 +263,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _getOrg();
     _getPositionList();
     _getBossList();
+    initDeviceId();
   }
 
   @override
