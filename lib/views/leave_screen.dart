@@ -22,7 +22,7 @@ const String INIT_DATETIME = '2019-05-16 09:00:00';
 class _LeaveScreenState extends State<LeaveScreen> {
   var typeLeave = 'ค่าเริ่มต้น';
   final format = DateFormat("dd/MM/yyyy");
-  var dateStr = '20/2/2020';
+  var dateStr = '';
   bool _showTitle = true;
   var msgStr;
   var msgCode = '';
@@ -35,12 +35,13 @@ class _LeaveScreenState extends State<LeaveScreen> {
   TextEditingController remarkCtrl = TextEditingController();
   SharedPreferences sharedPreferences;
   var message;
-  int _currentInfIntValue = 1;
+  var _currentInfIntValue = '1';
   NumberPicker integerInfiniteNumberPicker;
   List<String> item = [];
   int _item;
   List<dynamic> leaveDDdata;
   var msgobj;
+  bool visible;
 
   void _showDateTimePicker() {
     return DatePicker.showDatePicker(
@@ -72,22 +73,6 @@ class _LeaveScreenState extends State<LeaveScreen> {
     );
   }
 
-  _getLeaveType() async {
-    var url = 'http://159.138.232.139/service/cwi/v1/master/getLeaveTypeList';
-
-    var response = await http.post(
-      url,
-      body: '{}',
-      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
-    );
-
-    Map<String, dynamic> messages = jsonDecode(response.body);
-
-    setState(() {
-      msgStr = messages;
-    });
-  }
-
   _setDDdata() {
     print(msgStr['leaveTypeList'][0]['name']);
     setState(() {
@@ -113,6 +98,22 @@ class _LeaveScreenState extends State<LeaveScreen> {
     });
   }
 
+  _getLeaveType() async {
+    var url = 'http://159.138.232.139/service/cwi/v1/master/getLeaveTypeList';
+
+    var response = await http.post(
+      url,
+      body: '{}',
+      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+    );
+
+    Map<String, dynamic> messages = jsonDecode(response.body);
+
+    setState(() {
+      msgStr = messages;
+    });
+  }
+
   getUserid() {
     print(message['cwiUser']['modelid'].toString());
   }
@@ -122,6 +123,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
     print(remarkCtrl.text);
     var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave';
     if (_formKey.currentState.validate()) {
+      setState(() => visible = true);
       var data = {"leaveId": "", "userId": userID, "leaveDate": dateStr, "leaveHour": _currentInfIntValue.toString(), "leaveCode": msgCode, "approveFlag": "", "remark": remarkCtrl.text.trim()};
 
       var response = await http.post(
@@ -134,6 +136,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
 
       print(message);
       if (message['responseCode'] == '000') {
+        setState(() => visible = false);
         Alert(
           context: context,
           type: AlertType.success,
@@ -151,11 +154,12 @@ class _LeaveScreenState extends State<LeaveScreen> {
           ],
         ).show();
       } else {
+        setState(() => visible = false);
         Alert(
           context: context,
           type: AlertType.error,
           title: "",
-          desc: "บันทึกไม่สำเร้จ",
+          desc: message['responseDesc'].toString(),
           buttons: [
             DialogButton(
               child: Text(
@@ -171,28 +175,6 @@ class _LeaveScreenState extends State<LeaveScreen> {
     }
   }
 
-  Future _showInfIntDialog() async {
-    await showDialog<int>(
-      context: context,
-      builder: (BuildContext context) {
-        return new NumberPickerDialog.integer(
-          minValue: 1,
-          maxValue: 8,
-          step: 1,
-          initialIntegerValue: _currentInfIntValue,
-          infiniteLoop: true,
-        );
-      },
-    ).then((num value) {
-      if (value != null) {
-        setState(() {
-          _currentInfIntValue = value;
-          print(_currentInfIntValue);
-        });
-      }
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -200,6 +182,10 @@ class _LeaveScreenState extends State<LeaveScreen> {
     getMsg();
     Future.delayed(Duration(milliseconds: 1000), () {
       _setDDdata();
+    });
+    setState(() {
+      dateStr = _dateTime.day.toString() + '/' + _dateTime.month.toString() + '/' + _dateTime.year.toString();
+      visible = false;
     });
   }
 
@@ -220,38 +206,48 @@ class _LeaveScreenState extends State<LeaveScreen> {
           child: Center(
             child: Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+              child: Stack(
                 children: <Widget>[
-                  showDate(
-                    date: dateStr,
-                    action: _showDateTimePicker,
-                  ),
-                  getTypeLeave(
-                    action: () {},
-                    leaveType: leaveTypeStr,
-                  ),
-                  hoursLeave(
-                    hrsCtrl: hrCtrl,
-                    remarkCtrl: remarkCtrl,
-                    hours: _currentInfIntValue.toString(),
-                  ),
-                  RaisedButton(
-                    color: Colors.blueAccent,
-                    onPressed: sendLeave,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'ตกลง',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: _kanit,
-                          ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      showDate(
+                        date: dateStr,
+                        action: _showDateTimePicker,
+                      ),
+                      getTypeLeave(
+                        action: () {},
+                        leaveType: leaveTypeStr,
+                      ),
+                      hoursLeave(
+                        hrsCtrl: hrCtrl,
+                        remarkCtrl: remarkCtrl,
+                        hours: _currentInfIntValue.toString(),
+                      ),
+                      RaisedButton(
+                        color: Colors.blueAccent,
+                        onPressed: sendLeave,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              'ตกลง',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: _kanit,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  Center(
+                    child: Visibility(
+                      visible: visible,
+                      child: CircularProgressIndicator(),
                     ),
                   ),
                 ],
@@ -352,6 +348,8 @@ class _LeaveScreenState extends State<LeaveScreen> {
     remarkCtrl,
     hours,
   }) {
+    List<String> hourItems = ['1', '2', '3', '4', '5', '6', '7', '8'];
+
     return Form(
       key: _formKey,
       child: Column(
@@ -366,24 +364,24 @@ class _LeaveScreenState extends State<LeaveScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              _showInfIntDialog();
+          DropdownButton<String>(
+            isExpanded: true,
+            value: _currentInfIntValue,
+            iconSize: 24,
+            elevation: 16,
+            style: TextStyle(fontFamily: _kanit, color: Colors.black54),
+            onChanged: (String newValue) {
+              setState(() {
+                _currentInfIntValue = newValue;
+              });
+              print(newValue);
             },
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    hours,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: _kanit,
-                      color: Colors.black54,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            items: hourItems.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
           ),
           Divider(
             color: Colors.black54,
