@@ -22,59 +22,45 @@ class _HomeScreenState extends State<HomeScreen> {
   SharedPreferences sharedPreferences;
   var message;
   _employee() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CheckinScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => CheckinScreen()));
   }
 
   _leave() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => LeaveScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => LeaveScreen()));
   }
 
   _history() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => HistoryScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryScreen()));
   }
 
   _logout() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
       sharedPreferences.clear();
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => SigninScreen()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SigninScreen()));
     });
   }
 
   _bossLeave() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => BossScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => BossScreen()));
   }
 
   setMessage() async {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = sharedPreferences.getString('userMsg');
     message = jsonDecode(msg);
-    
   }
 
   _notiBoss() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => NotiBossScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => NotiBossScreen()));
   }
 
   _showProfile() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
   }
 
-  _register() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => RegisterScreen()));
-  }
- 
-  _historyCheckin(){
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => HistoryCheckin()));
+  _historyCheckin() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryCheckin()));
   }
 
   @override
@@ -112,7 +98,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.deepOrange,
                   action: _bossLeave,
                 ),
-                
                 btnMenu(
                   btnName: 'แจ้งเตือน(หัวหน้า)',
                   color: Colors.deepOrange,
@@ -124,17 +109,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   action: _showProfile,
                 ),
                 btnMenu(
-                  btnName: 'สมัครสมาชิก',
-                  color: Colors.deepOrange,
-                  action: _register,
-                ),
-
-                btnMenu(
                   btnName: 'ประวัติลงเวลา',
                   color: Colors.deepOrange,
                   action: _historyCheckin,
                 ),
-
                 btnMenu(
                   btnName: 'logout',
                   color: Colors.deepOrange,

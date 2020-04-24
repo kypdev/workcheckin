@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workcheckin/views/home_screen.dart';
 import 'package:device_id/device_id.dart';
 import 'package:flutter/services.dart';
+import 'package:workcheckin/views/register_screen.dart';
 
 final String _kanit = 'kanit';
 
@@ -211,6 +212,10 @@ class _SigninScreenState extends State<SigninScreen> {
     }
   }
 
+  _signup() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -251,6 +256,7 @@ class _SigninScreenState extends State<SigninScreen> {
                           Form(
                             key: _formKey,
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -333,17 +339,44 @@ class _SigninScreenState extends State<SigninScreen> {
                             ),
                           ),
                           SizedBox(height: 20),
-                          RaisedButton(
-                            child: Text(
-                              'LOGIN',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            color: Colors.blue[400],
-                            onPressed: _login,
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                  child: RaisedButton(
+                                    child: Text(
+                                      'เข้าสู่ระบบ',
+                                      style: TextStyle(color: Colors.white, fontFamily: _kanit),
+                                    ),
+                                    elevation: 10,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    color: Colors.blue[400],
+                                    onPressed: _login,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                  child: RaisedButton(
+                                    child: Text(
+                                      'สมัครสมาชิก',
+                                      style: TextStyle(color: Colors.white, fontFamily: _kanit),
+                                    ),
+                                    elevation: 10,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    color: Colors.blue[400],
+                                    onPressed: _signup,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(height: 20),
                         ],
