@@ -72,109 +72,159 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Center(
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/bg.jpg'),
+              fit: BoxFit.cover,
+            ),
+          ),
           child: SingleChildScrollView(
-            child: Stack(
+            child: Column(
               children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Container(
+                  height: MediaQuery.of(context).size.height / 17.2,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/nav.png'),
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    btnMenu(
-                      btnName: 'ลงเวลาการทำงาน',
-                      color: Colors.blueAccent,
-                      action: _employee,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20, top: 10),
+                      child: Container(
+                        width: 70,
+                        height: 70,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/noti.png'),
+                          ),
+                        ),
+                      ),
                     ),
-                    btnMenu(
-                      btnName: 'ลางาน',
-                      color: Colors.greenAccent,
-                      action: _leave,
-                    ),
-                    btnMenu(
-                      btnName: 'ประวัติการลา',
-                      color: Colors.deepOrange,
-                      action: _history,
-                    ),
-                    btnMenu(
-                      btnName: 'ประวัติการลา(หัวหน้า)',
-                      color: Colors.deepOrange,
-                      action: _bossLeave,
-                    ),
-                    btnMenu(
-                      btnName: 'แจ้งเตือน(หัวหน้า)',
-                      color: Colors.deepOrange,
-                      action: _notiBoss,
-                    ),
-                    btnMenu(
-                      btnName: 'ข้อมูลส่วนตัว',
-                      color: Colors.deepOrange,
-                      action: _showProfile,
-                    ),
-                    btnMenu(
-                      btnName: 'ประวัติลงเวลา',
-                      color: Colors.deepOrange,
-                      action: _historyCheckin,
-                    ),
-                    btnMenu(
-                      btnName: 'logout',
-                      color: Colors.deepOrange,
-                      action: _logout,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20, top: 10),
+                      child: Container(
+                        width: 70,
+                        height: 70,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/logout.png'),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                // Container(
-                //   width: MediaQuery.of(context).size.width,
-                //   height: MediaQuery.of(context).size.height,
-                //   decoration: BoxDecoration(
-                //     image: DecorationImage(
-                //       image: AssetImage('assets/images/bg.jpg'),
-                //       fit: BoxFit.cover,
-                //     ),
-                //   ),
-                //   child: Column(
-                //     children: <Widget>[
-                //       Row(
-                //         children: <Widget>[
-                //           Container(
-                //             width: 50,
-                //             height: 50,
-                //             decoration: BoxDecoration(
-                //               image: DecorationImage(
-                //                 image: AssetImage('assets/images/noti.png'),
-                //               ),
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //       Container(
-                //         width: MediaQuery.of(context).size.width / 2,
-                //         height: MediaQuery.of(context).size.height / 2,
-                //         decoration: BoxDecoration(
-                //           image: DecorationImage(
-                //             image: AssetImage('assets/images/card-menu.png'),
-                //             fit: BoxFit.cover,
-                //           ),
-                //         ),
-                //         child: Column(
-                //           children: <Widget>[
-                //             Row(
-                //               children: <Widget>[
-                //                 Container(
-                //                   width: 50,
-                //                   height: 50,
-                //                   decoration: BoxDecoration(
-                //                     image: DecorationImage(
-                //                       image: AssetImage('assets/images/noti.png'),
-                //                     ),
-                //                   ),
-                //                 ),
-                //               ],
-                //             ),
-                //           ],
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 1.1,
+                  height: MediaQuery.of(context).size.height / 2.2,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/card-menu.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(top: 60, left: 50),
+                            child: Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/images/check.png'),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 60, right: 50),
+                            child: Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/images/his-time.png'),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 50, right: 50),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/images/leave.png'),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/images/his-leave.png'),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/pro.png'),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height / 3.15,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/boss-mnu2.png'),
+                    ),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 70),
+                        child: Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/images/report.png'),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
