@@ -507,11 +507,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 setState(() {
                                   positionIndexDD = positionItem.indexOf(value);
                                   if (positionIndexDD == 0) {
-                                    positionId = 1;
+                                    positionId = 3;
                                   } else if (positionIndexDD == 1) {
                                     positionId = 2;
                                   } else {
-                                    positionId = 3;
+                                    positionId = 1;
                                   }
                                 });
                                 print('positionindex: $positionIndexDD');

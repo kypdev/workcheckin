@@ -53,7 +53,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
     });
   }
 
-  selectPlace() {
+  selectPlace() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     setState(() {
       ddDatas = msg['locationList'];
       _item = 0;

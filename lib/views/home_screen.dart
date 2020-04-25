@@ -72,162 +72,190 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/bg.jpg'),
-              fit: BoxFit.cover,
+        body: Stack(
+          children: <Widget>[
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/bg.jpg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: MediaQuery.of(context).size.height / 17.2,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/nav.png'),
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, top: 10),
-                      child: Container(
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/images/noti.png'),
-                          ),
-                        ),
+            SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: MediaQuery.of(context).size.height / 17.2,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/nav.png'),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20, top: 10),
-                      child: Container(
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/images/logout.png'),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 1.1,
-                  height: MediaQuery.of(context).size.height / 2.2,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/card-menu.png'),
-                      fit: BoxFit.cover,
-                    ),
                   ),
-                  child: Column(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 60, left: 50),
-                            child: Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/images/check.png'),
-                                ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, top: 10),
+                        child: GestureDetector(
+                          onTap: _notiBoss,
+                          child: Container(
+                            width: 70,
+                            height: 70,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/images/noti.png'),
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 60, right: 50),
-                            child: Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/images/his-time.png'),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 50, right: 50),
-                        child: Row(
+                        padding: const EdgeInsets.only(right: 20, top: 10),
+                        child: GestureDetector(
+                          onTap: _logout,
+                          child: Container(
+                            width: 70,
+                            height: 70,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/images/logout.png'),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width / 1.1,
+                    height: MediaQuery.of(context).size.height / 2.2,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/card-menu.png'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/images/leave.png'),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 60, left: 50),
+                              child: GestureDetector(
+                                onTap: _employee,
+                                child: Container(
+                                  width: 80,
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage('assets/images/check.png'),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                            Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/images/his-leave.png'),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 60, right: 50),
+                              child: GestureDetector(
+                                onTap: _historyCheckin,
+                                child: Container(
+                                  width: 80,
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage('assets/images/his-time.png'),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/images/pro.png'),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 50, right: 50),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: _leave,
+                                child: Container(
+                                  width: 80,
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage('assets/images/leave.png'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: _history,
+                                child: Container(
+                                  width: 80,
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage('assets/images/his-leave.png'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height / 3.15,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/boss-mnu2.png'),
-                    ),
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 70),
-                        child: Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/report.png'),
+                        GestureDetector(
+                          onTap: _showProfile,
+                          child: Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/images/pro.png'),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  GestureDetector(
+                    onTap: _bossLeave,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 3.15,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/boss-menu.png'),
+                        ),
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          // Padding(
+                          //   padding: const EdgeInsets.only(top: 70),
+                          //   child: Container(
+                          //     width: 120,
+                          //     height: 120,
+                          //     decoration: BoxDecoration(
+                          //       image: DecorationImage(
+                          //         image: AssetImage('assets/images/report.png'),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

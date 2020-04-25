@@ -37,29 +37,33 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
 
     List<CheckinHistory> checkinHsitories = [];
 
-    for (var n in msg['checkinModelList']) {
-      CheckinHistory checkinHistory = CheckinHistory(
-        n['modelid'],
-        n['userId'],
-        n['deviceId'],
-        n['osMobile'],
-        n['locationId'],
-        n['bossId'],
-        n['actionCode'],
-        n['locationName'],
-        n['platform'],
-        n['lateTime'],
-        n['createDate'],
-        n['createTime'],
-        n['createBy'],
-        n['checkoutDate'],
-        n['checkoutTime'],
-        n['lateFlag'],
-      );
-      checkinHsitories.add(checkinHistory);
-    }
+    if (msg['checkinModelList'].toString() == '[]') {
+      return null;
+    } else {
+      for (var n in msg['checkinModelList']) {
+        CheckinHistory checkinHistory = CheckinHistory(
+          n['modelid'],
+          n['userId'],
+          n['deviceId'],
+          n['osMobile'],
+          n['locationId'],
+          n['bossId'],
+          n['actionCode'],
+          n['locationName'],
+          n['platform'],
+          n['lateTime'],
+          n['createDate'],
+          n['createTime'],
+          n['createBy'],
+          n['checkoutDate'],
+          n['checkoutTime'],
+          n['lateFlag'],
+        );
+        checkinHsitories.add(checkinHistory);
+      }
 
-    return checkinHsitories;
+      return checkinHsitories;
+    }
   }
 
   @override
@@ -78,26 +82,53 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
         ),
         centerTitle: true,
       ),
-      body: FutureBuilder(
-        future: _getLeave(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.data == null) {
-            return Text('loading...');
-          } else {
-            return ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (BuildContext context, int index) {
-                return cardNoti(
-                  checkinDate: snapshot.data[index].createDate.toString(),
-                  checinTime: snapshot.data[index].createTime.toString(),
-                  checkoutDate: snapshot.data[index].checkoutDate.toString(),
-                  checkoutTime: snapshot.data[index].checkoutTime.toString() == 'null' ? '-' : snapshot.data[index].checkoutTime.toString(),
-                  lateFlag: snapshot.data[index].lateFlag.toString(),
-                );
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            FutureBuilder(
+              future: _getLeave(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.data == null) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Visibility(
+                          visible: true,
+                          child: CircularProgressIndicator(),
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          'ไม่พบข้อมูล...',
+                          style: TextStyle(
+                            fontFamily: _kanit,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  return Container(
+                    height: MediaQuery.of(context).size.height,
+                    child: ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return cardNoti(
+                          checkinDate: snapshot.data[index].createDate.toString(),
+                          checinTime: snapshot.data[index].createTime.toString(),
+                          checkoutDate: snapshot.data[index].checkoutDate.toString(),
+                          checkoutTime: snapshot.data[index].checkoutTime.toString() == 'null' ? '-' : snapshot.data[index].checkoutTime.toString(),
+                          lateFlag: snapshot.data[index].lateFlag.toString(),
+                        );
+                      },
+                    ),
+                  );
+                }
               },
-            );
-          }
-        },
+            ),
+          ],
+        ),
       ),
     );
   }
