@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:workcheckin/models/boss_leave_model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workcheckin/models/request_by_boss.dart';
 
@@ -16,66 +15,23 @@ class BossScreen extends StatefulWidget {
 
 class _BossScreenState extends State<BossScreen> {
   //  bossid = account userid
-  var bossID = '';
+  var bossID;
   SharedPreferences sharedPreferences;
   bool visible = false;
-  var msg;
 
-  getMsg() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    var msg = jsonDecode(sharedPreferences.getString('userMsg'));
-    setState(() {
-      bossID = msg['cwiUser']['modelid'].toString();
-    });
-  }
+  getMsg() async {}
 
   @override
   void initState() {
     super.initState();
-    getMsg();
   }
 
-  Future<List<BossLeaveModel>> _getLeave() async {
-    var data = {"bossId": bossID};
-    print(bossID);
-    var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave_list_by_boss';
-
-    var response = await http.post(
-      url,
-      body: json.encode(data),
-      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
-    );
-
-    Map<String, dynamic> msg = jsonDecode(response.body);
-
-    print('msgbosslist: $msg');
-
-    List<BossLeaveModel> leaveModels = [];
-
-    for (var leave in msg['trnLeaveList']) {
-      BossLeaveModel leaveModel = BossLeaveModel(
-        leave['modelid'],
-        leave['userId'],
-        leave['leaveTypeCode'],
-        leave['leaveDate'],
-        leave['leaveHour'],
-        leave['remark'],
-        leave['approveFlag'],
-        leave['approveRejectDate'],
-        leave['approveRejectBy'],
-        leave['createDate'],
-        leave['createBy'],
-        leave['updateDate'],
-        leave['updateBy'],
-      );
-      leaveModels.add(leaveModel);
-    }
-    return leaveModels;
-  }
-
-// #########################################################
   Future<List<RequestByBoss>> _getLeaveHenchList() async {
     var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave_list_by_boss';
+    sharedPreferences = await SharedPreferences.getInstance();
+    var msg = jsonDecode(sharedPreferences.getString('userMsg'));
+    var bossID = msg['cwiUser']['modelid'];
+    print(bossID);
     var data = {"bossId": bossID};
     var response = await http.post(
       url,
@@ -83,22 +39,10 @@ class _BossScreenState extends State<BossScreen> {
       headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
     );
     Map<String, dynamic> message = jsonDecode(response.body);
+    print(message['trnLeaveList']);
     List<RequestByBoss> hencLeaveList = [];
     for (var n in message['trnLeaveList']) {
-      RequestByBoss requestByBoss = RequestByBoss(
-        n['modelid'],
-        n['userId'],
-        n['leaveTypeCode'],
-        n['leaveDate'],
-        n['leaveHour'],
-        n['remark'],
-        n['approveFlag'],
-        n['approveRejectDate'],
-        n['approveRejectBy'],
-        n['createDate'],
-        n['createBy'],
-        n['updateDate'],
-        n['updateBy']);
+      RequestByBoss requestByBoss = RequestByBoss(n['modelid'], n['userId'], n['leaveTypeCode'], n['leaveDate'], n['leaveHour'], n['remark'], n['approveFlag'], n['approveRejectDate'], n['approveRejectBy'], n['createDate'], n['createBy'], n['updateDate'], n['updateBy']);
       hencLeaveList.add(requestByBoss);
     }
     return hencLeaveList;
@@ -112,53 +56,224 @@ class _BossScreenState extends State<BossScreen> {
           title: Text('ใบลา(หัวหน้า)', style: TextStyle(fontFamily: _kanit)),
           centerTitle: true,
         ),
-        body: Center(
-          child: SingleChildScrollView(
+        body: SingleChildScrollView(
+          child: Center(
             child: Stack(
               alignment: Alignment.center,
               children: <Widget>[
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-
                     FutureBuilder(
                       future: _getLeaveHenchList(),
-                      builder: (BuildContext context, AsyncSnapshot sn){
-                        if(sn.data==null){
-
-                          return Center(
-                            child: Container(
-                              child: CircularProgressIndicator(),
-                            ),
+                      builder: (BuildContext context, AsyncSnapshot sn) {
+                        if (sn.data == null) {
+                          return Column(
+                            children: <Widget>[
+                              Center(
+                                child: Visibility(visible: true, child: CircularProgressIndicator()),
+                              ),
+                              SizedBox(height: 20),
+                              Text(
+                                'ไม่พบข้อมูล',
+                                style: TextStyle(
+                                  fontFamily: _kanit,
+                                  fontSize: 18,
+                                ),
+                              )
+                            ],
                           );
-                        }else{
-
+                        } else {
                           return Container(
                             height: MediaQuery.of(context).size.height,
                             child: ListView.builder(
                               itemCount: sn.data.length,
-                              itemBuilder: (BuildContext context, int index){
-
+                              itemBuilder: (BuildContext context, int index) {
                                 return cardHistory(
                                   leaveDate: sn.data[index].leaveDate.toString(),
                                   userid: sn.data[index].userId.toString(),
                                   leaveHour: sn.data[index].leaveHour.toString(),
                                   approveFlag: sn.data[index].approveFlag.toString(),
                                   approveRejectDate: sn.data[index].approveRejectDate.toString(),
-                                  remark: sn.data[index].remark.toString(),     
-                                  id: sn.data[index].modelid.toString(),     
-                                  actionNo: (){print(sn.data[index].modelid.toString());},
-                                  actionOk: (){print(sn.data[index].modelid.toString());},
+                                  remark: sn.data[index].remark.toString(),
+                                  id: sn.data[index].modelid.toString(),
+                                  actionOk: () {
+                                    print(
+                                      sn.data[index].approveFlag.toString(),
+                                    );
+                                    setState(() => visible = true);
+                                    Alert(
+                                      context: context,
+                                      type: AlertType.warning,
+                                      title: "คุณแน่ใจว่าจะยืนยันใบลานี้ ?",
+                                      desc: "",
+                                      buttons: [
+                                        DialogButton(
+                                          child: Text(
+                                            "ใช่",
+                                            style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                                          ),
+                                          onPressed: () async {
+                                            // start process approve
+                                            var leaveid = sn.data[index].modelid.toString();
+                                            var data = {"leaveId": leaveid, "userId": bossID, "approveFlag": "1"};
+                                            var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave_approve';
+                                            var response = await http.post(
+                                              url,
+                                              body: json.encode(data),
+                                              headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+                                            );
+
+                                            Map<String, dynamic> message = jsonDecode(response.body);
+
+                                            if (message['responseCode'] == '000') {
+                                              // success
+                                              setState(() => visible = false);
+                                              Navigator.pop(context);
+                                              Alert(context: context, type: AlertType.success, title: 'ยืนยันใบลาสำเร็จ', desc: "", buttons: [
+                                                DialogButton(
+                                                  child: Text(
+                                                    "ตกลง",
+                                                    style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                                                  ),
+                                                  onPressed: () => Navigator.pop(context),
+                                                  color: Colors.green,
+                                                ),
+                                              ]).show();
+                                            } else {
+                                              // Failed to process
+                                              Navigator.pop(context);
+                                              setState(() {
+                                                visible = false;
+                                              });
+                                              Alert(
+                                                context: context,
+                                                type: AlertType.warning,
+                                                title: message['responseDesc'].toString(),
+                                                desc: "",
+                                                buttons: [
+                                                  DialogButton(
+                                                    child: Text(
+                                                      "ตกลง",
+                                                      style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                                                    ),
+                                                    onPressed: () => Navigator.pop(context),
+                                                    color: Colors.red,
+                                                  )
+                                                ],
+                                              ).show();
+                                            }
+
+                                            // end process leave
+                                          },
+                                          color: Color.fromRGBO(0, 179, 134, 1.0),
+                                        ),
+                                        DialogButton(
+                                          child: Text(
+                                            "ไม่ใช่",
+                                            style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                                          ),
+                                          onPressed: () {
+                                            setState(() => visible = false);
+                                            Navigator.pop(context);
+                                          },
+                                          gradient: LinearGradient(colors: [Color.fromRGBO(116, 116, 191, 1.0), Color.fromRGBO(52, 138, 199, 1.0)]),
+                                        )
+                                      ],
+                                    ).show();
+                                  },
+                                  actionNo: () {
+                                    setState(() => visible = true);
+                                    Alert(
+                                      context: context,
+                                      type: AlertType.warning,
+                                      title: "คุณแน่ใจว่าจะยกเลิกใบลานี้ ?",
+                                      desc: "",
+                                      buttons: [
+                                        DialogButton(
+                                          child: Text(
+                                            "ใช่",
+                                            style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                                          ),
+                                          onPressed: () async {
+                                            // start process reject
+                                            var leaveid = sn.data[index].modelid.toString();
+                                            var data = {"leaveId": leaveid, "userId": bossID, "approveFlag": "2"};
+                                            var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave_approve';
+                                            var response = await http.post(
+                                              url,
+                                              body: json.encode(data),
+                                              headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+                                            );
+
+                                            Map<String, dynamic> message = jsonDecode(response.body);
+
+                                            if (message['responseCode'] == '000') {
+                                              // success
+                                              setState(() => visible = false);
+                                              Navigator.pop(context);
+                                              Alert(context: context, type: AlertType.success, title: 'ยกเลิกใบลาสำเร็จ', desc: "", buttons: [
+                                                DialogButton(
+                                                  child: Text(
+                                                    "ตกลง",
+                                                    style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                                                  ),
+                                                  onPressed: () => Navigator.pop(context),
+                                                  color: Colors.green,
+                                                ),
+                                              ]).show();
+                                            } else {
+                                              // Failed to process
+                                              Navigator.pop(context);
+                                              setState(() {
+                                                visible = false;
+                                              });
+                                              Alert(
+                                                context: context,
+                                                type: AlertType.warning,
+                                                title: message['responseDesc'].toString(),
+                                                desc: "",
+                                                buttons: [
+                                                  DialogButton(
+                                                    child: Text(
+                                                      "ตกลง",
+                                                      style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                                                    ),
+                                                    onPressed: () => Navigator.pop(context),
+                                                    color: Colors.red,
+                                                  )
+                                                ],
+                                              ).show();
+                                            }
+
+                                            // end process leave
+                                          },
+                                          color: Color.fromRGBO(0, 179, 134, 1.0),
+                                        ),
+                                        DialogButton(
+                                          child: Text(
+                                            "ไม่ใช่",
+                                            style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                                          ),
+                                          onPressed: () {
+                                            setState(() => visible = false);
+                                            Navigator.pop(context);
+                                          },
+                                          gradient: LinearGradient(colors: [Color.fromRGBO(116, 116, 191, 1.0), Color.fromRGBO(52, 138, 199, 1.0)]),
+                                        )
+                                      ],
+                                    ).show();
+                                  },
                                 );
                               },
                             ),
                           );
                         }
-
-
                       },
                     ),
-
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 1,
+                    ),
                   ],
                 ),
                 Center(
@@ -225,12 +340,23 @@ class _BossScreenState extends State<BossScreen> {
                         fontSize: 13.0,
                       ),
                     ),
-                    Text(
-                      'สถานะการลา : $approveFlag$approveRejectDate',
-                      style: TextStyle(
-                        fontFamily: _kanit,
-                        fontSize: 13.0,
-                      ),
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          'สถานะการลา : ',
+                          style: TextStyle(
+                            fontFamily: _kanit,
+                            fontSize: 13.0,
+                          ),
+                        ),
+                        Text(
+                          approveFlag == '1' ? 'อนุมัติแล้ว' : approveFlag == '2' ? 'ยกเลิกแล้ว' : 'รอการอนุมัติ',
+                          style: TextStyle(
+                            fontFamily: _kanit,
+                            fontSize: 13.0,
+                          ),
+                        ),
+                      ],
                     ),
                     Text(
                       'เหตุผล : $remark',

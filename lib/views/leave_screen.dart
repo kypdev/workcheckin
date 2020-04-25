@@ -177,6 +177,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
 
   @override
   void initState() {
+    
     super.initState();
     _getLeaveType();
     getMsg();

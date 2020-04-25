@@ -5,7 +5,7 @@ class LeaveModel {
   String leaveDate;
   int leaveHour;
   String remark;
-  String approveFlag;
+  int approveFlag;
   String approveRejectDate;
   String approveRejectBy;
   String createDate;
@@ -13,20 +13,7 @@ class LeaveModel {
   String updateDate;
   String updateBy;
 
-  LeaveModel(
-      this.modelid,
-      this.userId,
-      this.leaveTypeCode,
-      this.leaveDate,
-      this.leaveHour,
-      this.remark,
-      this.approveFlag,
-      this.approveRejectDate,
-      this.approveRejectBy,
-      this.createDate,
-      this.createBy,
-      this.updateDate,
-      this.updateBy);
+  LeaveModel(this.modelid, this.userId, this.leaveTypeCode, this.leaveDate, this.leaveHour, this.remark, this.approveFlag, this.approveRejectDate, this.approveRejectBy, this.createDate, this.createBy, this.updateDate, this.updateBy);
 
   LeaveModel.fromJson(Map<String, dynamic> json) {
     modelid = json['modelid'];

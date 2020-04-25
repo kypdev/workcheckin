@@ -7,7 +7,6 @@ import 'package:workcheckin/views/history_checkin.dart';
 import 'package:workcheckin/views/history_screen.dart';
 import 'package:workcheckin/views/noti_boss_screen.dart';
 import 'package:workcheckin/views/profile_screen.dart';
-import 'package:workcheckin/views/register_screen.dart';
 import 'package:workcheckin/views/signin_screen.dart';
 import 'leave_screen.dart';
 
