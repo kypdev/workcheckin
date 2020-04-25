@@ -7,11 +7,11 @@ class LeaveModel {
   String remark;
   int approveFlag;
   String approveRejectDate;
-  String approveRejectBy;
+  int approveRejectBy;
   String createDate;
   int createBy;
   String updateDate;
-  String updateBy;
+  int updateBy;
 
   LeaveModel(this.modelid, this.userId, this.leaveTypeCode, this.leaveDate, this.leaveHour, this.remark, this.approveFlag, this.approveRejectDate, this.approveRejectBy, this.createDate, this.createBy, this.updateDate, this.updateBy);
 

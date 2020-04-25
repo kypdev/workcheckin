@@ -264,7 +264,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
             context: context,
             type: AlertType.success,
             title: "",
-            desc: msg['responseDesc'].toString(),
+            desc: 'บันทึกสำเร็จ',
             buttons: [
               DialogButton(
                 child: Text(
