@@ -13,57 +13,15 @@ class NotiScreen extends StatefulWidget {
 
 class _NotiScreenState extends State<NotiScreen> {
   SharedPreferences sharedPreferences;
-  var message;
-  getMsg() async {
+
+  Future<List<BossNotifyModel>> _getNotiList() async {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
-    setState(() {
-      message = msg;
-    });
-  }
-
-  Future<List<NotificationModel>> _getLeave() async {
-    var userID = message['cwiUser']['modelid'];
-    var data = {
-      "bossId": "",
-      "userId": userID,
-      "leaveDate": "19/04/2020",
-      "leaveCode": ""
-    };
-
-    var url = 'http://159.138.232.139/service/cwi/v1/user/get_noti_list';
-
-    var response = await http.post(
-      url,
-      body: json.encode(data),
-      headers: {
-        "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-        "Content-Type": "application/json"
-      },
-    );
-
-    Map<String, dynamic> msg = jsonDecode(response.body);
-
-    List<NotificationModel> noti = [];
-
-    for (var n in msg['trnNotiModelList']) {
-      NotificationModel notificationModel = NotificationModel(
-        n['modelid'],
-        n['userId'],
-        n['bossId'],
-        n['noti'],
-        n['createDate'],
-        n['createBy'],
-      );
-      noti.add(notificationModel);
-    }
-
-    return noti;
+    print(msg);
   }
 
   @override
   void initState() {
-    getMsg();
     super.initState();
   }
 
@@ -77,23 +35,15 @@ class _NotiScreenState extends State<NotiScreen> {
         ),
         centerTitle: true,
       ),
-      body: FutureBuilder(
-        future: _getLeave(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.data == null) {
-            return Text('loading...');
-          } else {
-            return ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (BuildContext context, int index) {
-                return cardNoti(
-                    leaveDate: snapshot.data[index].createDate.toString(),
-                    noti: snapshot.data[index].noti.toString(),
-                    userid: snapshot.data[index].userId.toString());
-              },
-            );
-          }
-        },
+      body: Column(
+        children: <Widget>[
+          RaisedButton(
+            child: Text('test'),
+            onPressed: () {
+              _getNotiList();
+            },
+          ),
+        ],
       ),
     );
   }

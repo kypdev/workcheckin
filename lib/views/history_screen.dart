@@ -157,7 +157,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                           ),
                                           onPressed: () async {
                                             setState(() => visible = true);
-                                            print(snapshot.data[index].modelid.toString());
+
                                             Alert(
                                               context: context,
                                               type: AlertType.warning,
@@ -171,60 +171,59 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                   ),
                                                   onPressed: () async {
                                                     // TODO ok aprove
-
+                                                    var userID = snapshot.data[index].userId.toString();
                                                     var leaveid = snapshot.data[index].modelid.toString();
-                                                    print(leaveid);
-                                                    var url = 'http://159.138.232.139/service/cwi/v1/user/delete_leave';
+                                                    var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave_approve';
 
-                                                    var jsonData = {"leaveId": leaveid};
+                                                    var jsonData = {"leaveId": leaveid, "userId": userID, "approveFlag": "9"};
                                                     var response = await http.post(
                                                       url,
                                                       body: json.encode(jsonData),
                                                       headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
                                                     );
 
-                                                    // Map<String, dynamic> message = jsonDecode(response.body);
+                                                    Map<String, dynamic> message = jsonDecode(response.body);
 
-                                                    // print('res: $message');
+                                                    print('res: $message');
 
-                                                    // if (message['responseCode'] == '000') {
-                                                    //   // Success
-                                                    //   setState(() => visible = false);
-                                                    //   Navigator.pop(context);
+                                                    if (message['responseCode'] == '000') {
+                                                      // Success
+                                                      setState(() => visible = false);
+                                                      Navigator.pop(context);
 
-                                                    //   Alert(context: context, type: AlertType.success, title: message['responseDesc'].toString(), desc: "", buttons: [
-                                                    //     DialogButton(
-                                                    //       child: Text(
-                                                    //         "ตกลง",
-                                                    //         style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
-                                                    //       ),
-                                                    //       onPressed: () => Navigator.pop(context),
-                                                    //       color: Colors.green,
-                                                    //     ),
-                                                    //   ]).show();
-                                                    // } else {
-                                                    //   // Failed to process
-                                                    //   Navigator.pop(context);
-                                                    //   setState(() {
-                                                    //     visible = false;
-                                                    //   });
-                                                    //   Alert(
-                                                    //     context: context,
-                                                    //     type: AlertType.warning,
-                                                    //     title: message['responseDesc'].toString(),
-                                                    //     desc: "",
-                                                    //     buttons: [
-                                                    //       DialogButton(
-                                                    //         child: Text(
-                                                    //           "ตกลง",
-                                                    //           style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
-                                                    //         ),
-                                                    //         onPressed: () => Navigator.pop(context),
-                                                    //         color: Colors.red,
-                                                    //       )
-                                                    //     ],
-                                                    //   ).show();
-                                                    // }
+                                                      Alert(context: context, type: AlertType.success, title: message['responseDesc'].toString(), desc: "", buttons: [
+                                                        DialogButton(
+                                                          child: Text(
+                                                            "ตกลง",
+                                                            style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                                                          ),
+                                                          onPressed: () => Navigator.pop(context),
+                                                          color: Colors.green,
+                                                        ),
+                                                      ]).show();
+                                                    } else {
+                                                      // Failed to process
+                                                      Navigator.pop(context);
+                                                      setState(() {
+                                                        visible = false;
+                                                      });
+                                                      Alert(
+                                                        context: context,
+                                                        type: AlertType.warning,
+                                                        title: message['responseDesc'].toString(),
+                                                        desc: "",
+                                                        buttons: [
+                                                          DialogButton(
+                                                            child: Text(
+                                                              "ตกลง",
+                                                              style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                                                            ),
+                                                            onPressed: () => Navigator.pop(context),
+                                                            color: Colors.red,
+                                                          )
+                                                        ],
+                                                      ).show();
+                                                    }
                                                   },
                                                   color: Color.fromRGBO(0, 179, 134, 1.0),
                                                 ),

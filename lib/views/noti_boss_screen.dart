@@ -12,58 +12,47 @@ class NotiBossScreen extends StatefulWidget {
 }
 
 class _NotiBossScreenState extends State<NotiBossScreen> {
-  var message;
   SharedPreferences sharedPreferences;
-  getMsg() async {
+
+  Future<List<BossNotifyModel>> _getNotiList() async {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
-    setState(() {
-      message = msg;
-    });
-  }
-
-  Future<List<NotificationModel>> _getLeave() async {
-    var userID = message['cwiUser']['modelid'];
-    var data = {
-      "bossId": "",
-      "userId": userID,
-      "leaveDate": "19/04/2020",
-      "leaveCode": ""
-    };
+    var branchid = msg['cwiUser']['branchId'].toString();
 
     var url = 'http://159.138.232.139/service/cwi/v1/user/get_noti_list';
+    var data = {"branchId": branchid};
 
     var response = await http.post(
       url,
       body: json.encode(data),
-      headers: {
-        "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-        "Content-Type": "application/json"
-      },
+      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
     );
 
-    Map<String, dynamic> msg = jsonDecode(response.body);
+    Map<String, dynamic> message = jsonDecode(response.body);
 
-    List<NotificationModel> noti = [];
+    List<BossNotifyModel> bossNotiList = [];
 
-    for (var n in msg['trnNotiModelList']) {
-      NotificationModel notificationModel = NotificationModel(
-        n['modelid'],
-        n['userId'],
-        n['bossId'],
-        n['noti'],
-        n['createDate'],
-        n['createBy'],
-      );
-      noti.add(notificationModel);
+    if (message['trnNotiModelList'].toString() == '[]') {
+      return null;
+    } else {
+      for (var n in message['trnNotiModelList']) {
+        BossNotifyModel bossNotify = BossNotifyModel(
+          n['modelid'],
+          n['userId'],
+          n['name'],
+          n['bossId'],
+          n['noti'],
+          n['createDate'],
+          n['createBy'],
+        );
+        bossNotiList.add(bossNotify);
+      }
+      return bossNotiList;
     }
-
-    return noti;
   }
 
   @override
   void initState() {
-    getMsg();
     super.initState();
   }
 
@@ -79,23 +68,33 @@ class _NotiBossScreenState extends State<NotiBossScreen> {
         ),
         centerTitle: true,
       ),
-      body: FutureBuilder(
-        future: _getLeave(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.data == null) {
-            return Text('loading...');
-          } else {
-            return ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (BuildContext context, int index) {
-                return cardNoti(
-                    leaveDate: snapshot.data[index].createDate.toString(),
-                    noti: snapshot.data[index].noti.toString(),
-                    userid: snapshot.data[index].userId.toString());
-              },
-            );
-          }
-        },
+      body: Stack(
+        children: <Widget>[
+          FutureBuilder(
+              future: _getNotiList(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.data == null) {
+                  return Center(
+                    child: Visibility(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                } else {
+                  return Container(
+                    child: ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return cardNoti(
+                          leaveDate: snapshot.data[index].createDate.toString(),
+                          noti: snapshot.data[index].noti.toString(),
+                          userid: snapshot.data[index].name.toString(),
+                        );
+                      },
+                    ),
+                  );
+                }
+              }),
+        ],
       ),
     );
   }
@@ -133,7 +132,7 @@ class _NotiBossScreenState extends State<NotiBossScreen> {
                               color: Colors.amber,
                             ),
                             Container(
-                              width: MediaQuery.of(context).size.width*0.7,
+                              width: MediaQuery.of(context).size.width * 0.7,
                               child: Column(
                                 children: <Widget>[
                                   Text(
