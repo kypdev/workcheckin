@@ -14,6 +14,7 @@ class CheckinHistory {
   int createBy;
   String checkoutDate;
   String checkoutTime;
+  int lateFlag;
 
   CheckinHistory(
       this.modelid,
@@ -30,7 +31,8 @@ class CheckinHistory {
       this.createTime,
       this.createBy,
       this.checkoutDate,
-      this.checkoutTime);
+      this.checkoutTime,
+      this.lateFlag);
 
   CheckinHistory.fromJson(Map<String, dynamic> json) {
     modelid = json['modelid'];
@@ -48,6 +50,7 @@ class CheckinHistory {
     createBy = json['createBy'];
     checkoutDate = json['checkoutDate'];
     checkoutTime = json['checkoutTime'];
+    lateFlag = json['lateFlag'];
   }
 
   Map<String, dynamic> toJson() {
@@ -67,6 +70,7 @@ class CheckinHistory {
     data['createBy'] = this.createBy;
     data['checkoutDate'] = this.checkoutDate;
     data['checkoutTime'] = this.checkoutTime;
+    data['lateFlag'] = this.lateFlag;
     return data;
   }
 }

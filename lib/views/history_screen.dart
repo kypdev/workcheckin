@@ -171,18 +171,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                   ),
                                                   onPressed: () async {
                                                     // TODO ok aprove
-                                                    var userID = snapshot.data[index].userId.toString();
                                                     var leaveid = snapshot.data[index].modelid.toString();
-                                                    var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave_approve';
+                                                    var url = 'http://159.138.232.139/service/cwi/v1/user/delete_leave';
 
-                                                    var jsonData = {"leaveId": leaveid, "userId": userID, "approveFlag": "9"};
+                                                    var jsonData = {"leaveId": leaveid};
+                                                    print(jsonEncode(jsonData));
                                                     var response = await http.post(
                                                       url,
-                                                      body: json.encode(jsonData),
+                                                      body: jsonEncode(jsonData),
                                                       headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
                                                     );
 
-                                                    Map<String, dynamic> message = jsonDecode(response.body);
+                                                    Map<String, dynamic> message = json.decode(response.body);
 
                                                     print('res: $message');
 

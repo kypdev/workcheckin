@@ -18,7 +18,7 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     setState(() {
-      userID= msg['cwiUser']['modelid'];
+      userID = msg['cwiUser']['modelid'];
     });
   }
 
@@ -30,10 +30,7 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
     var response = await http.post(
       url,
       body: json.encode(data),
-      headers: {
-        "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-        "Content-Type": "application/json"
-      },
+      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
     );
 
     Map<String, dynamic> msg = jsonDecode(response.body);
@@ -57,6 +54,7 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
         n['createBy'],
         n['checkoutDate'],
         n['checkoutTime'],
+        n['lateFlag'],
       );
       checkinHsitories.add(checkinHistory);
     }
@@ -93,10 +91,8 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
                   checkinDate: snapshot.data[index].createDate.toString(),
                   checinTime: snapshot.data[index].createTime.toString(),
                   checkoutDate: snapshot.data[index].checkoutDate.toString(),
-                  checkoutTime:
-                      snapshot.data[index].checkoutTime.toString() == 'null'
-                          ? '-'
-                          : snapshot.data[index].checkoutTime.toString(),
+                  checkoutTime: snapshot.data[index].checkoutTime.toString() == 'null' ? '-' : snapshot.data[index].checkoutTime.toString(),
+                  lateFlag: snapshot.data[index].lateFlag.toString(),
                 );
               },
             );
@@ -111,7 +107,11 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
     checinTime,
     checkoutDate,
     checkoutTime,
+    lateFlag,
   }) {
+    TextStyle styleLate = TextStyle(fontFamily: _kanit, color: Colors.red, fontSize: 18.0);
+    TextStyle styleNoLate = TextStyle(fontFamily: _kanit, color: Colors.green, fontSize: 18.0);
+
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: Card(
@@ -121,7 +121,7 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
           child: Container(
             width: MediaQuery.of(context).size.width * 0.8,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -134,7 +134,6 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.8,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Table(
                               columnWidths: {
@@ -147,20 +146,18 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
                                   children: [
                                     Container(),
                                     Container(
-                                      child: Text('เข้า',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily: _kanit,
-                                              color: Colors.green,
-                                              fontSize: 12.0)),
+                                      child: Text(
+                                        'เข้า',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontFamily: _kanit, color: Colors.green, fontSize: 12.0),
+                                      ),
                                     ),
                                     Container(
-                                      child: Text('ออก',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily: _kanit,
-                                              color: Colors.red,
-                                              fontSize: 12.0)),
+                                      child: Text(
+                                        'ออก',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontFamily: _kanit, color: Colors.green, fontSize: 12.0),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -168,7 +165,7 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
                             ),
                             Table(
                               columnWidths: {
-                                0: FlexColumnWidth(3.0),
+                                0: FlexColumnWidth(4.0),
                                 1: FlexColumnWidth(3.0),
                                 2: FlexColumnWidth(3.0),
                               },
@@ -179,33 +176,21 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
                                       child: Text(
                                         '$checkinDate',
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontFamily: _kanit,
-                                          color: Colors.green,
-                                          fontSize: 18.0,
-                                        ),
+                                        style: lateFlag == '1' ? styleLate : styleNoLate,
                                       ),
                                     ),
                                     Container(
                                       child: Text(
                                         '$checinTime',
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontFamily: _kanit,
-                                          color: Colors.green,
-                                          fontSize: 18.0,
-                                        ),
+                                        style: lateFlag == '1' ? styleLate : styleNoLate,
                                       ),
                                     ),
                                     Container(
                                       child: Text(
                                         '$checkoutTime',
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontFamily: _kanit,
-                                          color: Colors.red,
-                                          fontSize: 18.0,
-                                        ),
+                                        style: lateFlag == '1' ? styleLate : styleNoLate,
                                       ),
                                     ),
                                   ],

@@ -362,18 +362,53 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                           ),
 
-                          form(
-                            visible: false,
-                            ctrl: usernameCtrl,
-                            labeltext: 'Username',
-                            prefixicon: Icon(Icons.person),
-                            val: (value) {
-                              if (value.isEmpty || value.length < 5) {
-                                return 'ชื่อผู้ใช้ ห้ามว่าง หรือ ต่ำกว่า 6 ตัวอักษร';
-                              }
-                              return null;
-                            },
+                          // form(
+                          //   visible: false,
+                          //   ctrl: usernameCtrl,
+                          //   labeltext: 'Username',
+                          //   prefixicon: Icon(Icons.person),
+                          //   val: (value) {
+                          //     if (value.isEmpty || value.length < 5) {
+                          //       return 'ชื่อผู้ใช้ ห้ามว่าง หรือ ต่ำกว่า 6 ตัวอักษร';
+                          //     }
+                          //     return null;
+                          //   },
+                          // ),
+
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: TextFormField(
+                              obscureText: false,
+                              validator: (value) {
+                                if (value.isEmpty || value.length < 5) {
+                                  return 'ชื่อผู้ใช้ ห้ามว่าง หรือ ต่ำกว่า 6 ตัวอักษร';
+                                }
+                                return null;
+                              },
+                              controller: usernameCtrl,
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.person),
+                                suffix: Padding(
+                                  padding: const EdgeInsets.only(right: 20),
+                                  child: Text('@' + orgId.toString()),
+                                ),
+                                labelText: 'Username',
+                                fillColor: Colors.black12.withOpacity(0.059),
+                                filled: true,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.transparent),
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.red,
+                                  ),
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                              ),
+                            ),
                           ),
+
                           form(
                             visible: obpass,
                             ctrl: passwordCtrl,
