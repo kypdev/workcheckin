@@ -111,6 +111,8 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
   }) {
     TextStyle styleLate = TextStyle(fontFamily: _kanit, color: Colors.red, fontSize: 18.0);
     TextStyle styleNoLate = TextStyle(fontFamily: _kanit, color: Colors.green, fontSize: 18.0);
+    TextStyle styleNoLateTitle = TextStyle(fontFamily: _kanit, color: Colors.green, fontSize: 12.0);
+    TextStyle styleLateTitle = TextStyle(fontFamily: _kanit, color: Colors.red, fontSize: 12.0);
 
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
@@ -149,14 +151,14 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
                                       child: Text(
                                         'เข้า',
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(fontFamily: _kanit, color: Colors.green, fontSize: 12.0),
+                                        style: lateFlag == '1' ? styleLateTitle : styleNoLateTitle,
                                       ),
                                     ),
                                     Container(
                                       child: Text(
                                         'ออก',
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(fontFamily: _kanit, color: Colors.green, fontSize: 12.0),
+                                        style: lateFlag == '1' ? styleLateTitle : styleNoLateTitle,
                                       ),
                                     ),
                                   ],

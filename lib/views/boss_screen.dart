@@ -75,12 +75,12 @@ class _BossScreenState extends State<BossScreen> {
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'ไม่พบข้อมูล',
+                        'ไม่พบข้อมูล...',
                         style: TextStyle(
                           fontFamily: _kanit,
                           fontSize: 18,
                         ),
-                      )
+                      ),
                     ],
                   );
                 } else {

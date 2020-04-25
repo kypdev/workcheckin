@@ -47,27 +47,31 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
     Map<String, dynamic> msg = jsonDecode(response.body);
 
-    List<LeaveModel> leaveModels = [];
+    if (msg['trnLeaveList'].toString() == '[]') {
+      return null;
+    } else {
+      List<LeaveModel> leaveModels = [];
 
-    for (var leave in msg['trnLeaveList']) {
-      LeaveModel leaveModel = LeaveModel(
-        leave['modelid'],
-        leave['userId'],
-        leave['leaveTypeCode'],
-        leave['leaveDate'],
-        leave['leaveHour'],
-        leave['remark'],
-        leave['approveFlag'],
-        leave['approveRejectDate'],
-        leave['approveRejectBy'],
-        leave['createDate'],
-        leave['createBy'],
-        leave['updateDate'],
-        leave['updateBy'],
-      );
-      leaveModels.add(leaveModel);
+      for (var leave in msg['trnLeaveList']) {
+        LeaveModel leaveModel = LeaveModel(
+          leave['modelid'],
+          leave['userId'],
+          leave['leaveTypeCode'],
+          leave['leaveDate'],
+          leave['leaveHour'],
+          leave['remark'],
+          leave['approveFlag'],
+          leave['approveRejectDate'],
+          leave['approveRejectBy'],
+          leave['createDate'],
+          leave['createBy'],
+          leave['updateDate'],
+          leave['updateBy'],
+        );
+        leaveModels.add(leaveModel);
+      }
+      return leaveModels;
     }
-    return leaveModels;
   }
 
   @override
@@ -89,7 +93,27 @@ class _HistoryScreenState extends State<HistoryScreen> {
             FutureBuilder(
               future: _getLeave(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.data != null) {
+                if (snapshot.data == null) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Visibility(
+                          visible: true,
+                          child: CircularProgressIndicator(),
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          'ไม่พบข้อมูล...',
+                          style: TextStyle(
+                            fontFamily: _kanit,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
                   return Container(
                     height: MediaQuery.of(context).size.height,
                     child: ListView.builder(
@@ -127,14 +151,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               ),
                                             ),
                                             Text(
-                                              'ชั่วโมง : ' + snapshot.data[index].leaveHour.toString(),
+                                              snapshot.data[index].approveFlag.toString() == 'null' ? 'สถานะการลา รอการอนุมัติ' : '',
                                               style: TextStyle(
                                                 fontFamily: _kanit,
                                                 fontSize: 13.0,
                                               ),
                                             ),
                                             Text(
-                                              snapshot.data[index].approveFlag.toString() == 'null' ? 'สถานะการลา รอการอนุมัติ' : '',
+                                              'เหตุผล : ' + snapshot.data[index].remark.toString(),
                                               style: TextStyle(
                                                 fontFamily: _kanit,
                                                 fontSize: 13.0,
@@ -251,13 +275,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           ),
                         );
                       },
-                    ),
-                  );
-                } else {
-                  return Center(
-                    child: Visibility(
-                      visible: true,
-                      child: CircularProgressIndicator(),
                     ),
                   );
                 }

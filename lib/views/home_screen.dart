@@ -74,49 +74,107 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         body: Center(
           child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Stack(
               children: <Widget>[
-                btnMenu(
-                  btnName: 'ลงเวลาการทำงาน',
-                  color: Colors.blueAccent,
-                  action: _employee,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    btnMenu(
+                      btnName: 'ลงเวลาการทำงาน',
+                      color: Colors.blueAccent,
+                      action: _employee,
+                    ),
+                    btnMenu(
+                      btnName: 'ลางาน',
+                      color: Colors.greenAccent,
+                      action: _leave,
+                    ),
+                    btnMenu(
+                      btnName: 'ประวัติการลา',
+                      color: Colors.deepOrange,
+                      action: _history,
+                    ),
+                    btnMenu(
+                      btnName: 'ประวัติการลา(หัวหน้า)',
+                      color: Colors.deepOrange,
+                      action: _bossLeave,
+                    ),
+                    btnMenu(
+                      btnName: 'แจ้งเตือน(หัวหน้า)',
+                      color: Colors.deepOrange,
+                      action: _notiBoss,
+                    ),
+                    btnMenu(
+                      btnName: 'ข้อมูลส่วนตัว',
+                      color: Colors.deepOrange,
+                      action: _showProfile,
+                    ),
+                    btnMenu(
+                      btnName: 'ประวัติลงเวลา',
+                      color: Colors.deepOrange,
+                      action: _historyCheckin,
+                    ),
+                    btnMenu(
+                      btnName: 'logout',
+                      color: Colors.deepOrange,
+                      action: _logout,
+                    ),
+                  ],
                 ),
-                btnMenu(
-                  btnName: 'ลางาน',
-                  color: Colors.greenAccent,
-                  action: _leave,
-                ),
-                btnMenu(
-                  btnName: 'ประวัติการลา',
-                  color: Colors.deepOrange,
-                  action: _history,
-                ),
-                btnMenu(
-                  btnName: 'ประวัติการลา(หัวหน้า)',
-                  color: Colors.deepOrange,
-                  action: _bossLeave,
-                ),
-                btnMenu(
-                  btnName: 'แจ้งเตือน(หัวหน้า)',
-                  color: Colors.deepOrange,
-                  action: _notiBoss,
-                ),
-                btnMenu(
-                  btnName: 'ข้อมูลส่วนตัว',
-                  color: Colors.deepOrange,
-                  action: _showProfile,
-                ),
-                btnMenu(
-                  btnName: 'ประวัติลงเวลา',
-                  color: Colors.deepOrange,
-                  action: _historyCheckin,
-                ),
-                btnMenu(
-                  btnName: 'logout',
-                  color: Colors.deepOrange,
-                  action: _logout,
-                ),
+                // Container(
+                //   width: MediaQuery.of(context).size.width,
+                //   height: MediaQuery.of(context).size.height,
+                //   decoration: BoxDecoration(
+                //     image: DecorationImage(
+                //       image: AssetImage('assets/images/bg.jpg'),
+                //       fit: BoxFit.cover,
+                //     ),
+                //   ),
+                //   child: Column(
+                //     children: <Widget>[
+                //       Row(
+                //         children: <Widget>[
+                //           Container(
+                //             width: 50,
+                //             height: 50,
+                //             decoration: BoxDecoration(
+                //               image: DecorationImage(
+                //                 image: AssetImage('assets/images/noti.png'),
+                //               ),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //       Container(
+                //         width: MediaQuery.of(context).size.width / 2,
+                //         height: MediaQuery.of(context).size.height / 2,
+                //         decoration: BoxDecoration(
+                //           image: DecorationImage(
+                //             image: AssetImage('assets/images/card-menu.png'),
+                //             fit: BoxFit.cover,
+                //           ),
+                //         ),
+                //         child: Column(
+                //           children: <Widget>[
+                //             Row(
+                //               children: <Widget>[
+                //                 Container(
+                //                   width: 50,
+                //                   height: 50,
+                //                   decoration: BoxDecoration(
+                //                     image: DecorationImage(
+                //                       image: AssetImage('assets/images/noti.png'),
+                //                     ),
+                //                   ),
+                //                 ),
+                //               ],
+                //             ),
+                //           ],
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ),
