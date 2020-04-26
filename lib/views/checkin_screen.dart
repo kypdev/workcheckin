@@ -358,44 +358,53 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           child: CircularProgressIndicator(),
                         ),
                       )
-                    : DropdownButton<String>(
-                        focusColor: Colors.white,
-                        isExpanded: true,
-                        hint: new Text(
-                          place,
+                    : Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        value: _item == null ? null : item[_item],
-                        items: item.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Center(
-                              child: Text(
-                                value,
-                                style: TextStyle(
-                                  fontFamily: _kanit,
-                                  fontSize: 20,
-                                ),
-                              ),
+                        child: DropdownButton<String>(
+                            focusColor: Colors.white,
+                            isExpanded: true,
+                            hint: new Text(
+                              place,
                             ),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            // get index
-                            _item = item.indexOf(value);
+                            value: _item == null ? null : item[_item],
+                            items: item.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Center(
+                                  child: Text(
+                                    value,
+                                    style: TextStyle(
+                                      fontFamily: _kanit,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                // get index
+                                _item = item.indexOf(value);
 
-                            // set location
-                            place = msg['locationList'][_item]['name'].toString();
-                            latitude = msg['locationList'][_item]['latitude'].toString();
-                            longtitude = msg['locationList'][_item]['longitude'].toString();
-                            loctionID = msg['locationList'][_item]['modelid'].toString();
-                          });
+                                // set location
+                                place = msg['locationList'][_item]['name'].toString();
+                                latitude = msg['locationList'][_item]['latitude'].toString();
+                                longtitude = msg['locationList'][_item]['longitude'].toString();
+                                loctionID = msg['locationList'][_item]['modelid'].toString();
+                              });
 
-                          print('$place $latitude, $longtitude $loctionID');
-                        },
+                              print('$place $latitude, $longtitude $loctionID');
+                            },
+                          ),
                       ),
+                    ),
 
-                      SizedBox(height: 50),
+                SizedBox(height: 50),
 
                 Container(
                   width: MediaQuery.of(context).size.width,
@@ -410,24 +419,30 @@ class _CheckinScreenState extends State<CheckinScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage(
-                                'assets/images/checkin.png',
+                        GestureDetector(
+                          onTap: _checkin,
+                          child: Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/checkin.png',
+                                ),
                               ),
                             ),
                           ),
                         ),
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage(
-                                'assets/images/checkout.png',
+                        GestureDetector(
+                          onTap: _checkout,
+                          child: Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/checkout.png',
+                                ),
                               ),
                             ),
                           ),

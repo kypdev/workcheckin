@@ -13,6 +13,9 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/splash': (BuildContext context) => SplashScreen(),
       },
+      theme: ThemeData(
+        primaryColor: Colors.blue,
+      ),
     );
   }
 }

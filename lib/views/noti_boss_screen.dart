@@ -61,7 +61,7 @@ class _NotiBossScreenState extends State<NotiBossScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'แจ้งเตือน(หัวหน้า)',
+          'แจ้งเตือน',
           style: TextStyle(
             fontFamily: _kanit,
           ),
