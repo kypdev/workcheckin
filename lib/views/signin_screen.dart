@@ -228,12 +228,21 @@ class _SigninScreenState extends State<SigninScreen> {
     return Scaffold(
       body: SafeArea(
         child: Stack(
+          alignment: Alignment.center,
           children: <Widget>[
             Container(
-              color: Colors.blue,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/bg.jpg',
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
             SingleChildScrollView(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   SizedBox(height: 20),
                   Image.asset(

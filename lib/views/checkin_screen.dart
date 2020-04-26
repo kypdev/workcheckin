@@ -327,134 +327,150 @@ class _CheckinScreenState extends State<CheckinScreen> {
         ),
         centerTitle: true,
       ),
-      body: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('เลือกสถานที่',
-                  style: TextStyle(
-                    fontFamily: _kanit,
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
-                  )),
+      body: Center(
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/bg.jpg',
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('เลือกสถานที่',
+                    style: TextStyle(
+                      fontFamily: _kanit,
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold,
+                    )),
 
-              place == ''
-                  ? Center(
-                      child: Visibility(
-                        visible: true,
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                  : DropdownButton<String>(
-                      isExpanded: true,
-                      hint: new Text(
-                        place,
-                      ),
-                      value: _item == null ? null : item[_item],
-                      items: item.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Center(
-                            child: Text(
-                              value,
-                              style: TextStyle(
-                                fontFamily: _kanit,
-                                fontSize: 20,
+                place == ''
+                    ? Center(
+                        child: Visibility(
+                          visible: true,
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : DropdownButton<String>(
+                        focusColor: Colors.white,
+                        isExpanded: true,
+                        hint: new Text(
+                          place,
+                        ),
+                        value: _item == null ? null : item[_item],
+                        items: item.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Center(
+                              child: Text(
+                                value,
+                                style: TextStyle(
+                                  fontFamily: _kanit,
+                                  fontSize: 20,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          // get index
-                          _item = item.indexOf(value);
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            // get index
+                            _item = item.indexOf(value);
 
-                          // set location
-                          place = msg['locationList'][_item]['name'].toString();
-                          latitude = msg['locationList'][_item]['latitude'].toString();
-                          longtitude = msg['locationList'][_item]['longitude'].toString();
-                          loctionID = msg['locationList'][_item]['modelid'].toString();
-                        });
+                            // set location
+                            place = msg['locationList'][_item]['name'].toString();
+                            latitude = msg['locationList'][_item]['latitude'].toString();
+                            longtitude = msg['locationList'][_item]['longitude'].toString();
+                            loctionID = msg['locationList'][_item]['modelid'].toString();
+                          });
 
-                        print('$place $latitude, $longtitude $loctionID');
-                      },
+                          print('$place $latitude, $longtitude $loctionID');
+                        },
+                      ),
+
+                SizedBox(height: 20.0),
+                Text(
+                  place == '' ? 'เลือกสถานที่ก่อน' : place,
+                  style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 20.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 20.0, color: Colors.black),
+                ),
+
+                SizedBox(height: 20.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      latitude == '' ? 'latitude / ' : latitude.toString() + ' / ',
+                      style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
                     ),
-
-              SizedBox(height: 20.0),
-              Text(
-                place == '' ? 'เลือกสถานที่ก่อน' : place,
-                style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 20.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 20.0, color: Colors.black),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    latitude == '' ? 'latitude / ' : latitude.toString() + ' / ',
-                    style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
-                  ),
-                  Text(
-                    latitude == '' ? 'longitude' : latitude.toString(),
-                    style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
-                  ),
-                ],
-              ),
-              // RaisedButton(
-              //   child: Text('asd'),
-              //   onPressed: () async {
-
-              //   },
-              // ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: _checkin,
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.green,
-                      ),
-                      child: Icon(
-                        FontAwesomeIcons.arrowAltCircleDown,
-                        size: 80,
-                        color: Colors.white,
-                      ),
+                    Text(
+                      latitude == '' ? 'longitude' : latitude.toString(),
+                      style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
                     ),
-                  ),
-                  SizedBox(width: 20),
-                  GestureDetector(
-                    onTap: _checkout,
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.red,
-                      ),
-                      child: Icon(
-                        FontAwesomeIcons.arrowAltCircleDown,
-                        size: 80,
-                        color: Colors.white,
+                  ],
+                ),
+                // RaisedButton(
+                //   child: Text('asd'),
+                //   onPressed: () async {
+
+                //   },
+                // ),
+                SizedBox(height: 20.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: _checkin,
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.green,
+                        ),
+                        child: Icon(
+                          FontAwesomeIcons.arrowAltCircleDown,
+                          size: 80,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: MediaQuery.of(context).size.height / 4),
-            ],
-          ),
-          Container(
-            child: Visibility(
-              visible: visible,
-              child: CircularProgressIndicator(),
+                    SizedBox(width: 20),
+                    GestureDetector(
+                      onTap: _checkout,
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red,
+                        ),
+                        child: Icon(
+                          FontAwesomeIcons.arrowAltCircleDown,
+                          size: 80,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height / 4),
+              ],
             ),
-          ),
-        ],
+            Container(
+              child: Visibility(
+                visible: visible,
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

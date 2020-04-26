@@ -90,6 +90,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/bg.jpg',
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
             FutureBuilder(
               future: _getLeave(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -150,12 +160,25 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                 fontSize: 13.0,
                                               ),
                                             ),
-                                            Text(
-                                              snapshot.data[index].approveFlag.toString() == 'null' ? 'สถานะการลา รอการอนุมัติ' : '',
+                                            Row(
+                                              children: <Widget>[
+                                                Text(
+                                              'สถานะการลา : ',
                                               style: TextStyle(
                                                 fontFamily: _kanit,
                                                 fontSize: 13.0,
                                               ),
+                                            ),
+                                                Text(
+                                                  snapshot.data[index].approveFlag.toString()=='0'? 
+                                                  'รอการอนุมัติ': snapshot.data[index].approveFlag.toString()=='1'?
+                                                  'อนุมัติการลา': 'ไม่อนุมัติการลา',
+                                                  style: TextStyle(
+                                                    fontFamily: _kanit,
+                                                    fontSize: 13.0,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                             Text(
                                               'เหตุผล : ' + snapshot.data[index].remark.toString(),
@@ -371,14 +394,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          'ชั่วโมง : $leaveHour',
+                          'ชั่วโมง555 : $leaveHour',
                           style: TextStyle(
                             fontFamily: _kanit,
                             fontSize: 13.0,
                           ),
                         ),
                         Text(
-                          'สถานะการลา : $approveFlag$approveRejectDate',
+                          'as;dljf;lasjkdfl',
                           style: TextStyle(
                             fontFamily: _kanit,
                             fontSize: 13.0,
@@ -393,6 +416,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         ),
                       ],
                     ),
+
+
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4, right: 20),

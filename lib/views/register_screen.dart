@@ -273,6 +273,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
         body: Stack(
           alignment: Alignment.center,
           children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/bg.jpg',
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
             SingleChildScrollView(
               child: Column(
                 children: <Widget>[

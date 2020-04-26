@@ -177,7 +177,6 @@ class _LeaveScreenState extends State<LeaveScreen> {
 
   @override
   void initState() {
-    
     super.initState();
     _getLeaveType();
     getMsg();
@@ -204,58 +203,66 @@ class _LeaveScreenState extends State<LeaveScreen> {
           ),
           centerTitle: true,
         ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Stack(
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      showDate(
-                        date: dateStr,
-                        action: _showDateTimePicker,
-                      ),
-                      getTypeLeave(
-                        action: () {},
-                        leaveType: leaveTypeStr,
-                      ),
-                      hoursLeave(
-                        hrsCtrl: hrCtrl,
-                        remarkCtrl: remarkCtrl,
-                        hours: _currentInfIntValue.toString(),
-                      ),
-                      RaisedButton(
-                        color: Colors.blueAccent,
-                        onPressed: sendLeave,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'ตกลง',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: _kanit,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+        body: Stack(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/bg.jpg',
                   ),
-                  Center(
-                    child: Visibility(
-                      visible: visible,
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                ],
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    showDate(
+                      date: dateStr,
+                      action: _showDateTimePicker,
+                    ),
+                    getTypeLeave(
+                      action: () {},
+                      leaveType: leaveTypeStr,
+                    ),
+                    hoursLeave(
+                      hrsCtrl: hrCtrl,
+                      remarkCtrl: remarkCtrl,
+                      hours: _currentInfIntValue.toString(),
+                    ),
+                    RaisedButton(
+                      color: Colors.blueAccent,
+                      onPressed: sendLeave,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'ตกลง',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: _kanit,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Center(
+              child: Visibility(
+                visible: visible,
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          ],
         ),
       ),
     );

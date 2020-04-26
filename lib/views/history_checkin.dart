@@ -85,6 +85,16 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
       body: SafeArea(
         child: Stack(
           children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/bg.jpg',
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
             FutureBuilder(
               future: _getLeave(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {

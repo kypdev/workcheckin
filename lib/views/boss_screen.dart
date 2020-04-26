@@ -63,6 +63,16 @@ class _BossScreenState extends State<BossScreen> {
         body: Stack(
           alignment: Alignment.center,
           children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/bg.jpg',
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
             FutureBuilder(
               future: _getLeaveHenchList(),
               builder: (BuildContext context, AsyncSnapshot sn) {
@@ -105,7 +115,7 @@ class _BossScreenState extends State<BossScreen> {
                             Alert(
                               context: context,
                               type: AlertType.warning,
-                              title: "คุณแน่ใจว่าจะยืนยันใบลานี้ ?",
+                              title: "คุณแน่ใจว่าจะไม่อนุมัติการลานี้?",
                               desc: "",
                               buttons: [
                                 DialogButton(
@@ -187,7 +197,7 @@ class _BossScreenState extends State<BossScreen> {
                             Alert(
                               context: context,
                               type: AlertType.warning,
-                              title: "คุณแน่ใจว่าจะยกเลิกใบลานี้ ?",
+                              title: "คุณแน่ใจว่าจะไม่อนุมัติการลานี้?",
                               desc: "",
                               buttons: [
                                 DialogButton(
@@ -212,7 +222,7 @@ class _BossScreenState extends State<BossScreen> {
                                       // success
                                       setState(() => visible = false);
                                       Navigator.pop(context);
-                                      Alert(context: context, type: AlertType.success, title: 'ยกเลิกใบลาสำเร็จ', desc: "", buttons: [
+                                      Alert(context: context, type: AlertType.success, title: 'บันทึกข้อมูลสำเร็จ', desc: "", buttons: [
                                         DialogButton(
                                           child: Text(
                                             "ตกลง",
@@ -346,7 +356,7 @@ class _BossScreenState extends State<BossScreen> {
                           ),
                         ),
                         Text(
-                          approveFlag == '1' ? 'อนุมัติแล้ว' : approveFlag == '2' ? 'ไม่อนุมัติการลา' : 'รอการอนุมัติ',
+                          approveFlag == '1' ? 'อนุมัติการลา' : approveFlag == '2' ? 'ไม่อนุมัติการลา' : 'รอการอนุมัติ',
                           style: TextStyle(
                             fontFamily: _kanit,
                             fontSize: 13.0,

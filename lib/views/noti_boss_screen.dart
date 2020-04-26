@@ -70,6 +70,16 @@ class _NotiBossScreenState extends State<NotiBossScreen> {
       ),
       body: Stack(
         children: <Widget>[
+          Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/bg.jpg',
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
           FutureBuilder(
               future: _getNotiList(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
