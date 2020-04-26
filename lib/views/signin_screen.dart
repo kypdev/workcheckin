@@ -234,7 +234,7 @@ class _SigninScreenState extends State<SigninScreen> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(
-                    'assets/images/bg.jpg',
+                    'assets/images/login.jpg',
                   ),
                   fit: BoxFit.cover,
                 ),
@@ -244,16 +244,8 @@ class _SigninScreenState extends State<SigninScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(height: 20),
-                  Image.asset(
-                    'assets/images/logo.png',
-                    height: 200,
-                  ),
-                  SizedBox(height: 20),
-                  // Text(
-                  //   'ECORP',
-                  //   style: TextStyle(fontSize: 50.0, color: Colors.white),
-                  // ),
+                  SizedBox(height: MediaQuery.of(context).size.height/6,),
+                  
                   Padding(
                     padding: const EdgeInsets.only(left: 30, right: 30),
                     child: Card(

@@ -66,6 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     var msg = messages;
     setState(() => indexOrg = 0);
     setState(() => resOrgList = messages);
+    setState(() => orgId = msg['orgList'][0]['modelid'] );
     orgData = msg['orgList'];
 
     for (int i = 0; i < orgData.length; i++) {
@@ -90,6 +91,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() => resBranshlist = messages);
     setState(() => branchIndex = 0);
     setState(() => branchName = '');
+    setState(() => branchid = messages['branchList'][0]['modelid']);
     branchData = resBranshlist['branchList'];
     branchItem = [];
 
@@ -114,6 +116,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() => bossIndexDD = 0);
     setState(() => bossName = '');
     setState(() => bossData = messages['bossList']);
+    setState(() => bossId = messages['bossList'][0]['modelid']);
+
     setState(() => bossItem = []);
 
     if (resBossList['bossList'].isEmpty) {
@@ -132,8 +136,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   _getPositionList() {
     positionItem = ["พนักงาน"];
+    
     setState(() {
       positionIndexDD = 0;
+      positionId = '3';
     });
     print(positionItem);
   }
@@ -187,6 +193,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         var usr = username + '@' + orgId.toString();
 
         var data = {"employeeId": employeeid, "username": usr, "password": passwords, "passwordConfirm": conpasswords, "name": firstname, "lastname": lastname, "position": positionId, "orgId": orgId, "branchId": branchid, "status": 0, "bossId": bossId, "deviceId": _deviceid};
+
+
+        
 
         print('ok');
         print('data: $data');

@@ -344,12 +344,12 @@ class _CheckinScreenState extends State<CheckinScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('เลือกสถานที่',
-                    style: TextStyle(
-                      fontFamily: _kanit,
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.bold,
-                    )),
+                //     Text('เลือกสถานที่',
+                //         style: TextStyle(
+                //           fontFamily: _kanit,
+                //           fontSize: 25.0,
+                //           fontWeight: FontWeight.bold,
+                //         )),
 
                 place == ''
                     ? Center(
@@ -395,72 +395,114 @@ class _CheckinScreenState extends State<CheckinScreen> {
                         },
                       ),
 
-                SizedBox(height: 20.0),
-                Text(
-                  place == '' ? 'เลือกสถานที่ก่อน' : place,
-                  style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 20.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 20.0, color: Colors.black),
+                      SizedBox(height: 50),
+
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 3,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/card-check.png'),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 70, right: 70),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(
+                                'assets/images/checkin.png',
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(
+                                'assets/images/checkout.png',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
 
-                SizedBox(height: 20.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      latitude == '' ? 'latitude / ' : latitude.toString() + ' / ',
-                      style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
-                    ),
-                    Text(
-                      latitude == '' ? 'longitude' : latitude.toString(),
-                      style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
-                    ),
-                  ],
-                ),
-                // RaisedButton(
-                //   child: Text('asd'),
-                //   onPressed: () async {
+                //     SizedBox(height: 20.0),
+                //     Text(
+                //       place == '' ? 'เลือกสถานที่ก่อน' : place,
+                //       style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 20.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 20.0, color: Colors.black),
+                //     ),
 
-                //   },
-                // ),
-                SizedBox(height: 20.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: _checkin,
-                      child: Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.green,
-                        ),
-                        child: Icon(
-                          FontAwesomeIcons.arrowAltCircleDown,
-                          size: 80,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 20),
-                    GestureDetector(
-                      onTap: _checkout,
-                      child: Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.red,
-                        ),
-                        child: Icon(
-                          FontAwesomeIcons.arrowAltCircleDown,
-                          size: 80,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height / 4),
+                //     SizedBox(height: 20.0),
+                //     Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: <Widget>[
+                //         Text(
+                //           latitude == '' ? 'latitude / ' : latitude.toString() + ' / ',
+                //           style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
+                //         ),
+                //         Text(
+                //           latitude == '' ? 'longitude' : latitude.toString(),
+                //           style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
+                //         ),
+                //       ],
+                //     ),
+                //     // RaisedButton(
+                //     //   child: Text('asd'),
+                //     //   onPressed: () async {
+
+                //     //   },
+                //     // ),
+                //     SizedBox(height: 20.0),
+                //     Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: <Widget>[
+                //         GestureDetector(
+                //           onTap: _checkin,
+                //           child: Container(
+                //             width: 100,
+                //             height: 100,
+                //             decoration: BoxDecoration(
+                //               shape: BoxShape.circle,
+                //               color: Colors.green,
+                //             ),
+                //             child: Icon(
+                //               FontAwesomeIcons.arrowAltCircleDown,
+                //               size: 80,
+                //               color: Colors.white,
+                //             ),
+                //           ),
+                //         ),
+                //         SizedBox(width: 20),
+                //         GestureDetector(
+                //           onTap: _checkout,
+                //           child: Container(
+                //             width: 100,
+                //             height: 100,
+                //             decoration: BoxDecoration(
+                //               shape: BoxShape.circle,
+                //               color: Colors.red,
+                //             ),
+                //             child: Icon(
+                //               FontAwesomeIcons.arrowAltCircleDown,
+                //               size: 80,
+                //               color: Colors.white,
+                //             ),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //     SizedBox(height: MediaQuery.of(context).size.height / 4),
               ],
             ),
             Container(

@@ -20,11 +20,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Map<String, dynamic> message;
   var userID;
   bool visible = false;
+
   @override
   void initState() {
     super.initState();
     getMsg();
   }
+
+  
 
   getMsg() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -75,6 +78,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -104,25 +113,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               future: _getLeave(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.data == null) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Visibility(
-                          visible: true,
-                          child: CircularProgressIndicator(),
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'ไม่พบข้อมูล...',
-                          style: TextStyle(
-                            fontFamily: _kanit,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
+                  return Container();
                 } else {
                   return Container(
                     height: MediaQuery.of(context).size.height,
@@ -244,13 +235,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                             "ตกลง",
                                                             style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
                                                           ),
-                                                          onPressed: () => Navigator.pop(context),
+                                                          onPressed: () {
+                                                            Navigator.pop(context);
+                                                          },
                                                           color: Colors.green,
                                                         ),
                                                       ]).show();
                                                     } else {
                                                       // Failed to process
-                                                      Navigator.pop(context);
+                                                      Navigator.maybePop(context);
                                                       setState(() {
                                                         visible = false;
                                                       });
