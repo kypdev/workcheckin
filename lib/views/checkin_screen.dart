@@ -30,8 +30,11 @@ class _CheckinScreenState extends State<CheckinScreen> {
   bool visible;
   GlobalKey<AnimatedListState> animatedListKey = GlobalKey<AnimatedListState>();
   AnimationController emptyListController;
-  List<dynamic> ddDatas;
-  List<String> item = [];
+  var resLocationLists;
+  int locationListIndexDD;
+  List<dynamic> locationData;
+  List<String> locationItem = [];
+  var locationId;
   int _item;
 
   @override
@@ -41,9 +44,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
     initDeviceId();
     getPT();
     visible = false;
-    Future.delayed(Duration(milliseconds: 500), () {
-      selectPlace();
-    });
+    selectPlace();
   }
 
   getMsg() async {
@@ -56,22 +57,36 @@ class _CheckinScreenState extends State<CheckinScreen> {
   selectPlace() async {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
-    setState(() {
-      ddDatas = msg['locationList'];
-      _item = 0;
-    });
+    var branchid = msg['cwiUser']['branchId'].toString();
 
-    for (int i = 0; i < ddDatas.length; i++) {
-      for (int j = i; j <= i; j++) {
-        item.add(ddDatas[i]['name']);
+    var url = 'http://159.138.232.139/service/cwi/v1/master/get_location_lish_for_user';
+    var data = {"branchId": branchid};
+    var response = await http.post(
+      url,
+      body: jsonEncode(data),
+      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+    );
+    Map<String, dynamic> messages = jsonDecode(response.body);
+    print(messages);
+    setState(() => _item =0);
+    setState(() => resLocationLists = messages);
+    setState(() => locationListIndexDD = 0);
+    setState(() => place = messages['locationList'][0]['name']);
+    setState(() => locationData = messages['locationList']);
+    setState(() => locationId = messages['locationList'][0]['modelid']);
+    setState(() => latitude = messages['locationList'][0]['latitude'].toString());
+    setState(() => longtitude = messages['locationList'][0]['modlongitudeelid'].toString());
+
+    if (resLocationLists['locationList'].toString() == '[]') {
+      locationItem.add('ไม่พบข้อมูล');
+    } else {
+      for (int i = 0; i < locationData.length; i++) {
+        for (int j = i; j <= i; j++) {
+          locationItem.add(locationData[i]['name']);
+        }
       }
     }
-    print(item);
-    place = msg['locationList'][_item]['name'].toString();
-    latitude = msg['locationList'][_item]['latitude'].toString();
-    longtitude = msg['locationList'][_item]['longitude'].toString().substring(0, 8);
-    loctionID = msg['locationList'][_item]['modelid'].toString();
-    print('$latitude $longtitude');
+    print(locationItem);
   }
 
   Future<void> initDeviceId() async {
@@ -344,6 +359,12 @@ class _CheckinScreenState extends State<CheckinScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                RaisedButton(
+                  child: Text('test'),
+                  onPressed: () {
+                    selectPlace();
+                  },
+                ),
                 //     Text('เลือกสถานที่',
                 //         style: TextStyle(
                 //           fontFamily: _kanit,
@@ -371,8 +392,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             hint: new Text(
                               place,
                             ),
-                            value: _item == null ? null : item[_item],
-                            items: item.map((String value) {
+                            value: _item == null ? null : locationItem[_item],
+                            items: locationItem.map((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Center(
@@ -389,13 +410,13 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             onChanged: (value) {
                               setState(() {
                                 // get index
-                                _item = item.indexOf(value);
+                                _item = locationItem.indexOf(value);
 
                                 // set location
-                                place = msg['locationList'][_item]['name'].toString();
-                                latitude = msg['locationList'][_item]['latitude'].toString();
-                                longtitude = msg['locationList'][_item]['longitude'].toString();
-                                loctionID = msg['locationList'][_item]['modelid'].toString();
+                                place = resLocationLists['locationList'][_item]['name'].toString();
+                                latitude = resLocationLists['locationList'][_item]['latitude'].toString();
+                                longtitude = resLocationLists['locationList'][_item]['longitude'].toString();
+                                loctionID = resLocationLists['locationList'][_item]['modelid'].toString();
                               });
 
                               print('$place $latitude, $longtitude $loctionID');
