@@ -80,7 +80,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   _getBranch() async {
-    var url = 'http://159.138.232.139/service/cwi/v1/master/getBranchList';
+    try{
+      var url = 'http://159.138.232.139/service/cwi/v1/master/get_branch_list_for_org';
     var data = {'orgId': orgId};
     var response = await http.post(
       url,
@@ -100,10 +101,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         branchItem.add(branchData[i]['name']);
       }
     }
+    }catch (e){
+      print(e);
+    }
   }
 
   _getBossList() async {
-    var url = 'http://159.138.232.139/service/cwi/v1/master/getBossList?';
+    try{
+      var url = 'http://159.138.232.139/service/cwi/v1/master/getBossList?';
     var data = {'orgId': orgId};
     var response = await http.post(
       url,
@@ -130,8 +135,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
       }
     }
+    }catch(e){
+      print(e);
+    }
 
-    print(bossItem);
   }
 
   _getPositionList() {
