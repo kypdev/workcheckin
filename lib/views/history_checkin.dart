@@ -99,25 +99,7 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
               future: _getLeave(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.data == null) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Visibility(
-                          visible: true,
-                          child: CircularProgressIndicator(),
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'ไม่พบข้อมูล...',
-                          style: TextStyle(
-                            fontFamily: _kanit,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
+                  return Container();
                 } else {
                   return Container(
                     height: MediaQuery.of(context).size.height,

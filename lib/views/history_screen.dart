@@ -236,7 +236,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                             style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
                                                           ),
                                                           onPressed: () {
-                                                            Navigator.pop(context);
+                                                            Navigator.pop(this.context);
                                                           },
                                                           color: Colors.green,
                                                         ),

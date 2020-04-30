@@ -77,22 +77,7 @@ class _BossScreenState extends State<BossScreen> {
               future: _getLeaveHenchList(),
               builder: (BuildContext context, AsyncSnapshot sn) {
                 if (sn.data == null) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Center(
-                        child: Visibility(visible: true, child: CircularProgressIndicator()),
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        'ไม่พบข้อมูล...',
-                        style: TextStyle(
-                          fontFamily: _kanit,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  );
+                  return Container();
                 } else {
                   return Container(
                     height: MediaQuery.of(context).size.height,

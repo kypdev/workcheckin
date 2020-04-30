@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 final _kanit = 'Kanit';
 
@@ -12,13 +13,23 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   SharedPreferences sharedPreferences;
   var message;
+  var resProfile;
   getMsg() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    var msg = jsonDecode(sharedPreferences.getString('userMsg'));
+    var msg = await jsonDecode(sharedPreferences.getString('userMsg'));
+    
+    var userID = msg['cwiUser']['modelid'].toString();
+    var url = 'http://159.138.232.139/service/cwi/v1/user/get_profile';
+    var data = {"userId": userID};
+    var response = await http.post(
+      url,
+      body: jsonEncode(data),
+      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+    );
+    Map<String, dynamic> messages = jsonDecode(response.body);
     setState(() {
-      message = msg;
+      resProfile =  messages;
     });
-    print(message['cwiUser']['orgId']);
   }
 
   @override
@@ -52,6 +63,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                
+               
+              resProfile == null ? Center(
+                child: Visibility(
+                  visible: true,
+                  child: CircularProgressIndicator(),
+                ),
+              ) :
                 Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20),
                   child: Card(
@@ -68,47 +87,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'องค์กร : ' + message['cwiUser']['orgId'].toString(),
+                                  'องค์กร : ' + resProfile['cwiUser']['orgName'].toString(),
                                   style: TextStyle(
                                     fontFamily: _kanit,
                                     fontSize: 18.0,
                                   ),
                                 ),
                                 Text(
-                                  'สาขา : ' + message['cwiUser']['branchId'].toString(),
+                                  'สาขา : ' + resProfile['cwiUser']['branchName'].toString(),
                                   style: TextStyle(
                                     fontFamily: _kanit,
                                     fontSize: 18.0,
                                   ),
                                 ),
                                 Text(
-                                  'Username : ' + message['cwiUser']['username'].toString(),
+                                  'Username : ' + resProfile['cwiUser']['username'].toString(),
                                   style: TextStyle(
                                     fontFamily: _kanit,
                                     fontSize: 18.0,
                                   ),
                                 ),
                                 Text(
-                                  'ชื่อ : ' + message['cwiUser']['name'].toString() + ' ' + message['cwiUser']['lastname'].toString(),
+                                  'ชื่อ : ' + resProfile['cwiUser']['name'].toString() + ' ' + resProfile['cwiUser']['lastname'].toString(),
                                   style: TextStyle(
                                     fontFamily: _kanit,
                                     fontSize: 18.0,
                                   ),
                                 ),
                                 Text(
-                                  'รหัสพนักงาน : ' + message['cwiUser']['employeeId'].toString(),
+                                  'รหัสพนักงาน : ' + resProfile['cwiUser']['employeeId'].toString(),
                                   style: TextStyle(
                                     fontFamily: _kanit,
                                     fontSize: 18.0,
                                   ),
                                 ),
-                                Text(
-                                  'ตำแหน่ง : ' + message['cwiUser']['position'].toString(),
-                                  style: TextStyle(
-                                    fontFamily: _kanit,
-                                    fontSize: 18.0,
-                                  ),
-                                ),
+                                // Text(
+                                //   'ตำแหน่ง : ' + resProfile['cwiUser']['position'].toString(),
+                                //   style: TextStyle(
+                                //     fontFamily: _kanit,
+                                //     fontSize: 18.0,
+                                //   ),
+                                // ),
                                 Row(
                                   children: <Widget>[
                                     Text(
@@ -119,7 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ),
                                     Text(
-                                      message['cwiUser']['bossId'].toString() == '0' ? '' : message['cwiUser']['bossId'].toString(),
+                                      resProfile['cwiUser']['bossId'].toString() == '0' ? '' : resProfile['cwiUser']['bossName'].toString(),
                                       style: TextStyle(
                                         fontFamily: _kanit,
                                         fontSize: 18.0,

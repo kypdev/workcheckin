@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:device_id/device_id.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
 final _kanit = 'Kanit';
@@ -73,9 +72,11 @@ class _CheckinScreenState extends State<CheckinScreen> {
     setState(() => locationListIndexDD = 0);
     setState(() => place = messages['locationList'][0]['name']);
     setState(() => locationData = messages['locationList']);
-    setState(() => locationId = messages['locationList'][0]['modelid']);
+    setState(() => loctionID = messages['locationList'][0]['modelid'].toString());
     setState(() => latitude = messages['locationList'][0]['latitude'].toString());
-    setState(() => longtitude = messages['locationList'][0]['modlongitudeelid'].toString());
+    setState(() => longtitude = messages['locationList'][0]['longitude'].toString());
+
+    print('$latitude, $longtitude');
 
     if (resLocationLists['locationList'].toString() == '[]') {
       locationItem.add('ไม่พบข้อมูล');
@@ -123,7 +124,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
   }
 
   _checkin() async {
+    print('$latitude $longtitude, $loctionID');
     double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
+    
     far = distanceInMeters.toString();
 
     print('far: $far');
@@ -266,6 +269,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
           'osMobile': platform,
           'locationId': loctionID,
         };
+        print(data);
 
         var url = 'http://159.138.232.139/service/cwi/v1/user/checkout';
 
@@ -359,12 +363,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                RaisedButton(
-                  child: Text('test'),
-                  onPressed: () {
-                    selectPlace();
-                  },
-                ),
+               
                 //     Text('เลือกสถานที่',
                 //         style: TextStyle(
                 //           fontFamily: _kanit,
