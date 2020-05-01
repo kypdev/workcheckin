@@ -51,6 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   var resPositionList;
   var positionId;
   bool visible;
+  var orgShortname;
 
   String _deviceid = 'Unknown';
 
@@ -67,6 +68,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() => indexOrg = 0);
     setState(() => resOrgList = messages);
     setState(() => orgId = msg['orgList'][0]['modelid'] );
+    setState(() => orgShortname = msg['orgList'][0]['shortName'] );
     orgData = msg['orgList'];
 
     for (int i = 0; i < orgData.length; i++) {
@@ -197,7 +199,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ).show();
       } else {
         setState(() => visible = false);
-        var usr = username + '@' + orgId.toString();
+        var usr = username + '@' + orgShortname.toString();
 
         var data = {"employeeId": employeeid, "username": usr, "password": passwords, "passwordConfirm": conpasswords, "name": firstname, "lastname": lastname, "position": positionId, "orgId": orgId, "branchId": branchid, "status": 0, "bossId": bossId, "deviceId": _deviceid};
 
@@ -416,7 +418,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 prefixIcon: Icon(Icons.person),
                                 suffix: Padding(
                                   padding: const EdgeInsets.only(right: 20),
-                                  child: Text('@' + orgId.toString()),
+                                  child: Text('@' + orgShortname.toString()),
                                 ),
                                 labelText: 'Username',
                                 fillColor: Colors.black12.withOpacity(0.059),
