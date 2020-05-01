@@ -2,23 +2,39 @@ class RequestByBoss {
   int modelid;
   int userId;
   int leaveTypeCode;
+  String leaveTypeName;
   String leaveDate;
   int leaveHour;
   String remark;
   int approveFlag;
   String approveRejectDate;
-  int approveRejectBy;
+  String approveRejectBy;
   String createDate;
   int createBy;
   String updateDate;
-  int updateBy;
+  String updateBy;
 
-  RequestByBoss(this.modelid, this.userId, this.leaveTypeCode, this.leaveDate, this.leaveHour, this.remark, this.approveFlag, this.approveRejectDate, this.approveRejectBy, this.createDate, this.createBy, this.updateDate, this.updateBy);
+  RequestByBoss(
+      this.modelid,
+      this.userId,
+      this.leaveTypeCode,
+      this.leaveTypeName,
+      this.leaveDate,
+      this.leaveHour,
+      this.remark,
+      this.approveFlag,
+      this.approveRejectDate,
+      this.approveRejectBy,
+      this.createDate,
+      this.createBy,
+      this.updateDate,
+      this.updateBy);
 
   RequestByBoss.fromJson(Map<String, dynamic> json) {
     modelid = json['modelid'];
     userId = json['userId'];
     leaveTypeCode = json['leaveTypeCode'];
+    leaveTypeName = json['leaveTypeName'];
     leaveDate = json['leaveDate'];
     leaveHour = json['leaveHour'];
     remark = json['remark'];
@@ -36,6 +52,7 @@ class RequestByBoss {
     data['modelid'] = this.modelid;
     data['userId'] = this.userId;
     data['leaveTypeCode'] = this.leaveTypeCode;
+    data['leaveTypeName'] = this.leaveTypeName;
     data['leaveDate'] = this.leaveDate;
     data['leaveHour'] = this.leaveHour;
     data['remark'] = this.remark;
