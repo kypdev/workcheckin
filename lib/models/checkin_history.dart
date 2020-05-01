@@ -9,12 +9,14 @@ class CheckinHistory {
   String locationName;
   int platform;
   int lateTime;
+  int lateFlag;
+  String earlyTime;
+  String earlyFlag;
   String createDate;
   String createTime;
   int createBy;
   String checkoutDate;
   String checkoutTime;
-  int lateFlag;
 
   CheckinHistory(
       this.modelid,
@@ -27,12 +29,14 @@ class CheckinHistory {
       this.locationName,
       this.platform,
       this.lateTime,
+      this.lateFlag,
+      this.earlyTime,
+      this.earlyFlag,
       this.createDate,
       this.createTime,
       this.createBy,
       this.checkoutDate,
-      this.checkoutTime,
-      this.lateFlag);
+      this.checkoutTime);
 
   CheckinHistory.fromJson(Map<String, dynamic> json) {
     modelid = json['modelid'];
@@ -45,12 +49,14 @@ class CheckinHistory {
     locationName = json['locationName'];
     platform = json['platform'];
     lateTime = json['lateTime'];
+    lateFlag = json['lateFlag'];
+    earlyTime = json['earlyTime'];
+    earlyFlag = json['earlyFlag'];
     createDate = json['createDate'];
     createTime = json['createTime'];
     createBy = json['createBy'];
     checkoutDate = json['checkoutDate'];
     checkoutTime = json['checkoutTime'];
-    lateFlag = json['lateFlag'];
   }
 
   Map<String, dynamic> toJson() {
@@ -65,12 +71,14 @@ class CheckinHistory {
     data['locationName'] = this.locationName;
     data['platform'] = this.platform;
     data['lateTime'] = this.lateTime;
+    data['lateFlag'] = this.lateFlag;
+    data['earlyTime'] = this.earlyTime;
+    data['earlyFlag'] = this.earlyFlag;
     data['createDate'] = this.createDate;
     data['createTime'] = this.createTime;
     data['createBy'] = this.createBy;
     data['checkoutDate'] = this.checkoutDate;
     data['checkoutTime'] = this.checkoutTime;
-    data['lateFlag'] = this.lateFlag;
     return data;
   }
 }
