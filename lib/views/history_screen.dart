@@ -27,8 +27,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
     getMsg();
   }
 
-  
-
   getMsg() async {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
@@ -38,14 +36,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Future<List<LeaveModel>> _getLeave() async {
-    var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave_list_by_user';
+    var url =
+        'http://159.138.232.139/service/cwi/v1/user/request_leave_list_by_user';
 
     var data = {"userId": userID};
 
     var response = await http.post(
       url,
       body: json.encode(data),
-      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+      headers: {
+        "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+        "Content-Type": "application/json"
+      },
     );
 
     Map<String, dynamic> msg = jsonDecode(response.body);
@@ -60,6 +62,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           leave['modelid'],
           leave['userId'],
           leave['leaveTypeCode'],
+          leave['leaveTypeName'],
           leave['leaveDate'],
           leave['leaveHour'],
           leave['remark'],
@@ -127,17 +130,22 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               Card(
                                 elevation: 5.0,
                                 child: Padding(
-                                  padding: const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
+                                  padding: const EdgeInsets.only(
+                                      top: 20, bottom: 20, left: 20, right: 20),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: <Widget>[
                                       Container(
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
-                                              'วันที่ลา : ' + snapshot.data[index].leaveDate.toString(),
+                                              'วันที่ลา : ' +
+                                                  snapshot.data[index].leaveDate
+                                                      .toString(),
                                               style: TextStyle(
                                                 fontFamily: _kanit,
                                                 fontSize: 16.0,
@@ -145,7 +153,19 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             ),
                                             SizedBox(height: 10.0),
                                             Text(
-                                              'ชั่วโมง : ' + snapshot.data[index].leaveHour.toString(),
+                                              'ประเภทการลา : ' +
+                                                  snapshot
+                                                      .data[index].leaveTypeName
+                                                      .toString(),
+                                              style: TextStyle(
+                                                fontFamily: _kanit,
+                                                fontSize: 13.0,
+                                              ),
+                                            ),
+                                            Text(
+                                              'ชั่วโมง : ' +
+                                                  snapshot.data[index].leaveHour
+                                                      .toString(),
                                               style: TextStyle(
                                                 fontFamily: _kanit,
                                                 fontSize: 13.0,
@@ -154,16 +174,24 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             Row(
                                               children: <Widget>[
                                                 Text(
-                                              'สถานะการลา : ',
-                                              style: TextStyle(
-                                                fontFamily: _kanit,
-                                                fontSize: 13.0,
-                                              ),
-                                            ),
+                                                  'สถานะการลา : ',
+                                                  style: TextStyle(
+                                                    fontFamily: _kanit,
+                                                    fontSize: 13.0,
+                                                  ),
+                                                ),
                                                 Text(
-                                                  snapshot.data[index].approveFlag.toString()=='0'? 
-                                                  'รอการอนุมัติ': snapshot.data[index].approveFlag.toString()=='1'?
-                                                  'อนุมัติการลา': 'ไม่อนุมัติการลา',
+                                                  snapshot.data[index]
+                                                              .approveFlag
+                                                              .toString() ==
+                                                          '0'
+                                                      ? 'รอการอนุมัติ'
+                                                      : snapshot.data[index]
+                                                                  .approveFlag
+                                                                  .toString() ==
+                                                              '1'
+                                                          ? 'อนุมัติการลา'
+                                                          : 'ไม่อนุมัติการลา',
                                                   style: TextStyle(
                                                     fontFamily: _kanit,
                                                     fontSize: 13.0,
@@ -172,7 +200,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               ],
                                             ),
                                             Text(
-                                              'เหตุผล : ' + snapshot.data[index].remark.toString(),
+                                              'เหตุผล : ' +
+                                                  snapshot.data[index].remark
+                                                      .toString(),
                                               style: TextStyle(
                                                 fontFamily: _kanit,
                                                 fontSize: 13.0,
@@ -186,7 +216,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                         child: RawMaterialButton(
                                           padding: EdgeInsets.all(10),
                                           shape: CircleBorder(
-                                            side: BorderSide(color: Colors.transparent),
+                                            side: BorderSide(
+                                                color: Colors.transparent),
                                           ),
                                           fillColor: Colors.blue,
                                           child: Icon(
@@ -199,84 +230,142 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             Alert(
                                               context: context,
                                               type: AlertType.warning,
-                                              title: "คุณต้องการลบใบลาหรือไม่ ?",
+                                              title:
+                                                  "คุณต้องการลบใบลาหรือไม่ ?",
                                               desc: "",
                                               buttons: [
                                                 DialogButton(
                                                   child: Text(
                                                     "ใช่",
-                                                    style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                                                    style: TextStyle(
+                                                        fontFamily: _kanit,
+                                                        color: Colors.white,
+                                                        fontSize: 20),
                                                   ),
                                                   onPressed: () async {
                                                     // TODO ok aprove
-                                                    var leaveid = snapshot.data[index].modelid.toString();
-                                                    var url = 'http://159.138.232.139/service/cwi/v1/user/delete_leave';
+                                                    var leaveid = snapshot
+                                                        .data[index].modelid
+                                                        .toString();
+                                                    var url =
+                                                        'http://159.138.232.139/service/cwi/v1/user/delete_leave';
 
-                                                    var jsonData = {"leaveId": leaveid};
+                                                    var jsonData = {
+                                                      "leaveId": leaveid
+                                                    };
                                                     print(jsonEncode(jsonData));
-                                                    var response = await http.post(
+                                                    var response =
+                                                        await http.post(
                                                       url,
-                                                      body: jsonEncode(jsonData),
-                                                      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+                                                      body:
+                                                          jsonEncode(jsonData),
+                                                      headers: {
+                                                        "Authorization":
+                                                            "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+                                                        "Content-Type":
+                                                            "application/json"
+                                                      },
                                                     );
 
-                                                    Map<String, dynamic> message = json.decode(response.body);
+                                                    Map<String, dynamic>
+                                                        message = json.decode(
+                                                            response.body);
 
                                                     print('res: $message');
 
-                                                    if (message['responseCode'] == '000') {
+                                                    if (message[
+                                                            'responseCode'] ==
+                                                        '000') {
                                                       // Success
-                                                      setState(() => visible = false);
+                                                      setState(() =>
+                                                          visible = false);
                                                       Navigator.pop(context);
 
-                                                      Alert(context: context, type: AlertType.success, title: message['responseDesc'].toString(), desc: "", buttons: [
-                                                        DialogButton(
-                                                          child: Text(
-                                                            "ตกลง",
-                                                            style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
-                                                          ),
-                                                          onPressed: () {
-                                                            Navigator.pop(this.context);
-                                                          },
-                                                          color: Colors.green,
-                                                        ),
-                                                      ]).show();
+                                                      Alert(
+                                                          context: context,
+                                                          type:
+                                                              AlertType.success,
+                                                          title: message[
+                                                                  'responseDesc']
+                                                              .toString(),
+                                                          desc: "",
+                                                          buttons: [
+                                                            DialogButton(
+                                                              child: Text(
+                                                                "ตกลง",
+                                                                style: TextStyle(
+                                                                    fontFamily:
+                                                                        _kanit,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        20),
+                                                              ),
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    this.context);
+                                                              },
+                                                              color:
+                                                                  Colors.green,
+                                                            ),
+                                                          ]).show();
                                                     } else {
                                                       // Failed to process
-                                                      Navigator.maybePop(context);
+                                                      Navigator.maybePop(
+                                                          context);
                                                       setState(() {
                                                         visible = false;
                                                       });
                                                       Alert(
                                                         context: context,
                                                         type: AlertType.warning,
-                                                        title: message['responseDesc'].toString(),
+                                                        title: message[
+                                                                'responseDesc']
+                                                            .toString(),
                                                         desc: "",
                                                         buttons: [
                                                           DialogButton(
                                                             child: Text(
                                                               "ตกลง",
-                                                              style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      _kanit,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 20),
                                                             ),
-                                                            onPressed: () => Navigator.pop(context),
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    context),
                                                             color: Colors.red,
                                                           )
                                                         ],
                                                       ).show();
                                                     }
                                                   },
-                                                  color: Color.fromRGBO(0, 179, 134, 1.0),
+                                                  color: Color.fromRGBO(
+                                                      0, 179, 134, 1.0),
                                                 ),
                                                 DialogButton(
                                                   child: Text(
                                                     "ไม่ใช่",
-                                                    style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                                                    style: TextStyle(
+                                                        fontFamily: _kanit,
+                                                        color: Colors.white,
+                                                        fontSize: 20),
                                                   ),
                                                   onPressed: () {
-                                                    setState(() => visible = false);
+                                                    setState(
+                                                        () => visible = false);
                                                     Navigator.pop(context);
                                                   },
-                                                  gradient: LinearGradient(colors: [Color.fromRGBO(116, 116, 191, 1.0), Color.fromRGBO(52, 138, 199, 1.0)]),
+                                                  gradient: LinearGradient(
+                                                      colors: [
+                                                        Color.fromRGBO(
+                                                            116, 116, 191, 1.0),
+                                                        Color.fromRGBO(
+                                                            52, 138, 199, 1.0)
+                                                      ]),
                                                 )
                                               ],
                                             ).show();
@@ -333,7 +422,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
               children: <Widget>[
                 Text(
                   employee,
-                  style: TextStyle(fontSize: 18, fontFamily: _kanit, color: Colors.black54),
+                  style: TextStyle(
+                      fontSize: 18, fontFamily: _kanit, color: Colors.black54),
                 ),
                 IconButton(
                   onPressed: action,
@@ -409,8 +499,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         ),
                       ],
                     ),
-
-
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4, right: 20),
