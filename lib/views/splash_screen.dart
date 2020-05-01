@@ -45,10 +45,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
   }
 
+  _setAppVersion() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString('app_version', '0.0.01');
+  }
+
   @override
   void initState() {
     _getLoginFlag();
-
+    _setAppVersion();
     super.initState();
   }
 

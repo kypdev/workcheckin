@@ -36,6 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
       sharedPreferences.clear();
+      sharedPreferences.setString('app_version', '0.0.01');
+
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SigninScreen()));
     });
   }

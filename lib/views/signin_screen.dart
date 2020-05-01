@@ -28,6 +28,7 @@ class _SigninScreenState extends State<SigninScreen> {
   bool visible;
   var userID;
   String _deviceid = 'Unknown';
+  var appVersion;
 
   showPWD() {
     if (securePWD) {
@@ -216,11 +217,21 @@ class _SigninScreenState extends State<SigninScreen> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()));
   }
 
+  _getAppVersion() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      appVersion = sharedPreferences.getString('app_version');
+    });
+
+    print('app_version: $appVersion');
+  }
+
   @override
   void initState() {
     super.initState();
     visible = false;
     initDeviceId();
+    _getAppVersion();
   }
 
   @override
@@ -244,8 +255,9 @@ class _SigninScreenState extends State<SigninScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(height: MediaQuery.of(context).size.height/6,),
-                  
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 6,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 30, right: 30),
                     child: Card(
@@ -384,11 +396,32 @@ class _SigninScreenState extends State<SigninScreen> {
                       ),
                     ),
                   ),
+                  
                 ],
               ),
             ),
             Center(
               child: Visibility(visible: visible, child: CircularProgressIndicator()),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                          'Version $appVersion',
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                            fontFamily: _kanit,
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
