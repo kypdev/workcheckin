@@ -10,8 +10,8 @@ class CheckinHistory {
   int platform;
   int lateTime;
   int lateFlag;
-  String earlyTime;
-  String earlyFlag;
+  int earlyTime;
+  int earlyFlag;
   String createDate;
   String createTime;
   int createBy;

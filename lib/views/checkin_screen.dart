@@ -58,23 +58,30 @@ class _CheckinScreenState extends State<CheckinScreen> {
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     var branchid = msg['cwiUser']['branchId'].toString();
 
-    var url = 'http://159.138.232.139/service/cwi/v1/master/get_location_lish_for_user';
+    var url =
+        'http://159.138.232.139/service/cwi/v1/master/get_location_lish_for_user';
     var data = {"branchId": branchid};
     var response = await http.post(
       url,
       body: jsonEncode(data),
-      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+      headers: {
+        "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+        "Content-Type": "application/json"
+      },
     );
     Map<String, dynamic> messages = jsonDecode(response.body);
     print(messages);
-    setState(() => _item =0);
+    setState(() => _item = 0);
     setState(() => resLocationLists = messages);
     setState(() => locationListIndexDD = 0);
     setState(() => place = messages['locationList'][0]['name']);
     setState(() => locationData = messages['locationList']);
-    setState(() => loctionID = messages['locationList'][0]['modelid'].toString());
-    setState(() => latitude = messages['locationList'][0]['latitude'].toString());
-    setState(() => longtitude = messages['locationList'][0]['longitude'].toString());
+    setState(
+        () => loctionID = messages['locationList'][0]['modelid'].toString());
+    setState(
+        () => latitude = messages['locationList'][0]['latitude'].toString());
+    setState(
+        () => longtitude = messages['locationList'][0]['longitude'].toString());
 
     print('$latitude, $longtitude');
 
@@ -125,8 +132,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
 
   _checkin() async {
     print('$latitude $longtitude, $loctionID');
-    double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
-    
+    double distanceInMeters = await Geolocator().distanceBetween(
+        13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
+
     far = distanceInMeters.toString();
 
     print('far: $far');
@@ -140,7 +148,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
           DialogButton(
             child: Text(
               "ตกลง",
-              style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              style: TextStyle(
+                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
             ),
             onPressed: () => Navigator.pop(context),
             width: 120,
@@ -162,12 +171,15 @@ class _CheckinScreenState extends State<CheckinScreen> {
           'locationId': loctionID,
         };
         print(data);
-        var url = 'http://159.138.232.139/service/cwi/v1/user/checkin';
+        var url = 'http://159.138.232.139/service/cwi/v2/user/checkin';
 
         var response = await http.post(
           url,
           body: json.encode(data),
-          headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+          headers: {
+            "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+            "Content-Type": "application/json"
+          },
         );
         Map<String, dynamic> msg = jsonDecode(response.body);
 
@@ -185,7 +197,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
               DialogButton(
                 child: Text(
                   "ตกลง",
-                  style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                  style: TextStyle(
+                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
                 ),
                 onPressed: () => Navigator.pop(context),
                 width: 120,
@@ -206,7 +219,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
               DialogButton(
                 child: Text(
                   "ตกลง",
-                  style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                  style: TextStyle(
+                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
                 ),
                 onPressed: () => Navigator.pop(context),
                 width: 120,
@@ -228,7 +242,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
             DialogButton(
               child: Text(
                 "ตกลง",
-                style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
               ),
               onPressed: () => Navigator.pop(context),
               width: 120,
@@ -240,7 +255,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
   }
 
   _checkout() async {
-    double distanceInMeters = await Geolocator().distanceBetween(13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
+    double distanceInMeters = await Geolocator().distanceBetween(
+        13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
     far = distanceInMeters.toString();
     if (far == null) {
       Alert(
@@ -252,7 +268,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
           DialogButton(
             child: Text(
               "ตกลง",
-              style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              style: TextStyle(
+                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
             ),
             onPressed: () => Navigator.pop(context),
             width: 120,
@@ -271,12 +288,15 @@ class _CheckinScreenState extends State<CheckinScreen> {
         };
         print(data);
 
-        var url = 'http://159.138.232.139/service/cwi/v1/user/checkout';
+        var url = 'http://159.138.232.139/service/cwi/v2/user/checkout';
 
         var response = await http.post(
           url,
           body: json.encode(data),
-          headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+          headers: {
+            "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+            "Content-Type": "application/json"
+          },
         );
         Map<String, dynamic> msg = jsonDecode(response.body);
 
@@ -290,7 +310,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
               DialogButton(
                 child: Text(
                   "ตกลง",
-                  style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                  style: TextStyle(
+                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
                 ),
                 onPressed: () => Navigator.pop(context),
                 width: 120,
@@ -307,7 +328,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
               DialogButton(
                 child: Text(
                   "ตกลง",
-                  style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                  style: TextStyle(
+                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
                 ),
                 onPressed: () => Navigator.pop(context),
                 width: 120,
@@ -325,7 +347,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
             DialogButton(
               child: Text(
                 "ตกลง",
-                style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
               ),
               onPressed: () => Navigator.pop(context),
               width: 120,
@@ -363,7 +386,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-               
                 //     Text('เลือกสถานที่',
                 //         style: TextStyle(
                 //           fontFamily: _kanit,
@@ -379,13 +401,13 @@ class _CheckinScreenState extends State<CheckinScreen> {
                         ),
                       )
                     : Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: DropdownButton<String>(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: DropdownButton<String>(
                             focusColor: Colors.white,
                             isExpanded: true,
                             hint: new Text(
@@ -412,17 +434,25 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                 _item = locationItem.indexOf(value);
 
                                 // set location
-                                place = resLocationLists['locationList'][_item]['name'].toString();
-                                latitude = resLocationLists['locationList'][_item]['latitude'].toString();
-                                longtitude = resLocationLists['locationList'][_item]['longitude'].toString();
-                                loctionID = resLocationLists['locationList'][_item]['modelid'].toString();
+                                place = resLocationLists['locationList'][_item]
+                                        ['name']
+                                    .toString();
+                                latitude = resLocationLists['locationList']
+                                        [_item]['latitude']
+                                    .toString();
+                                longtitude = resLocationLists['locationList']
+                                        [_item]['longitude']
+                                    .toString();
+                                loctionID = resLocationLists['locationList']
+                                        [_item]['modelid']
+                                    .toString();
                               });
 
                               print('$place $latitude, $longtitude $loctionID');
                             },
                           ),
+                        ),
                       ),
-                    ),
 
                 SizedBox(height: 50),
 
