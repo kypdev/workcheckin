@@ -132,13 +132,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                       top: 20, bottom: 20, left: 20, right: 20),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: <Widget>[
-                                      Container(
-                                        child: Column(
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: <Widget>[
+                                        Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
@@ -210,81 +212,121 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             ),
                                           ],
                                         ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: RawMaterialButton(
-                                          padding: EdgeInsets.all(10),
-                                          shape: CircleBorder(
-                                            side: BorderSide(
-                                                color: Colors.transparent),
-                                          ),
-                                          fillColor: Colors.blue,
-                                          child: Icon(
-                                            FontAwesomeIcons.trashAlt,
-                                            color: Colors.white,
-                                          ),
-                                          onPressed: () async {
-                                            setState(() => visible = true);
+                                        SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                10),
+                                        Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: RawMaterialButton(
+                                            padding: EdgeInsets.all(10),
+                                            shape: CircleBorder(
+                                              side: BorderSide(
+                                                  color: Colors.transparent),
+                                            ),
+                                            fillColor: Colors.blue,
+                                            child: Icon(
+                                              FontAwesomeIcons.trashAlt,
+                                              color: Colors.white,
+                                            ),
+                                            onPressed: () async {
+                                              setState(() => visible = true);
 
-                                            Alert(
-                                              context: context,
-                                              type: AlertType.warning,
-                                              title:
-                                                  "คุณต้องการลบใบลาหรือไม่ ?",
-                                              desc: "",
-                                              buttons: [
-                                                DialogButton(
-                                                  child: Text(
-                                                    "ใช่",
-                                                    style: TextStyle(
-                                                        fontFamily: _kanit,
-                                                        color: Colors.white,
-                                                        fontSize: 20),
-                                                  ),
-                                                  onPressed: () async {
-                                                    // TODO ok aprove
-                                                    var leaveid = snapshot
-                                                        .data[index].modelid
-                                                        .toString();
-                                                    var url =
-                                                        'http://159.138.232.139/service/cwi/v1/user/delete_leave';
+                                              Alert(
+                                                context: context,
+                                                type: AlertType.warning,
+                                                title:
+                                                    "คุณต้องการลบใบลาหรือไม่ ?",
+                                                desc: "",
+                                                buttons: [
+                                                  DialogButton(
+                                                    child: Text(
+                                                      "ใช่",
+                                                      style: TextStyle(
+                                                          fontFamily: _kanit,
+                                                          color: Colors.white,
+                                                          fontSize: 20),
+                                                    ),
+                                                    onPressed: () async {
+                                                      // TODO ok aprove
+                                                      var leaveid = snapshot
+                                                          .data[index].modelid
+                                                          .toString();
+                                                      var url =
+                                                          'http://159.138.232.139/service/cwi/v1/user/delete_leave';
 
-                                                    var jsonData = {
-                                                      "leaveId": leaveid
-                                                    };
-                                                    print(jsonEncode(jsonData));
-                                                    var response =
-                                                        await http.post(
-                                                      url,
-                                                      body:
-                                                          jsonEncode(jsonData),
-                                                      headers: {
-                                                        "Authorization":
-                                                            "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-                                                        "Content-Type":
-                                                            "application/json"
-                                                      },
-                                                    );
+                                                      var jsonData = {
+                                                        "leaveId": leaveid
+                                                      };
+                                                      print(
+                                                          jsonEncode(jsonData));
+                                                      var response =
+                                                          await http.post(
+                                                        url,
+                                                        body: jsonEncode(
+                                                            jsonData),
+                                                        headers: {
+                                                          "Authorization":
+                                                              "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+                                                          "Content-Type":
+                                                              "application/json"
+                                                        },
+                                                      );
 
-                                                    Map<String, dynamic>
-                                                        message = json.decode(
-                                                            response.body);
+                                                      Map<String, dynamic>
+                                                          message = json.decode(
+                                                              response.body);
 
-                                                    print('res: $message');
+                                                      print('res: $message');
 
-                                                    if (message[
-                                                            'responseCode'] ==
-                                                        '000') {
-                                                      // Success
-                                                      setState(() =>
-                                                          visible = false);
-                                                      Navigator.pop(context);
+                                                      if (message[
+                                                              'responseCode'] ==
+                                                          '000') {
+                                                        // Success
+                                                        setState(() =>
+                                                            visible = false);
+                                                        Navigator.pop(context);
 
-                                                      Alert(
+                                                        Alert(
+                                                            context: context,
+                                                            type: AlertType
+                                                                .success,
+                                                            title: message[
+                                                                    'responseDesc']
+                                                                .toString(),
+                                                            desc: "",
+                                                            buttons: [
+                                                              DialogButton(
+                                                                child: Text(
+                                                                  "ตกลง",
+                                                                  style: TextStyle(
+                                                                      fontFamily:
+                                                                          _kanit,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          20),
+                                                                ),
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      this.context);
+                                                                },
+                                                                color: Colors
+                                                                    .green,
+                                                              ),
+                                                            ]).show();
+                                                      } else {
+                                                        // Failed to process
+                                                        Navigator.maybePop(
+                                                            context);
+                                                        setState(() {
+                                                          visible = false;
+                                                        });
+                                                        Alert(
                                                           context: context,
                                                           type:
-                                                              AlertType.success,
+                                                              AlertType.warning,
                                                           title: message[
                                                                   'responseDesc']
                                                               .toString(),
@@ -301,78 +343,46 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                                     fontSize:
                                                                         20),
                                                               ),
-                                                              onPressed: () {
-                                                                Navigator.pop(
-                                                                    this.context);
-                                                              },
-                                                              color:
-                                                                  Colors.green,
-                                                            ),
-                                                          ]).show();
-                                                    } else {
-                                                      // Failed to process
-                                                      Navigator.maybePop(
-                                                          context);
-                                                      setState(() {
-                                                        visible = false;
-                                                      });
-                                                      Alert(
-                                                        context: context,
-                                                        type: AlertType.warning,
-                                                        title: message[
-                                                                'responseDesc']
-                                                            .toString(),
-                                                        desc: "",
-                                                        buttons: [
-                                                          DialogButton(
-                                                            child: Text(
-                                                              "ตกลง",
-                                                              style: TextStyle(
-                                                                  fontFamily:
-                                                                      _kanit,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize: 20),
-                                                            ),
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                    context),
-                                                            color: Colors.red,
-                                                          )
-                                                        ],
-                                                      ).show();
-                                                    }
-                                                  },
-                                                  color: Color.fromRGBO(
-                                                      0, 179, 134, 1.0),
-                                                ),
-                                                DialogButton(
-                                                  child: Text(
-                                                    "ไม่ใช่",
-                                                    style: TextStyle(
-                                                        fontFamily: _kanit,
-                                                        color: Colors.white,
-                                                        fontSize: 20),
+                                                              onPressed: () =>
+                                                                  Navigator.pop(
+                                                                      context),
+                                                              color: Colors.red,
+                                                            )
+                                                          ],
+                                                        ).show();
+                                                      }
+                                                    },
+                                                    color: Color.fromRGBO(
+                                                        0, 179, 134, 1.0),
                                                   ),
-                                                  onPressed: () {
-                                                    setState(
-                                                        () => visible = false);
-                                                    Navigator.pop(context);
-                                                  },
-                                                  gradient: LinearGradient(
-                                                      colors: [
-                                                        Color.fromRGBO(
-                                                            116, 116, 191, 1.0),
-                                                        Color.fromRGBO(
-                                                            52, 138, 199, 1.0)
-                                                      ]),
-                                                )
-                                              ],
-                                            ).show();
-                                          },
+                                                  DialogButton(
+                                                    child: Text(
+                                                      "ไม่ใช่",
+                                                      style: TextStyle(
+                                                          fontFamily: _kanit,
+                                                          color: Colors.white,
+                                                          fontSize: 20),
+                                                    ),
+                                                    onPressed: () {
+                                                      setState(() =>
+                                                          visible = false);
+                                                      Navigator.pop(context);
+                                                    },
+                                                    gradient:
+                                                        LinearGradient(colors: [
+                                                      Color.fromRGBO(
+                                                          116, 116, 191, 1.0),
+                                                      Color.fromRGBO(
+                                                          52, 138, 199, 1.0)
+                                                    ]),
+                                                  )
+                                                ],
+                                              ).show();
+                                            },
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
