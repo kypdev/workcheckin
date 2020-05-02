@@ -117,11 +117,11 @@ class _BossScreenState extends State<BossScreen> {
                             print(
                               sn.data[index].approveFlag.toString(),
                             );
-                            setState(() => visible = true);
+
                             Alert(
                               context: context,
                               type: AlertType.warning,
-                              title: "คุณแน่ใจว่าจะไม่อนุมัติการลานี้?",
+                              title: "คุณแน่ใจว่าจะอนุมัติการลานี้?",
                               desc: "",
                               buttons: [
                                 DialogButton(
@@ -134,6 +134,7 @@ class _BossScreenState extends State<BossScreen> {
                                   ),
                                   onPressed: () async {
                                     // start process approve
+                                    setState(() => visible = true);
                                     var leaveid =
                                         sn.data[index].modelid.toString();
                                     var data = {
@@ -175,7 +176,7 @@ class _BossScreenState extends State<BossScreen> {
                                                     fontSize: 20),
                                               ),
                                               onPressed: () =>
-                                                  Navigator.pop(context),
+                                                  Navigator.pop(this.context),
                                               color: Colors.green,
                                             ),
                                           ]).show();
@@ -233,7 +234,6 @@ class _BossScreenState extends State<BossScreen> {
                             ).show();
                           },
                           actionNo: () {
-                            setState(() => visible = true);
                             Alert(
                               context: context,
                               type: AlertType.warning,
@@ -291,7 +291,7 @@ class _BossScreenState extends State<BossScreen> {
                                                     fontSize: 20),
                                               ),
                                               onPressed: () =>
-                                                  Navigator.pop(context),
+                                                  Navigator.pop(this.context),
                                               color: Colors.green,
                                             ),
                                           ]).show();
