@@ -206,11 +206,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             ),
                                           ],
                                         ),
-                                        SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                10),
+                                        SizedBox(width: 70.0),
                                         Align(
                                           alignment: Alignment.bottomRight,
                                           child: RawMaterialButton(
