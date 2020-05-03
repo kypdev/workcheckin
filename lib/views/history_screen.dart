@@ -271,8 +271,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                           message = json.decode(
                                                               response.body);
 
-                                                      print('res: $message');
-
                                                       if (message[
                                                               'responseCode'] ==
                                                           '000') {
