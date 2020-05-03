@@ -8,6 +8,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workcheckin/models/leave_model.dart';
 
 final _kanit = 'Kanit';
+final AlertStyle _alertStyle = AlertStyle(
+  titleStyle: TextStyle(
+    fontFamily: _kanit,
+  ),
+);
 
 class HistoryScreen extends StatefulWidget {
   @override
@@ -135,7 +140,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                           CrossAxisAlignment.end,
                                       children: <Widget>[
                                         Container(
-                                          color: Colors.amber,
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width /
@@ -241,21 +245,19 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               var apprFlag = snapshot
                                                   .data[index].approveFlag
                                                   .toString();
+
                                               int apprvFlagInt =
                                                   int.parse(apprFlag);
 
                                               if (apprvFlagInt == 1) {
+                                                // Cannot delete leave letter
                                                 Alert(
                                                     context: context,
                                                     type: AlertType.warning,
                                                     title:
                                                         'ไม่สามารถลบใบลนี้ได้!!!',
                                                     desc: "",
-                                                    style: AlertStyle(
-                                                      titleStyle: TextStyle(
-                                                        fontFamily: _kanit,
-                                                      ),
-                                                    ),
+                                                    style: _alertStyle,
                                                     buttons: [
                                                       DialogButton(
                                                         child: Text(
@@ -275,12 +277,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                       ),
                                                     ]).show();
                                               } else {
+                                                // Can delte leave letter
                                                 Alert(
                                                   context: context,
                                                   type: AlertType.warning,
                                                   title:
                                                       "คุณต้องการลบใบลาหรือไม่ ?",
-                                                  desc: "",
+                                                  style: _alertStyle,
                                                   buttons: [
                                                     DialogButton(
                                                       child: Text(

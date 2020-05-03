@@ -8,7 +8,7 @@ class LeaveModel {
   String remark;
   int approveFlag;
   String approveRejectDate;
-  String approveRejectBy;
+  int approveRejectBy;
   String createDate;
   int createBy;
   String updateDate;
