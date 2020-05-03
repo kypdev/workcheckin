@@ -60,7 +60,10 @@ class _SigninScreenState extends State<SigninScreen> {
         var response = await http.post(
           url,
           body: json.encode(data),
-          headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+          headers: {
+            "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+            "Content-Type": "application/json"
+          },
         );
 
         Map<String, dynamic> message = jsonDecode(response.body);
@@ -86,7 +89,8 @@ class _SigninScreenState extends State<SigninScreen> {
               sharedPreferences.setInt('loginFlag', 1);
               visible = false;
             });
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => HomeScreen()));
           } else {
             setState(() {
               visible = false;
@@ -100,7 +104,8 @@ class _SigninScreenState extends State<SigninScreen> {
                 DialogButton(
                   child: Text(
                     "ใช่",
-                    style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                    style: TextStyle(
+                        fontFamily: _kanit, color: Colors.white, fontSize: 20),
                   ),
                   onPressed: () async {
                     var changdvid = await _changeDeviceID();
@@ -110,7 +115,10 @@ class _SigninScreenState extends State<SigninScreen> {
                       sharedPreferences.setInt('loginFlag', 1);
                       print(sharedPreferences.getInt('loginFlag'));
                       Navigator.pop(context);
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen()));
                     } else {
                       sharedPreferences.clear();
                       Alert(
@@ -122,7 +130,10 @@ class _SigninScreenState extends State<SigninScreen> {
                           DialogButton(
                             child: Text(
                               "ตกลง",
-                              style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                              style: TextStyle(
+                                  fontFamily: _kanit,
+                                  color: Colors.white,
+                                  fontSize: 20),
                             ),
                             onPressed: () => Navigator.pop(context),
                             width: 120,
@@ -136,13 +147,17 @@ class _SigninScreenState extends State<SigninScreen> {
                 DialogButton(
                   child: Text(
                     "ไม่ใช่",
-                    style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                    style: TextStyle(
+                        fontFamily: _kanit, color: Colors.white, fontSize: 20),
                   ),
                   onPressed: () {
                     sharedPreferences.clear();
                     Navigator.pop(context);
                   },
-                  gradient: LinearGradient(colors: [Color.fromRGBO(116, 116, 191, 1.0), Color.fromRGBO(52, 138, 199, 1.0)]),
+                  gradient: LinearGradient(colors: [
+                    Color.fromRGBO(116, 116, 191, 1.0),
+                    Color.fromRGBO(52, 138, 199, 1.0)
+                  ]),
                 )
               ],
             ).show();
@@ -159,7 +174,8 @@ class _SigninScreenState extends State<SigninScreen> {
               DialogButton(
                 child: Text(
                   "ตกลง",
-                  style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                  style: TextStyle(
+                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
                 ),
                 onPressed: () => Navigator.pop(context),
                 width: 120,
@@ -198,7 +214,10 @@ class _SigninScreenState extends State<SigninScreen> {
     var response = await http.post(
       url,
       body: json.encode(data),
-      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+      headers: {
+        "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+        "Content-Type": "application/json"
+      },
     );
 
     Map<String, dynamic> message = jsonDecode(response.body);
@@ -214,7 +233,8 @@ class _SigninScreenState extends State<SigninScreen> {
   }
 
   _signup() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => RegisterScreen()));
   }
 
   _getAppVersion() async {
@@ -272,9 +292,12 @@ class _SigninScreenState extends State<SigninScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20, top: 20),
                                   child: TextFormField(
-                                    validator: (value) => value.length < 3 ? 'username must more than 3 character' : null,
+                                    validator: (value) => value.length < 3
+                                        ? 'username must more than 3 character'
+                                        : null,
                                     style: TextStyle(
                                       color: Colors.black45,
                                     ),
@@ -282,8 +305,10 @@ class _SigninScreenState extends State<SigninScreen> {
                                     decoration: InputDecoration(
                                       labelText: 'username',
                                       enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.transparent),
-                                        borderRadius: BorderRadius.circular(100),
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
                                       ),
                                       prefixIcon: Icon(
                                         Icons.person,
@@ -298,20 +323,26 @@ class _SigninScreenState extends State<SigninScreen> {
                                         borderSide: BorderSide(
                                           color: Colors.red,
                                         ),
-                                        borderRadius: BorderRadius.circular(100),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
                                       ),
                                       focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blue, width: 1.5),
-                                        borderRadius: BorderRadius.circular(100),
+                                        borderSide: BorderSide(
+                                            color: Colors.blue, width: 1.5),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
                                       ),
                                     ),
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20, top: 20),
                                   child: TextFormField(
                                     obscureText: securePWD,
-                                    validator: (value) => value.length < 3 ? 'password must more than 3 character' : null,
+                                    validator: (value) => value.length < 3
+                                        ? 'password must more than 3 character'
+                                        : null,
                                     style: TextStyle(
                                       color: Colors.black45,
                                     ),
@@ -319,12 +350,16 @@ class _SigninScreenState extends State<SigninScreen> {
                                     decoration: InputDecoration(
                                       suffixIcon: IconButton(
                                         onPressed: showPWD,
-                                        icon: securePWD ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+                                        icon: securePWD
+                                            ? Icon(Icons.visibility)
+                                            : Icon(Icons.visibility_off),
                                       ),
                                       labelText: 'password',
                                       enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.transparent),
-                                        borderRadius: BorderRadius.circular(100),
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
                                       ),
                                       prefixIcon: Icon(
                                         Icons.lock,
@@ -339,11 +374,14 @@ class _SigninScreenState extends State<SigninScreen> {
                                         borderSide: BorderSide(
                                           color: Colors.red,
                                         ),
-                                        borderRadius: BorderRadius.circular(100),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
                                       ),
                                       focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blue, width: 1.5),
-                                        borderRadius: BorderRadius.circular(100),
+                                        borderSide: BorderSide(
+                                            color: Colors.blue, width: 1.5),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
                                       ),
                                     ),
                                   ),
@@ -357,11 +395,14 @@ class _SigninScreenState extends State<SigninScreen> {
                             children: <Widget>[
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
                                   child: RaisedButton(
                                     child: Text(
                                       'เข้าสู่ระบบ',
-                                      style: TextStyle(color: Colors.white, fontFamily: _kanit),
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: _kanit),
                                     ),
                                     elevation: 10,
                                     shape: RoundedRectangleBorder(
@@ -374,11 +415,14 @@ class _SigninScreenState extends State<SigninScreen> {
                               ),
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
                                   child: RaisedButton(
                                     child: Text(
                                       'สมัครสมาชิก',
-                                      style: TextStyle(color: Colors.white, fontFamily: _kanit),
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: _kanit),
                                     ),
                                     elevation: 10,
                                     shape: RoundedRectangleBorder(
@@ -396,12 +440,12 @@ class _SigninScreenState extends State<SigninScreen> {
                       ),
                     ),
                   ),
-                  
                 ],
               ),
             ),
             Center(
-              child: Visibility(visible: visible, child: CircularProgressIndicator()),
+              child: Visibility(
+                  visible: visible, child: CircularProgressIndicator()),
             ),
             Padding(
               padding: const EdgeInsets.only(right: 10),
@@ -412,12 +456,12 @@ class _SigninScreenState extends State<SigninScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                          'Version $appVersion',
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                            fontFamily: _kanit,
-                          ),
+                        'Version $appVersion',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          fontFamily: _kanit,
                         ),
+                      ),
                     ],
                   ),
                 ],

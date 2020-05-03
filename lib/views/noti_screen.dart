@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workcheckin/models/notification_model.dart';
 
@@ -15,7 +14,6 @@ class _NotiScreenState extends State<NotiScreen> {
 
   Future<List<BossNotifyModel>> _getNotiList() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    var msg = jsonDecode(sharedPreferences.getString('userMsg'));
   }
 
   @override
