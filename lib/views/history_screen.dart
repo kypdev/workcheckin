@@ -253,8 +253,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                       var jsonData = {
                                                         "leaveId": leaveid
                                                       };
-                                                      print(
-                                                          jsonEncode(jsonData));
+
                                                       var response =
                                                           await http.post(
                                                         url,
