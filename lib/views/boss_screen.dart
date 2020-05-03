@@ -14,7 +14,6 @@ class BossScreen extends StatefulWidget {
 }
 
 class _BossScreenState extends State<BossScreen> {
-  //  bossid = account userid
   var bossID;
   SharedPreferences sharedPreferences;
   bool visible = false;
@@ -465,8 +464,8 @@ class _BossScreenState extends State<BossScreen> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4, right: 8),
                     child: Container(
-                      width: 30,
-                      height: 30,
+                      width: 50,
+                      height: 50,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.blue,
@@ -476,7 +475,7 @@ class _BossScreenState extends State<BossScreen> {
                         child: Icon(
                           FontAwesomeIcons.check,
                           color: Colors.white,
-                          size: 20.0,
+                          size: 30.0,
                         ),
                       ),
                     ),
@@ -484,8 +483,8 @@ class _BossScreenState extends State<BossScreen> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4, right: 14),
                     child: Container(
-                      width: 30,
-                      height: 30,
+                      width: 50,
+                      height: 50,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.red,
@@ -494,7 +493,7 @@ class _BossScreenState extends State<BossScreen> {
                         onPressed: actionNo,
                         child: Icon(
                           FontAwesomeIcons.times,
-                          size: 20.0,
+                          size: 30.0,
                           color: Colors.white,
                         ),
                       ),
