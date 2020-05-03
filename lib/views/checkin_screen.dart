@@ -133,7 +133,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
     far = distanceInMeters.toString();
     var farSetFormat = oCcy.format(double.parse(far));
     var resFar = resLocationLists['locationList'][0]['far'];
-    var eqlFar = double.parse('20');
+    var eqlFar = double.parse(farSetFormat);
 
     if (eqlFar <= resFar) {
       var userID = msg['cwiUser']['modelid'];

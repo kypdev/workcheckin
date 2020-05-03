@@ -134,77 +134,85 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       children: <Widget>[
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(
-                                              'วันที่ลา : ' +
-                                                  snapshot.data[index].leaveDate
-                                                      .toString(),
-                                              style: TextStyle(
-                                                fontFamily: _kanit,
-                                                fontSize: 16.0,
-                                              ),
-                                            ),
-                                            SizedBox(height: 10.0),
-                                            Text(
-                                              'ประเภทการลา : ' +
-                                                  snapshot
-                                                      .data[index].leaveTypeName
-                                                      .toString(),
-                                              style: TextStyle(
-                                                fontFamily: _kanit,
-                                                fontSize: 13.0,
-                                              ),
-                                            ),
-                                            Text(
-                                              'ชั่วโมง : ' +
-                                                  snapshot.data[index].leaveHour
-                                                      .toString(),
-                                              style: TextStyle(
-                                                fontFamily: _kanit,
-                                                fontSize: 13.0,
-                                              ),
-                                            ),
-                                            Row(
-                                              children: <Widget>[
-                                                Text(
-                                                  'สถานะการลา : ',
-                                                  style: TextStyle(
-                                                    fontFamily: _kanit,
-                                                    fontSize: 13.0,
-                                                  ),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2.9,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                'วันที่ลา : ' +
+                                                    snapshot
+                                                        .data[index].leaveDate
+                                                        .toString(),
+                                                style: TextStyle(
+                                                  fontFamily: _kanit,
+                                                  fontSize: 16.0,
                                                 ),
-                                                Text(
-                                                  snapshot.data[index]
-                                                              .approveFlag
-                                                              .toString() ==
-                                                          '0'
-                                                      ? 'รอการอนุมัติ'
-                                                      : snapshot.data[index]
-                                                                  .approveFlag
-                                                                  .toString() ==
-                                                              '1'
-                                                          ? 'อนุมัติการลา'
-                                                          : 'ไม่อนุมัติการลา',
-                                                  style: TextStyle(
-                                                    fontFamily: _kanit,
-                                                    fontSize: 13.0,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Text(
-                                              'เหตุผล : ' +
-                                                  snapshot.data[index].remark
-                                                      .toString(),
-                                              style: TextStyle(
-                                                fontFamily: _kanit,
-                                                fontSize: 13.0,
                                               ),
-                                            ),
-                                          ],
+                                              SizedBox(height: 10.0),
+                                              Text(
+                                                'ประเภทการลา : ' +
+                                                    snapshot.data[index]
+                                                        .leaveTypeName
+                                                        .toString(),
+                                                style: TextStyle(
+                                                  fontFamily: _kanit,
+                                                  fontSize: 13.0,
+                                                ),
+                                              ),
+                                              Text(
+                                                'ชั่วโมง : ' +
+                                                    snapshot
+                                                        .data[index].leaveHour
+                                                        .toString(),
+                                                style: TextStyle(
+                                                  fontFamily: _kanit,
+                                                  fontSize: 13.0,
+                                                ),
+                                              ),
+                                              Row(
+                                                children: <Widget>[
+                                                  Text(
+                                                    'สถานะการลา : ',
+                                                    style: TextStyle(
+                                                      fontFamily: _kanit,
+                                                      fontSize: 13.0,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    snapshot.data[index]
+                                                                .approveFlag
+                                                                .toString() ==
+                                                            '0'
+                                                        ? 'รอการอนุมัติ'
+                                                        : snapshot.data[index]
+                                                                    .approveFlag
+                                                                    .toString() ==
+                                                                '1'
+                                                            ? 'อนุมัติการลา'
+                                                            : 'ไม่อนุมัติการลา',
+                                                    style: TextStyle(
+                                                      fontFamily: _kanit,
+                                                      fontSize: 13.0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Text(
+                                                'เหตุผล : ' +
+                                                    snapshot.data[index].remark
+                                                        .toString(),
+                                                style: TextStyle(
+                                                  fontFamily: _kanit,
+                                                  fontSize: 13.0,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         SizedBox(width: 70.0),
                                         Align(
