@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'dart:async';
 import 'package:device_id/device_id.dart';
 import 'package:workcheckin/views/signin_screen.dart';
+import 'package:workcheckin/models/size_config.dart';
 
 final _kanit = 'Kanit';
 
@@ -29,7 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   List<String> orgItem = [];
   int indexOrg;
   var resOrgList;
-  var orgId = 3;
+  var orgId;
   List<dynamic> branchData;
   List<String> branchItem = [];
   int branchIndex;
@@ -64,12 +65,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       },
     );
     Map<String, dynamic> messages = jsonDecode(response.body);
-    var msg = messages;
+
     setState(() => indexOrg = 0);
     setState(() => resOrgList = messages);
-    setState(() => orgId = msg['orgList'][0]['modelid']);
-    setState(() => orgShortname = msg['orgList'][0]['shortName']);
-    orgData = msg['orgList'];
+    setState(() => orgId = messages['orgList'][0]['modelid'].toString());
+    setState(
+        () => orgShortname = messages['orgList'][0]['shortName'].toString());
+    orgData = messages['orgList'];
 
     for (int i = 0; i < orgData.length; i++) {
       for (int j = i; j <= i; j++) {
@@ -77,6 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     }
     _getBranch();
+    _getBossList();
   }
 
   _getBranch() async {
@@ -95,14 +98,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Map<String, dynamic> messages = jsonDecode(response.body);
       setState(() => resBranshlist = messages);
       setState(() => branchIndex = 0);
-      setState(() => branchName = '');
-      setState(() => branchid = messages['branchList'][0]['modelid']);
-      branchData = resBranshlist['branchList'];
+      setState(() => branchName = messages['branchList'][0]['name']);
       branchItem = [];
+      if (messages['branchList'].toString() == 'null') {
+        Alert(
+          context: context,
+          type: AlertType.warning,
+          title: 'ไม่พบข้อมูลสาขา',
+          desc: '',
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            )
+          ],
+        ).show();
+        branchItem.add('ไม่พบข้อมูลสาขา');
+      } else {
+        branchData = resBranshlist['branchList'];
+        setState(
+            () => branchid = messages['branchList'][0]['modelid'].toString());
 
-      for (int i = 0; i < branchData.length; i++) {
-        for (int j = i; j <= i; j++) {
-          branchItem.add(branchData[i]['name']);
+        for (int i = 0; i < branchData.length; i++) {
+          for (int j = i; j <= i; j++) {
+            branchItem.add(branchData[i]['name']);
+          }
         }
       }
     } catch (e) {
@@ -127,14 +152,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() => resBossList = messages);
       setState(() => bossIndexDD = 0);
       setState(() => bossName = '');
-      setState(() => bossData = messages['bossList']);
-      setState(() => bossId = messages['bossList'][0]['modelid']);
       setState(() => bossItem = []);
-
       if (resBossList['bossList'].isEmpty) {
+        Alert(
+          context: context,
+          type: AlertType.warning,
+          title: 'ไม่พบข้อมูลหัวหน้า',
+          desc: '',
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            )
+          ],
+        ).show();
+
         bossItem.add('ไม่พบข้อมูล');
       } else {
-        setState(() => bossItem = []);
+        setState(() => bossData = messages['bossList']);
+        setState(() => bossId = messages['bossList'][0]['modelid']);
         for (int i = 0; i < bossData.length; i++) {
           for (int j = i; j <= i; j++) {
             bossItem.add(bossData[i]['name']);
@@ -196,7 +237,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ],
         ).show();
       } else {
-        setState(() => visible = false);
+        setState(() => visible = true);
+
         var usr = username + '@' + orgShortname.toString();
         var data = {
           "employeeId": employeeid,
@@ -212,6 +254,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           "bossId": bossId,
           "deviceId": _deviceid
         };
+        debugPrint('data: $data');
         var url = 'http://159.138.232.139/service/cwi/v1/user/register';
         var response = await http.post(
           url,
@@ -222,6 +265,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           },
         );
         Map<String, dynamic> message = jsonDecode(response.body);
+        debugPrint('debug: ${data}');
 
         if (message['responseCode'] == '000') {
           setState(() => visible = false);
@@ -277,13 +321,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.initState();
     _getOrg();
     _getPositionList();
-    _getBossList();
+
     initDeviceId();
     visible = false;
   }
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    var sizeHor = SizeConfig.safeBlockHorizontal;
+    var sizeVer = SizeConfig.safeBlockVertical;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -323,6 +370,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Padding(
                             padding: const EdgeInsets.only(left: 10, right: 10),
                             child: DropdownButton<String>(
+                              underline: Container(),
                               isExpanded: true,
                               value:
                                   indexOrg == null ? null : orgItem[indexOrg],
@@ -347,11 +395,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   branchid = '';
                                   bossId = '';
                                 });
+                                debugPrint('orgid: $orgId, $branchName');
                                 _getBranch();
                                 _getBossList();
                               },
                             ),
                           ),
+
                           dropdown(
                             title: 'สาขา',
                           ),
@@ -359,6 +409,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Padding(
                             padding: const EdgeInsets.only(left: 10, right: 10),
                             child: DropdownButton<String>(
+                              underline: Container(),
                               isExpanded: true,
                               value: branchIndex == null
                                   ? null
@@ -383,6 +434,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           [branchIndex]['modelid']
                                       .toString();
                                 });
+                                debugPrint('branch: $branchName, $branchid');
                               },
                             ),
                           ),
@@ -522,6 +574,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Padding(
                             padding: const EdgeInsets.only(left: 20, right: 20),
                             child: DropdownButton<String>(
+                              underline: Container(),
                               isExpanded: true,
                               value: positionIndexDD == null
                                   ? null
@@ -554,10 +607,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             title: 'หัวหน้า',
                           ),
 
-                          // boss dropdown
+                          //  boss dropdown
                           Padding(
                             padding: const EdgeInsets.only(left: 20, right: 20),
                             child: DropdownButton<String>(
+                              underline: Container(),
                               isExpanded: true,
                               value: bossIndexDD == null
                                   ? null
@@ -578,6 +632,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           ['modelid']
                                       .toString();
                                 });
+                                debugPrint('boss: $bossId');
                               },
                             ),
                           ),
