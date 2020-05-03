@@ -224,7 +224,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               var apprFlag = snapshot
                                                   .data[index].approveFlag
                                                   .toString();
-                                              int apprvFlagInt = int.parse('1');
+                                              int apprvFlagInt =
+                                                  int.parse(apprFlag);
 
                                               if (apprvFlagInt == 1) {
                                                 Alert(
