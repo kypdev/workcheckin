@@ -133,13 +133,16 @@ class _CheckinScreenState extends State<CheckinScreen> {
         13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
     far = distanceInMeters.toString();
     var farSetFormat = oCcy.format(double.parse(far));
+    var resFar = resLocationLists['locationList'][0]['far'];
 
-    if (far == null) {
+    if (double.parse(farSetFormat) <= resFar) {
+      print('far less 40');
+    } else {
       Alert(
         context: context,
         type: AlertType.warning,
         title: "",
-        desc: "กรุณาเลือกสถานที่",
+        desc: "เกิน $resFar เมตร",
         buttons: [
           DialogButton(
             child: Text(
@@ -152,102 +155,122 @@ class _CheckinScreenState extends State<CheckinScreen> {
           )
         ],
       ).show();
-    } else {
-      double fars = double.parse(far);
-      var userID = msg['cwiUser']['modelid'];
-
-      if (fars <= 100) {
-        setState(() {
-          visible = true;
-        });
-        var data = {
-          'userId': userID,
-          'deviceId': _deviceid,
-          'osMobile': platform,
-          'locationId': loctionID,
-        };
-
-        var url = 'http://159.138.232.139/service/cwi/v2/user/checkin';
-
-        var response = await http.post(
-          url,
-          body: json.encode(data),
-          headers: {
-            "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-            "Content-Type": "application/json"
-          },
-        );
-        Map<String, dynamic> msg = jsonDecode(response.body);
-
-        if (msg['responseCode'] == '000') {
-          setState(() {
-            visible = false;
-          });
-
-          Alert(
-            context: context,
-            type: AlertType.success,
-            title: "",
-            desc: "บันทึกสำเร็จ",
-            buttons: [
-              DialogButton(
-                child: Text(
-                  "ตกลง",
-                  style: TextStyle(
-                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
-                ),
-                onPressed: () => Navigator.pop(context),
-                width: 120,
-              )
-            ],
-          ).show();
-        } else {
-          setState(() {
-            visible = false;
-          });
-
-          Alert(
-            context: context,
-            type: AlertType.error,
-            title: "",
-            desc: msg['responseDesc'],
-            buttons: [
-              DialogButton(
-                child: Text(
-                  "ตกลง",
-                  style: TextStyle(
-                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
-                ),
-                onPressed: () => Navigator.pop(context),
-                width: 120,
-              )
-            ],
-          ).show();
-        }
-      } else {
-        setState(() {
-          visible = false;
-        });
-
-        Alert(
-          context: context,
-          type: AlertType.error,
-          title: "",
-          desc: "เกิน $farSetFormat เมตร",
-          buttons: [
-            DialogButton(
-              child: Text(
-                "ตกลง",
-                style: TextStyle(
-                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
-              ),
-              onPressed: () => Navigator.pop(context),
-              width: 120,
-            )
-          ],
-        ).show();
-      }
     }
+
+    // if (far == null) {
+    //   Alert(
+    //     context: context,
+    //     type: AlertType.warning,
+    //     title: "",
+    //     desc: "กรุณาเลือกสถานที่",
+    //     buttons: [
+    //       DialogButton(
+    //         child: Text(
+    //           "ตกลง",
+    //           style: TextStyle(
+    //               fontFamily: _kanit, color: Colors.white, fontSize: 20),
+    //         ),
+    //         onPressed: () => Navigator.pop(context),
+    //         width: 120,
+    //       )
+    //     ],
+    //   ).show();
+    // } else {
+    //   double fars = double.parse(far);
+    //   var userID = msg['cwiUser']['modelid'];
+
+    //   if (fars <= 100) {
+    //     setState(() {
+    //       visible = true;
+    //     });
+    //     var data = {
+    //       'userId': userID,
+    //       'deviceId': _deviceid,
+    //       'osMobile': platform,
+    //       'locationId': loctionID,
+    //     };
+
+    //     var url = 'http://159.138.232.139/service/cwi/v2/user/checkin';
+
+    //     var response = await http.post(
+    //       url,
+    //       body: json.encode(data),
+    //       headers: {
+    //         "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+    //         "Content-Type": "application/json"
+    //       },
+    //     );
+    //     Map<String, dynamic> msg = jsonDecode(response.body);
+
+    //     if (msg['responseCode'] == '000') {
+    //       setState(() {
+    //         visible = false;
+    //       });
+
+    //       Alert(
+    //         context: context,
+    //         type: AlertType.success,
+    //         title: "",
+    //         desc: "บันทึกสำเร็จ",
+    //         buttons: [
+    //           DialogButton(
+    //             child: Text(
+    //               "ตกลง",
+    //               style: TextStyle(
+    //                   fontFamily: _kanit, color: Colors.white, fontSize: 20),
+    //             ),
+    //             onPressed: () => Navigator.pop(context),
+    //             width: 120,
+    //           )
+    //         ],
+    //       ).show();
+    //     } else {
+    //       setState(() {
+    //         visible = false;
+    //       });
+
+    //       Alert(
+    //         context: context,
+    //         type: AlertType.error,
+    //         title: "",
+    //         desc: msg['responseDesc'],
+    //         buttons: [
+    //           DialogButton(
+    //             child: Text(
+    //               "ตกลง",
+    //               style: TextStyle(
+    //                   fontFamily: _kanit, color: Colors.white, fontSize: 20),
+    //             ),
+    //             onPressed: () => Navigator.pop(context),
+    //             width: 120,
+    //           )
+    //         ],
+    //       ).show();
+    //     }
+    //   } else {
+    //     setState(() {
+    //       visible = false;
+    //     });
+
+    //     Alert(
+    //       context: context,
+    //       type: AlertType.error,
+    //       title: "",
+    //       desc: "เกิน $farSetFormat เมตร",
+    //       buttons: [
+    //         DialogButton(
+    //           child: Text(
+    //             "ตกลง",
+    //             style: TextStyle(
+    //                 fontFamily: _kanit, color: Colors.white, fontSize: 20),
+    //           ),
+    //           onPressed: () => Navigator.pop(context),
+    //           width: 120,
+    //         )
+    //       ],
+    //     ).show();
+    //   }
+    // }
   }
 
   _checkout() async {
@@ -381,13 +404,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                //     Text('เลือกสถานที่',
-                //         style: TextStyle(
-                //           fontFamily: _kanit,
-                //           fontSize: 25.0,
-                //           fontWeight: FontWeight.bold,
-                //         )),
-
                 place == ''
                     ? Center(
                         child: Visibility(
@@ -428,7 +444,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                 // get index
                                 _item = locationItem.indexOf(value);
 
-                                // set location
                                 place = resLocationLists['locationList'][_item]
                                         ['name']
                                     .toString();
@@ -446,9 +461,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           ),
                         ),
                       ),
-
                 SizedBox(height: 50),
-
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height / 3,
@@ -494,73 +507,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                     ),
                   ),
                 ),
-
-                //     SizedBox(height: 20.0),
-                //     Text(
-                //       place == '' ? 'เลือกสถานที่ก่อน' : place,
-                //       style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 20.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 20.0, color: Colors.black),
-                //     ),
-
-                //     SizedBox(height: 20.0),
-                //     Row(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: <Widget>[
-                //         Text(
-                //           latitude == '' ? 'latitude / ' : latitude.toString() + ' / ',
-                //           style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
-                //         ),
-                //         Text(
-                //           latitude == '' ? 'longitude' : latitude.toString(),
-                //           style: place == '' ? TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.red) : TextStyle(fontFamily: _kanit, fontSize: 18.0, color: Colors.black),
-                //         ),
-                //       ],
-                //     ),
-                //     // RaisedButton(
-                //     //   child: Text('asd'),
-                //     //   onPressed: () async {
-
-                //     //   },
-                //     // ),
-                //     SizedBox(height: 20.0),
-                //     Row(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: <Widget>[
-                //         GestureDetector(
-                //           onTap: _checkin,
-                //           child: Container(
-                //             width: 100,
-                //             height: 100,
-                //             decoration: BoxDecoration(
-                //               shape: BoxShape.circle,
-                //               color: Colors.green,
-                //             ),
-                //             child: Icon(
-                //               FontAwesomeIcons.arrowAltCircleDown,
-                //               size: 80,
-                //               color: Colors.white,
-                //             ),
-                //           ),
-                //         ),
-                //         SizedBox(width: 20),
-                //         GestureDetector(
-                //           onTap: _checkout,
-                //           child: Container(
-                //             width: 100,
-                //             height: 100,
-                //             decoration: BoxDecoration(
-                //               shape: BoxShape.circle,
-                //               color: Colors.red,
-                //             ),
-                //             child: Icon(
-                //               FontAwesomeIcons.arrowAltCircleDown,
-                //               size: 80,
-                //               color: Colors.white,
-                //             ),
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //     SizedBox(height: MediaQuery.of(context).size.height / 4),
+                SizedBox(height: MediaQuery.of(context).size.height / 4),
               ],
             ),
             Container(
@@ -575,22 +522,3 @@ class _CheckinScreenState extends State<CheckinScreen> {
     );
   }
 }
-
-// showmodalsheet
-// showModalBottomSheet(
-//         shape: RoundedRectangleBorder(
-//             borderRadius: BorderRadius.only(
-//           topLeft: Radius.circular(30),
-//           topRight: Radius.circular(30),
-//         )),
-//         context: context,
-//         builder: (BuildContext context) {
-//           return Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: <Widget>[
-//               _createTile(context, 'สถานที่1', _action1),
-//               _createTile(context, 'สถานที่2'.toString(), _action2),
-//               _createTile(context, 'สถานที่ test', _action3),
-//             ],
-//           );
-//         });
