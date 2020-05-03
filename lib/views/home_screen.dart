@@ -255,20 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       child: Column(
-                        children: <Widget>[
-                          // Padding(
-                          //   padding: const EdgeInsets.only(top: 70),
-                          //   child: Container(
-                          //     width: 120,
-                          //     height: 120,
-                          //     decoration: BoxDecoration(
-                          //       image: DecorationImage(
-                          //         image: AssetImage('assets/images/report.png'),
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
-                        ],
+                        children: <Widget>[],
                       ),
                     ),
                   ),
