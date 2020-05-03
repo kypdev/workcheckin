@@ -108,16 +108,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       alignment: Alignment.topRight,
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 10),
-                        child: GestureDetector(
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: MediaQuery.of(context).size.height / 30.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        GestureDetector(
                           onTap: _notiBoss,
                           child: Container(
-                            width: 70,
-                            height: 70,
+                            width: 100.0,
+                            height: 100.0,
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: AssetImage('assets/images/noti.png'),
@@ -125,14 +126,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20, top: 10),
-                        child: GestureDetector(
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width / 4.0),
+                        GestureDetector(
                           onTap: _logout,
                           child: Container(
-                            width: 70,
-                            height: 70,
+                            width: 100.0,
+                            height: 100.0,
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: AssetImage('assets/images/logout.png'),
@@ -140,8 +140,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width / 1.1,
