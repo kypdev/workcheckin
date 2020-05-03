@@ -8,8 +8,10 @@ import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:device_id/device_id.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 
 final _kanit = 'Kanit';
+final oCcy = new NumberFormat("#,##0.00", "en_US");
 
 class CheckinScreen extends StatefulWidget {
   @override
@@ -131,13 +133,12 @@ class _CheckinScreenState extends State<CheckinScreen> {
   }
 
   _checkin() async {
-    print('$latitude $longtitude, $loctionID');
     double distanceInMeters = await Geolocator().distanceBetween(
         13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
-
     far = distanceInMeters.toString();
+    var farSetFormat = oCcy.format(double.parse(far));
+    print('farsetformat: $farSetFormat');
 
-    print('far: $far');
     if (far == null) {
       Alert(
         context: context,
@@ -160,7 +161,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
       double fars = double.parse(far);
       var userID = msg['cwiUser']['modelid'];
 
-      if (fars <= 50) {
+      if (fars <= 100) {
         setState(() {
           visible = true;
         });
@@ -237,7 +238,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
           context: context,
           type: AlertType.error,
           title: "",
-          desc: "เกิน 50 เมตร",
+          desc: "เกิน $farSetFormat เมตร",
           buttons: [
             DialogButton(
               child: Text(
