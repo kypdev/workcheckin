@@ -31,7 +31,6 @@ class _BossScreenState extends State<BossScreen> {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     var bossID = msg['cwiUser']['modelid'];
-    print(bossID);
     var data = {"bossId": bossID};
     var response = await http.post(
       url,
@@ -42,7 +41,6 @@ class _BossScreenState extends State<BossScreen> {
       },
     );
     Map<String, dynamic> message = jsonDecode(response.body);
-    print(message['trnLeaveList'].toString());
     if (message['trnLeaveList'].toString() == '[]') {
       return null;
     } else {
@@ -113,10 +111,6 @@ class _BossScreenState extends State<BossScreen> {
                           leaveTypeName:
                               sn.data[index].leaveTypeName.toString(),
                           actionOk: () {
-                            print(
-                              sn.data[index].approveFlag.toString(),
-                            );
-
                             Alert(
                               context: context,
                               type: AlertType.warning,
@@ -382,9 +376,12 @@ class _BossScreenState extends State<BossScreen> {
     Function actionNo,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
       child: Card(
-        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        elevation: 5.0,
         child: Padding(
           padding: const EdgeInsets.only(top: 20, bottom: 20),
           child: SingleChildScrollView(
@@ -394,9 +391,7 @@ class _BossScreenState extends State<BossScreen> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(
-                    left: 20,
-                  ),
+                  padding: const EdgeInsets.only(left: 20),
                   child: Container(
                     width: MediaQuery.of(context).size.width / 2.2,
                     child: Column(
@@ -486,6 +481,7 @@ class _BossScreenState extends State<BossScreen> {
                         ),
                       ),
                     ),
+                    SizedBox(width: MediaQuery.of(context).size.width / 40.0),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 4, right: 14),
                       child: Container(
