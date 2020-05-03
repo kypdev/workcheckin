@@ -51,12 +51,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   var positionId;
   bool visible;
   var orgShortname;
-
   String _deviceid = 'Unknown';
 
   _getOrg() async {
     var url = 'http://159.138.232.139/service/cwi/v1/master/getOrgList';
-
     var response = await http.post(
       url,
       body: '{}',
@@ -131,7 +129,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() => bossName = '');
       setState(() => bossData = messages['bossList']);
       setState(() => bossId = messages['bossList'][0]['modelid']);
-
       setState(() => bossItem = []);
 
       if (resBossList['bossList'].isEmpty) {
@@ -151,7 +148,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   _getPositionList() {
     positionItem = ["พนักงาน"];
-
     setState(() {
       positionIndexDD = 0;
       positionId = '3';
@@ -160,7 +156,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future<void> initDeviceId() async {
     String deviceid;
-
     deviceid = await DeviceId.getID;
     try {
       // todo
@@ -170,9 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (!mounted) return;
 
-    setState(() {
-      _deviceid = '$deviceid';
-    });
+    setState(() => _deviceid = '$deviceid');
   }
 
   _register() async {
@@ -205,7 +198,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       } else {
         setState(() => visible = false);
         var usr = username + '@' + orgShortname.toString();
-
         var data = {
           "employeeId": employeeid,
           "username": usr,
@@ -220,9 +212,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           "bossId": bossId,
           "deviceId": _deviceid
         };
-
         var url = 'http://159.138.232.139/service/cwi/v1/user/register';
-
         var response = await http.post(
           url,
           body: json.encode(data),
@@ -231,7 +221,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             "Content-Type": "application/json"
           },
         );
-
         Map<String, dynamic> message = jsonDecode(response.body);
 
         if (message['responseCode'] == '000') {
