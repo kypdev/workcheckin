@@ -135,7 +135,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
     var farSetFormat = oCcy.format(double.parse(far));
     var resFar = resLocationLists['locationList'][0]['far'];
 
-    if (double.parse(farSetFormat) <= resFar) {
+    if (double.parse('$farSetFormat') <= resFar) {
       var userID = msg['cwiUser']['modelid'];
       var data = {
         'userId': userID,
@@ -226,90 +226,63 @@ class _CheckinScreenState extends State<CheckinScreen> {
     double distanceInMeters = await Geolocator().distanceBetween(
         13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
     far = distanceInMeters.toString();
-    if (far == null) {
-      Alert(
-        context: context,
-        type: AlertType.warning,
-        title: "",
-        desc: "กรุณาเลือกสถานที่",
-        buttons: [
-          DialogButton(
-            child: Text(
-              "ตกลง",
-              style: TextStyle(
-                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
-            ),
-            onPressed: () => Navigator.pop(context),
-            width: 120,
-          )
-        ],
-      ).show();
-    } else {
-      double fars = double.parse(far);
+    var farSetFormat = oCcy.format(double.parse(far));
+    var resFar = resLocationLists['locationList'][0]['far'];
+
+    if (double.parse('$farSetFormat') <= resFar) {
       var userID = msg['cwiUser']['modelid'];
-      if (fars <= 50) {
-        var data = {
-          'userId': userID,
-          'deviceId': _deviceid,
-          'osMobile': platform,
-          'locationId': loctionID,
-        };
+      var data = {
+        'userId': userID,
+        'deviceId': _deviceid,
+        'osMobile': platform,
+        'locationId': loctionID
+      };
+      var url = 'http://159.138.232.139/service/cwi/v2/user/checkout';
+      var response = await http.post(
+        url,
+        body: json.encode(data),
+        headers: {
+          "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+          "Content-Type": "application/json"
+        },
+      );
+      Map<String, dynamic> resMsgCheckin = jsonDecode(response.body);
+      var checkinResOk = resMsgCheckin['responseCode'].toString();
 
-        var url = 'http://159.138.232.139/service/cwi/v2/user/checkout';
-
-        var response = await http.post(
-          url,
-          body: json.encode(data),
-          headers: {
-            "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-            "Content-Type": "application/json"
-          },
-        );
-        Map<String, dynamic> msg = jsonDecode(response.body);
-
-        if (msg['responseCode'] == '000') {
-          Alert(
-            context: context,
-            type: AlertType.success,
-            title: "",
-            desc: 'บันทึกสำเร็จ',
-            buttons: [
-              DialogButton(
-                child: Text(
-                  "ตกลง",
-                  style: TextStyle(
-                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
-                ),
-                onPressed: () => Navigator.pop(context),
-                width: 120,
-              )
-            ],
-          ).show();
-        } else {
-          Alert(
-            context: context,
-            type: AlertType.error,
-            title: "",
-            desc: msg['responseDesc'].toString(),
-            buttons: [
-              DialogButton(
-                child: Text(
-                  "ตกลง",
-                  style: TextStyle(
-                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
-                ),
-                onPressed: () => Navigator.pop(context),
-                width: 120,
-              )
-            ],
-          ).show();
-        }
+      if (checkinResOk == '000') {
+        Alert(
+          context: context,
+          type: AlertType.success,
+          title: 'บันทึกสำเร็จ',
+          style: AlertStyle(
+            titleStyle: TextStyle(
+              fontFamily: _kanit,
+            ),
+          ),
+          desc: '',
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            )
+          ],
+        ).show();
       } else {
         Alert(
           context: context,
           type: AlertType.error,
-          title: "",
-          desc: "เกิน 50 เมตร",
+          title: resMsgCheckin['responseDesc'].toString(),
+          style: AlertStyle(
+            titleStyle: TextStyle(
+              fontFamily: _kanit,
+            ),
+          ),
+          desc: '',
           buttons: [
             DialogButton(
               child: Text(
@@ -323,6 +296,24 @@ class _CheckinScreenState extends State<CheckinScreen> {
           ],
         ).show();
       }
+    } else {
+      Alert(
+        context: context,
+        type: AlertType.warning,
+        title: "",
+        desc: "เกิน $resFar เมตร",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "ตกลง",
+              style: TextStyle(
+                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            width: 120,
+          )
+        ],
+      ).show();
     }
   }
 
