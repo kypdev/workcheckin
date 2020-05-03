@@ -136,7 +136,71 @@ class _CheckinScreenState extends State<CheckinScreen> {
     var resFar = resLocationLists['locationList'][0]['far'];
 
     if (double.parse(farSetFormat) <= resFar) {
-      print('far less 40');
+      var userID = msg['cwiUser']['modelid'];
+      var data = {
+        'userId': userID,
+        'deviceId': _deviceid,
+        'osMobile': platform,
+        'locationId': loctionID
+      };
+      var url = 'http://159.138.232.139/service/cwi/v2/user/checkin';
+      var response = await http.post(
+        url,
+        body: json.encode(data),
+        headers: {
+          "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+          "Content-Type": "application/json"
+        },
+      );
+      Map<String, dynamic> resMsgCheckin = jsonDecode(response.body);
+      var checkinResOk = resMsgCheckin['responseCode'].toString();
+      if (checkinResOk == '000') {
+        Alert(
+          context: context,
+          type: AlertType.success,
+          title: 'บันทึกสำเร็จ',
+          style: AlertStyle(
+            titleStyle: TextStyle(
+              fontFamily: _kanit,
+            ),
+          ),
+          desc: '',
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            )
+          ],
+        ).show();
+      } else {
+        Alert(
+          context: context,
+          type: AlertType.error,
+          title: resMsgCheckin['responseDesc'].toString(),
+          style: AlertStyle(
+            titleStyle: TextStyle(
+              fontFamily: _kanit,
+            ),
+          ),
+          desc: '',
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            )
+          ],
+        ).show();
+      }
     } else {
       Alert(
         context: context,
@@ -156,121 +220,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
         ],
       ).show();
     }
-
-    // if (far == null) {
-    //   Alert(
-    //     context: context,
-    //     type: AlertType.warning,
-    //     title: "",
-    //     desc: "กรุณาเลือกสถานที่",
-    //     buttons: [
-    //       DialogButton(
-    //         child: Text(
-    //           "ตกลง",
-    //           style: TextStyle(
-    //               fontFamily: _kanit, color: Colors.white, fontSize: 20),
-    //         ),
-    //         onPressed: () => Navigator.pop(context),
-    //         width: 120,
-    //       )
-    //     ],
-    //   ).show();
-    // } else {
-    //   double fars = double.parse(far);
-    //   var userID = msg['cwiUser']['modelid'];
-
-    //   if (fars <= 100) {
-    //     setState(() {
-    //       visible = true;
-    //     });
-    //     var data = {
-    //       'userId': userID,
-    //       'deviceId': _deviceid,
-    //       'osMobile': platform,
-    //       'locationId': loctionID,
-    //     };
-
-    //     var url = 'http://159.138.232.139/service/cwi/v2/user/checkin';
-
-    //     var response = await http.post(
-    //       url,
-    //       body: json.encode(data),
-    //       headers: {
-    //         "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-    //         "Content-Type": "application/json"
-    //       },
-    //     );
-    //     Map<String, dynamic> msg = jsonDecode(response.body);
-
-    //     if (msg['responseCode'] == '000') {
-    //       setState(() {
-    //         visible = false;
-    //       });
-
-    //       Alert(
-    //         context: context,
-    //         type: AlertType.success,
-    //         title: "",
-    //         desc: "บันทึกสำเร็จ",
-    //         buttons: [
-    //           DialogButton(
-    //             child: Text(
-    //               "ตกลง",
-    //               style: TextStyle(
-    //                   fontFamily: _kanit, color: Colors.white, fontSize: 20),
-    //             ),
-    //             onPressed: () => Navigator.pop(context),
-    //             width: 120,
-    //           )
-    //         ],
-    //       ).show();
-    //     } else {
-    //       setState(() {
-    //         visible = false;
-    //       });
-
-    //       Alert(
-    //         context: context,
-    //         type: AlertType.error,
-    //         title: "",
-    //         desc: msg['responseDesc'],
-    //         buttons: [
-    //           DialogButton(
-    //             child: Text(
-    //               "ตกลง",
-    //               style: TextStyle(
-    //                   fontFamily: _kanit, color: Colors.white, fontSize: 20),
-    //             ),
-    //             onPressed: () => Navigator.pop(context),
-    //             width: 120,
-    //           )
-    //         ],
-    //       ).show();
-    //     }
-    //   } else {
-    //     setState(() {
-    //       visible = false;
-    //     });
-
-    //     Alert(
-    //       context: context,
-    //       type: AlertType.error,
-    //       title: "",
-    //       desc: "เกิน $farSetFormat เมตร",
-    //       buttons: [
-    //         DialogButton(
-    //           child: Text(
-    //             "ตกลง",
-    //             style: TextStyle(
-    //                 fontFamily: _kanit, color: Colors.white, fontSize: 20),
-    //           ),
-    //           onPressed: () => Navigator.pop(context),
-    //           width: 120,
-    //         )
-    //       ],
-    //     ).show();
-    //   }
-    // }
   }
 
   _checkout() async {
