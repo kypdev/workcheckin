@@ -66,6 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                SizedBox(height: MediaQuery.of(context).size.width / 20.0),
                 resProfile == null
                     ? Center(
                         child: Visibility(
@@ -76,7 +77,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     : Padding(
                         padding: const EdgeInsets.only(left: 20, right: 20),
                         child: Card(
-                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          elevation: 5.0,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 20, bottom: 20),
                             child: Row(
@@ -137,7 +141,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           fontSize: 18.0,
                                         ),
                                       ),
-                                     
                                       Row(
                                         children: <Widget>[
                                           Text(
