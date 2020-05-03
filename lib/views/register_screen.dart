@@ -400,19 +400,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                           ),
 
-                          // form(
-                          //   visible: false,
-                          //   ctrl: usernameCtrl,
-                          //   labeltext: 'Username',
-                          //   prefixicon: Icon(Icons.person),
-                          //   val: (value) {
-                          //     if (value.isEmpty || value.length < 5) {
-                          //       return 'ชื่อผู้ใช้ ห้ามว่าง หรือ ต่ำกว่า 6 ตัวอักษร';
-                          //     }
-                          //     return null;
-                          //   },
-                          // ),
-
                           Padding(
                             padding: const EdgeInsets.only(top: 20),
                             child: TextFormField(
