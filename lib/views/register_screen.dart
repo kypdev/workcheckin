@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
-import 'dart:io' show Platform;
 import 'package:device_id/device_id.dart';
 import 'package:workcheckin/views/signin_screen.dart';
 
@@ -61,14 +60,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
     var response = await http.post(
       url,
       body: '{}',
-      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+      headers: {
+        "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+        "Content-Type": "application/json"
+      },
     );
     Map<String, dynamic> messages = jsonDecode(response.body);
     var msg = messages;
     setState(() => indexOrg = 0);
     setState(() => resOrgList = messages);
-    setState(() => orgId = msg['orgList'][0]['modelid'] );
-    setState(() => orgShortname = msg['orgList'][0]['shortName'] );
+    setState(() => orgId = msg['orgList'][0]['modelid']);
+    setState(() => orgShortname = msg['orgList'][0]['shortName']);
     orgData = msg['orgList'];
 
     for (int i = 0; i < orgData.length; i++) {
@@ -82,70 +84,76 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   _getBranch() async {
-    try{
-      var url = 'http://159.138.232.139/service/cwi/v1/master/get_branch_list_for_org';
-    var data = {'orgId': orgId};
-    var response = await http.post(
-      url,
-      body: jsonEncode(data),
-      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
-    );
-    Map<String, dynamic> messages = jsonDecode(response.body);
-    setState(() => resBranshlist = messages);
-    setState(() => branchIndex = 0);
-    setState(() => branchName = '');
-    setState(() => branchid = messages['branchList'][0]['modelid']);
-    branchData = resBranshlist['branchList'];
-    branchItem = [];
+    try {
+      var url =
+          'http://159.138.232.139/service/cwi/v1/master/get_branch_list_for_org';
+      var data = {'orgId': orgId};
+      var response = await http.post(
+        url,
+        body: jsonEncode(data),
+        headers: {
+          "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+          "Content-Type": "application/json"
+        },
+      );
+      Map<String, dynamic> messages = jsonDecode(response.body);
+      setState(() => resBranshlist = messages);
+      setState(() => branchIndex = 0);
+      setState(() => branchName = '');
+      setState(() => branchid = messages['branchList'][0]['modelid']);
+      branchData = resBranshlist['branchList'];
+      branchItem = [];
 
-    for (int i = 0; i < branchData.length; i++) {
-      for (int j = i; j <= i; j++) {
-        branchItem.add(branchData[i]['name']);
+      for (int i = 0; i < branchData.length; i++) {
+        for (int j = i; j <= i; j++) {
+          branchItem.add(branchData[i]['name']);
+        }
       }
-    }
-    }catch (e){
+    } catch (e) {
       print(e);
     }
   }
 
   _getBossList() async {
-    try{
+    try {
       var url = 'http://159.138.232.139/service/cwi/v1/master/getBossList?';
-    var data = {'orgId': orgId};
-    var response = await http.post(
-      url,
-      body: jsonEncode(data),
-      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
-    );
+      var data = {'orgId': orgId};
+      var response = await http.post(
+        url,
+        body: jsonEncode(data),
+        headers: {
+          "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+          "Content-Type": "application/json"
+        },
+      );
 
-    Map<String, dynamic> messages = jsonDecode(response.body);
-    setState(() => resBossList = messages);
-    setState(() => bossIndexDD = 0);
-    setState(() => bossName = '');
-    setState(() => bossData = messages['bossList']);
-    setState(() => bossId = messages['bossList'][0]['modelid']);
+      Map<String, dynamic> messages = jsonDecode(response.body);
+      setState(() => resBossList = messages);
+      setState(() => bossIndexDD = 0);
+      setState(() => bossName = '');
+      setState(() => bossData = messages['bossList']);
+      setState(() => bossId = messages['bossList'][0]['modelid']);
 
-    setState(() => bossItem = []);
-
-    if (resBossList['bossList'].isEmpty) {
-      bossItem.add('ไม่พบข้อมูล');
-    } else {
       setState(() => bossItem = []);
-      for (int i = 0; i < bossData.length; i++) {
-        for (int j = i; j <= i; j++) {
-          bossItem.add(bossData[i]['name']);
+
+      if (resBossList['bossList'].isEmpty) {
+        bossItem.add('ไม่พบข้อมูล');
+      } else {
+        setState(() => bossItem = []);
+        for (int i = 0; i < bossData.length; i++) {
+          for (int j = i; j <= i; j++) {
+            bossItem.add(bossData[i]['name']);
+          }
         }
       }
-    }
-    }catch(e){
+    } catch (e) {
       print(e);
     }
-
   }
 
   _getPositionList() {
     positionItem = ["พนักงาน"];
-    
+
     setState(() {
       positionIndexDD = 0;
       positionId = '3';
@@ -190,7 +198,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             DialogButton(
               child: Text(
                 "ตกลง",
-                style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
               ),
               onPressed: () => Navigator.pop(context),
               color: Colors.red,
@@ -201,10 +210,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
         setState(() => visible = false);
         var usr = username + '@' + orgShortname.toString();
 
-        var data = {"employeeId": employeeid, "username": usr, "password": passwords, "passwordConfirm": conpasswords, "name": firstname, "lastname": lastname, "position": positionId, "orgId": orgId, "branchId": branchid, "status": 0, "bossId": bossId, "deviceId": _deviceid};
-
-
-        
+        var data = {
+          "employeeId": employeeid,
+          "username": usr,
+          "password": passwords,
+          "passwordConfirm": conpasswords,
+          "name": firstname,
+          "lastname": lastname,
+          "position": positionId,
+          "orgId": orgId,
+          "branchId": branchid,
+          "status": 0,
+          "bossId": bossId,
+          "deviceId": _deviceid
+        };
 
         print('ok');
         print('data: $data');
@@ -214,7 +233,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         var response = await http.post(
           url,
           body: json.encode(data),
-          headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+          headers: {
+            "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+            "Content-Type": "application/json"
+          },
         );
 
         Map<String, dynamic> message = jsonDecode(response.body);
@@ -232,11 +254,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               DialogButton(
                 child: Text(
                   "ตกลง",
-                  style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                  style: TextStyle(
+                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
                 ),
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SigninScreen()));
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => SigninScreen()));
                 },
                 color: Colors.green,
               )
@@ -253,7 +277,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               DialogButton(
                 child: Text(
                   "ตกลง",
-                  style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                  style: TextStyle(
+                      fontFamily: _kanit, color: Colors.white, fontSize: 20),
                 ),
                 onPressed: () => Navigator.pop(context),
                 color: Colors.red,
@@ -319,7 +344,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             padding: const EdgeInsets.only(left: 10, right: 10),
                             child: DropdownButton<String>(
                               isExpanded: true,
-                              value: indexOrg == null ? null : orgItem[indexOrg],
+                              value:
+                                  indexOrg == null ? null : orgItem[indexOrg],
                               items: orgItem.map((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
@@ -335,7 +361,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   indexOrg = orgItem.indexOf(value);
 
                                   org = resOrgList['orgList'][indexOrg]['name'];
-                                  orgId = resOrgList['orgList'][indexOrg]['modelid'];
+                                  orgId = resOrgList['orgList'][indexOrg]
+                                      ['modelid'];
 
                                   branchid = '';
                                   bossId = '';
@@ -355,7 +382,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             padding: const EdgeInsets.only(left: 10, right: 10),
                             child: DropdownButton<String>(
                               isExpanded: true,
-                              value: branchIndex == null ? null : branchItem[branchIndex],
+                              value: branchIndex == null
+                                  ? null
+                                  : branchItem[branchIndex],
                               items: branchItem.map((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
@@ -369,8 +398,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 setState(() {
                                   // get index
                                   branchIndex = branchItem.indexOf(value);
-                                  branchName = resBranshlist['branchList'][branchIndex]['name'].toString();
-                                  branchid = resBranshlist['branchList'][branchIndex]['modelid'].toString();
+                                  branchName = resBranshlist['branchList']
+                                          [branchIndex]['name']
+                                      .toString();
+                                  branchid = resBranshlist['branchList']
+                                          [branchIndex]['modelid']
+                                      .toString();
                                 });
                                 print('$branchName, $branchid');
                               },
@@ -424,7 +457,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 fillColor: Colors.black12.withOpacity(0.059),
                                 filled: true,
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.transparent),
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent),
                                   borderRadius: BorderRadius.circular(100),
                                 ),
                                 border: OutlineInputBorder(
@@ -443,7 +477,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             labeltext: 'รหัสผ่าน',
                             prefixicon: Icon(Icons.lock),
                             sufficicon: IconButton(
-                              icon: obpass ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+                              icon: obpass
+                                  ? Icon(Icons.visibility)
+                                  : Icon(Icons.visibility_off),
                               onPressed: () {
                                 if (obpass) {
                                   setState(() {
@@ -469,7 +505,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             labeltext: 'ยืนยันรหัสผ่าน',
                             prefixicon: Icon(Icons.lock),
                             sufficicon: IconButton(
-                              icon: obconpass ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+                              icon: obconpass
+                                  ? Icon(Icons.visibility)
+                                  : Icon(Icons.visibility_off),
                               onPressed: () {
                                 if (obconpass) {
                                   setState(() {
@@ -521,7 +559,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             padding: const EdgeInsets.only(left: 20, right: 20),
                             child: DropdownButton<String>(
                               isExpanded: true,
-                              value: positionIndexDD == null ? null : positionItem[positionIndexDD],
+                              value: positionIndexDD == null
+                                  ? null
+                                  : positionItem[positionIndexDD],
                               items: positionItem.map((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
@@ -557,7 +597,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             padding: const EdgeInsets.only(left: 20, right: 20),
                             child: DropdownButton<String>(
                               isExpanded: true,
-                              value: bossIndexDD == null ? null : bossItem[bossIndexDD],
+                              value: bossIndexDD == null
+                                  ? null
+                                  : bossItem[bossIndexDD],
                               items: bossItem.map((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
@@ -571,7 +613,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 print(value);
                                 setState(() {
                                   bossIndexDD = bossItem.indexOf(value);
-                                  bossId = resBossList['bossList'][bossIndexDD]['modelid'].toString();
+                                  bossId = resBossList['bossList'][bossIndexDD]
+                                          ['modelid']
+                                      .toString();
                                 });
                                 print('bossid: $bossId');
                               },
@@ -582,7 +626,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
+                    padding: const EdgeInsets.only(
+                        left: 30, right: 30, top: 20, bottom: 20),
                     child: RaisedButton(
                       elevation: 5.0,
                       shape: RoundedRectangleBorder(
