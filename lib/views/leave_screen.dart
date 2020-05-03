@@ -48,15 +48,21 @@ class _LeaveScreenState extends State<LeaveScreen> {
       context,
       pickerTheme: DateTimePickerTheme(
         showTitle: _showTitle,
-        confirm: Text('ตกลง', style: TextStyle(color: Colors.red, fontFamily: _kanit)),
-        cancel: Text('ยกเลิก', style: TextStyle(color: Colors.cyan, fontFamily: _kanit)),
+        confirm: Text('ตกลง',
+            style: TextStyle(color: Colors.red, fontFamily: _kanit)),
+        cancel: Text('ยกเลิก',
+            style: TextStyle(color: Colors.cyan, fontFamily: _kanit)),
       ),
       initialDateTime: _dateTime,
       dateFormat: _format,
       locale: _locale,
       onClose: () {
         setState(() {
-          dateStr = _dateTime.day.toString() + '/' + _dateTime.month.toString() + '/' + _dateTime.year.toString();
+          dateStr = _dateTime.day.toString() +
+              '/' +
+              _dateTime.month.toString() +
+              '/' +
+              _dateTime.year.toString();
         });
       },
       onCancel: () => print('onCancel'),
@@ -78,15 +84,12 @@ class _LeaveScreenState extends State<LeaveScreen> {
     setState(() {
       msgobj = msgStr['leaveTypeList'];
     });
-    print(msgobj[0]['name']);
 
     for (int i = 0; i < msgobj.length; i++) {
       for (int j = i; j <= i; j++) {
         item.add(msgobj[i]['name']);
-        print('s');
       }
     }
-    print(item);
     leaveTypeStr = msgStr['leaveTypeList'][0]['name'];
   }
 
@@ -104,7 +107,10 @@ class _LeaveScreenState extends State<LeaveScreen> {
     var response = await http.post(
       url,
       body: '{}',
-      headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+      headers: {
+        "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+        "Content-Type": "application/json"
+      },
     );
 
     Map<String, dynamic> messages = jsonDecode(response.body);
@@ -124,17 +130,26 @@ class _LeaveScreenState extends State<LeaveScreen> {
     var url = 'http://159.138.232.139/service/cwi/v1/user/request_leave';
     if (_formKey.currentState.validate()) {
       setState(() => visible = true);
-      var data = {"leaveId": "", "userId": userID, "leaveDate": dateStr, "leaveHour": _currentInfIntValue.toString(), "leaveCode": msgCode, "approveFlag": "0", "remark": remarkCtrl.text.trim()};
-      print(data);
+      var data = {
+        "leaveId": "",
+        "userId": userID,
+        "leaveDate": dateStr,
+        "leaveHour": _currentInfIntValue.toString(),
+        "leaveCode": msgCode,
+        "approveFlag": "0",
+        "remark": remarkCtrl.text.trim()
+      };
       var response = await http.post(
         url,
         body: json.encode(data),
-        headers: {"Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=", "Content-Type": "application/json"},
+        headers: {
+          "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+          "Content-Type": "application/json"
+        },
       );
 
       Map<String, dynamic> message = jsonDecode(response.body);
 
-      print(message);
       if (message['responseCode'] == '000') {
         setState(() => visible = false);
         Alert(
@@ -146,7 +161,8 @@ class _LeaveScreenState extends State<LeaveScreen> {
             DialogButton(
               child: Text(
                 "ตกลง",
-                style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
               ),
               onPressed: () => Navigator.pop(context),
               width: 120,
@@ -164,7 +180,8 @@ class _LeaveScreenState extends State<LeaveScreen> {
             DialogButton(
               child: Text(
                 "ตกลง",
-                style: TextStyle(fontFamily: _kanit, color: Colors.white, fontSize: 20),
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
               ),
               onPressed: () => Navigator.pop(context),
               width: 120,
@@ -184,7 +201,11 @@ class _LeaveScreenState extends State<LeaveScreen> {
       _setDDdata();
     });
     setState(() {
-      dateStr = _dateTime.day.toString() + '/' + _dateTime.month.toString() + '/' + _dateTime.year.toString();
+      dateStr = _dateTime.day.toString() +
+          '/' +
+          _dateTime.month.toString() +
+          '/' +
+          _dateTime.year.toString();
       visible = false;
       msgCode = '1';
     });
@@ -278,7 +299,8 @@ class _LeaveScreenState extends State<LeaveScreen> {
         SizedBox(height: 20),
         Text(
           'วันที่',
-          style: TextStyle(fontFamily: _kanit, fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontFamily: _kanit, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         GestureDetector(
           onTap: action,
@@ -338,7 +360,8 @@ class _LeaveScreenState extends State<LeaveScreen> {
                 // get index
                 _item = item.indexOf(value);
                 msgCode = msgStr['leaveTypeList'][_item]['code'].toString();
-                leaveTypeStr = msgStr['leaveTypeList'][_item]['description'].toString();
+                leaveTypeStr =
+                    msgStr['leaveTypeList'][_item]['description'].toString();
                 print(msgCode);
               });
             },
