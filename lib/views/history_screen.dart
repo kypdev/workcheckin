@@ -231,8 +231,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               color: Colors.white,
                                             ),
                                             onPressed: () async {
-                                              setState(() => visible = true);
-
                                               Alert(
                                                 context: context,
                                                 type: AlertType.warning,
@@ -250,6 +248,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                     ),
                                                     onPressed: () async {
                                                       // TODO ok aprove
+                                                      setState(
+                                                          () => visible = true);
                                                       var leaveid = snapshot
                                                           .data[index].modelid
                                                           .toString();
