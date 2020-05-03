@@ -21,15 +21,18 @@ class _HomeScreenState extends State<HomeScreen> {
   SharedPreferences sharedPreferences;
   var message;
   _employee() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => CheckinScreen()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => CheckinScreen()));
   }
 
   _leave() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => LeaveScreen()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => LeaveScreen()));
   }
 
   _history() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryScreen()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => HistoryScreen()));
   }
 
   _logout() async {
@@ -38,12 +41,14 @@ class _HomeScreenState extends State<HomeScreen> {
       sharedPreferences.clear();
       sharedPreferences.setString('app_version', '0.0.01');
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SigninScreen()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => SigninScreen()));
     });
   }
 
   _bossLeave() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => BossScreen()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => BossScreen()));
   }
 
   setMessage() async {
@@ -53,15 +58,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _notiBoss() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => NotiBossScreen()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => NotiBossScreen()));
   }
 
   _showProfile() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ProfileScreen()));
   }
 
   _historyCheckin() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryCheckin()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => HistoryCheckin()));
   }
 
   @override
@@ -142,88 +150,96 @@ class _HomeScreenState extends State<HomeScreen> {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(top: 60, left: 50),
-                              child: GestureDetector(
-                                onTap: _employee,
-                                child: Container(
-                                  width: 80,
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage('assets/images/check.png'),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 60, right: 50),
-                              child: GestureDetector(
-                                onTap: _historyCheckin,
-                                child: Container(
-                                  width: 80,
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage('assets/images/his-time.png'),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 50, right: 50),
-                          child: Row(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              GestureDetector(
-                                onTap: _leave,
-                                child: Container(
-                                  width: 80,
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage('assets/images/leave.png'),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 60, left: 50),
+                                child: GestureDetector(
+                                  onTap: _employee,
+                                  child: Container(
+                                    width: 80,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/check.png'),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                              GestureDetector(
-                                onTap: _history,
-                                child: Container(
-                                  width: 80,
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage('assets/images/his-leave.png'),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 60, right: 50),
+                                child: GestureDetector(
+                                  onTap: _historyCheckin,
+                                  child: Container(
+                                    width: 80,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/his-time.png'),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: _showProfile,
-                          child: Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage('assets/images/pro.png'),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 50, right: 50),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                GestureDetector(
+                                  onTap: _leave,
+                                  child: Container(
+                                    width: 80,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/leave.png'),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: _history,
+                                  child: Container(
+                                    width: 80,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/his-leave.png'),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: _showProfile,
+                            child: Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/images/pro.png'),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   GestureDetector(
