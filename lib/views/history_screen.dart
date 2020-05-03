@@ -82,18 +82,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'ประวัติการลา',
-          style: TextStyle(
-            fontFamily: _kanit,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'ประวัติการลา',
+            style: TextStyle(
+              fontFamily: _kanit,
+            ),
           ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Stack(
+        body: Stack(
           alignment: Alignment.center,
           children: <Widget>[
             Container(
@@ -135,10 +135,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                           CrossAxisAlignment.end,
                                       children: <Widget>[
                                         Container(
+                                          color: Colors.amber,
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width /
-                                              2.9,
+                                              2.0,
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -153,7 +154,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                   fontSize: 16.0,
                                                 ),
                                               ),
-                                              SizedBox(height: 10.0),
+                                              SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      20.0),
                                               Text(
                                                 'ประเภทการลา : ' +
                                                     snapshot.data[index]
@@ -214,7 +219,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(width: 70.0),
+                                        SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                27.0),
                                         Align(
                                           alignment: Alignment.bottomRight,
                                           child: RawMaterialButton(
