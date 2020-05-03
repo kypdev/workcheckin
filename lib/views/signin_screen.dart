@@ -250,16 +250,16 @@ class _SigninScreenState extends State<SigninScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
           alignment: Alignment.center,
           children: <Widget>[
             Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(
-                    'assets/images/login.jpg',
+                    'assets/images/bg.jpg',
                   ),
                   fit: BoxFit.cover,
                 ),
@@ -269,8 +269,16 @@ class _SigninScreenState extends State<SigninScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 4.0,
+                    child: Image.asset(
+                      'assets/images/logos.png',
+                      alignment: Alignment.center,
+                    ),
+                  ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height / 6,
+                    height: MediaQuery.of(context).size.height / 22.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 30, right: 30),
@@ -280,159 +288,202 @@ class _SigninScreenState extends State<SigninScreen> {
                       ),
                       child: Column(
                         children: <Widget>[
-                          Form(
-                            key: _formKey,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20, right: 20, top: 20),
-                                  child: TextFormField(
-                                    validator: (value) => value.length < 3
-                                        ? 'username must more than 3 character'
-                                        : null,
-                                    style: TextStyle(
-                                      color: Colors.black45,
-                                    ),
-                                    controller: _username,
-                                    decoration: InputDecoration(
-                                      labelText: 'username',
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.transparent),
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
-                                      prefixIcon: Icon(
-                                        Icons.person,
-                                        color: Colors.grey,
-                                      ),
-                                      filled: true,
-                                      fillColor: Color.alphaBlend(
-                                        Colors.blue.withOpacity(.09),
-                                        Colors.grey.withOpacity(.04),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.red,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.blue, width: 1.5),
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20, right: 20, top: 20),
-                                  child: TextFormField(
-                                    obscureText: securePWD,
-                                    validator: (value) => value.length < 3
-                                        ? 'password must more than 3 character'
-                                        : null,
-                                    style: TextStyle(
-                                      color: Colors.black45,
-                                    ),
-                                    controller: _password,
-                                    decoration: InputDecoration(
-                                      suffixIcon: IconButton(
-                                        onPressed: showPWD,
-                                        icon: securePWD
-                                            ? Icon(Icons.visibility)
-                                            : Icon(Icons.visibility_off),
-                                      ),
-                                      labelText: 'password',
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.transparent),
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
-                                      prefixIcon: Icon(
-                                        Icons.lock,
-                                        color: Colors.grey,
-                                      ),
-                                      filled: true,
-                                      fillColor: Color.alphaBlend(
-                                        Colors.blue.withOpacity(.09),
-                                        Colors.grey.withOpacity(.04),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.red,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.blue, width: 1.5),
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                          Stack(
                             children: <Widget>[
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: RaisedButton(
-                                    child: Text(
-                                      'เข้าสู่ระบบ',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: _kanit),
-                                    ),
-                                    elevation: 10,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(100),
-                                    ),
-                                    color: Colors.blue[400],
-                                    onPressed: _login,
-                                  ),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                height:
+                                    MediaQuery.of(context).size.height / 12.0,
+                                child: Image.asset(
+                                  'assets/images/tot.png',
+                                  alignment: Alignment.topRight,
                                 ),
                               ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: RaisedButton(
-                                    child: Text(
-                                      'สมัครสมาชิก',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: _kanit),
+                              Column(
+                                children: <Widget>[
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              16.0),
+                                  Form(
+                                    key: _formKey,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 20, right: 20, top: 20),
+                                          child: TextFormField(
+                                            validator: (value) => value.length <
+                                                    3
+                                                ? 'username must more than 3 character'
+                                                : null,
+                                            style: TextStyle(
+                                              color: Colors.black45,
+                                            ),
+                                            controller: _username,
+                                            decoration: InputDecoration(
+                                              labelText: 'username',
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.transparent),
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                              ),
+                                              prefixIcon: Icon(
+                                                Icons.person,
+                                                color: Colors.grey,
+                                              ),
+                                              filled: true,
+                                              fillColor: Color.alphaBlend(
+                                                Colors.blue.withOpacity(.09),
+                                                Colors.grey.withOpacity(.04),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.red,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.blue,
+                                                    width: 1.5),
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 20, right: 20, top: 20),
+                                          child: TextFormField(
+                                            obscureText: securePWD,
+                                            validator: (value) => value.length <
+                                                    3
+                                                ? 'password must more than 3 character'
+                                                : null,
+                                            style: TextStyle(
+                                              color: Colors.black45,
+                                            ),
+                                            controller: _password,
+                                            decoration: InputDecoration(
+                                              suffixIcon: IconButton(
+                                                onPressed: showPWD,
+                                                icon: securePWD
+                                                    ? Icon(Icons.visibility)
+                                                    : Icon(
+                                                        Icons.visibility_off),
+                                              ),
+                                              labelText: 'password',
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.transparent),
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                              ),
+                                              prefixIcon: Icon(
+                                                Icons.lock,
+                                                color: Colors.grey,
+                                              ),
+                                              filled: true,
+                                              fillColor: Color.alphaBlend(
+                                                Colors.blue.withOpacity(.09),
+                                                Colors.grey.withOpacity(.04),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.red,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.blue,
+                                                    width: 1.5),
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    elevation: 10,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(100),
-                                    ),
-                                    color: Colors.blue[400],
-                                    onPressed: _signup,
                                   ),
-                                ),
+                                  SizedBox(height: 20),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: RaisedButton(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    50.0),
+                                            child: Text(
+                                              'เข้าสู่ระบบ',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: _kanit),
+                                            ),
+                                            elevation: 10,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            color: Colors.blue[400],
+                                            onPressed: _login,
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: RaisedButton(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    50.0),
+                                            child: Text(
+                                              'สมัครสมาชิก',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: _kanit),
+                                            ),
+                                            elevation: 10,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            color: Colors.blue[400],
+                                            onPressed: _signup,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20),
+                                ],
                               ),
                             ],
                           ),
-                          SizedBox(height: 20),
                         ],
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 8.0,
                   ),
                 ],
               ),
