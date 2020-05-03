@@ -138,17 +138,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
-                                            // todo remove approve approveflagtext
-                                            Text(
-                                              'fppFlag : ' +
-                                                  snapshot
-                                                      .data[index].approveFlag
-                                                      .toString(),
-                                              style: TextStyle(
-                                                fontFamily: _kanit,
-                                                fontSize: 16.0,
-                                              ),
-                                            ),
                                             Text(
                                               'วันที่ลา : ' +
                                                   snapshot.data[index].leaveDate
@@ -232,16 +221,41 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               color: Colors.white,
                                             ),
                                             onPressed: () async {
-                                              // todo yes or no appflag
                                               var apprFlag = snapshot
                                                   .data[index].approveFlag
                                                   .toString();
                                               int apprvFlagInt = int.parse('1');
 
                                               if (apprvFlagInt == 1) {
-                                                // todo apprvFlag == 1 cannot remove leave letter
-                                                print(
-                                                    'cannot remove leave letter');
+                                                Alert(
+                                                    context: context,
+                                                    type: AlertType.warning,
+                                                    title:
+                                                        'ไม่สามารถลบใบลนี้ได้!!!',
+                                                    desc: "",
+                                                    style: AlertStyle(
+                                                      titleStyle: TextStyle(
+                                                        fontFamily: _kanit,
+                                                      ),
+                                                    ),
+                                                    buttons: [
+                                                      DialogButton(
+                                                        child: Text(
+                                                          "ตกลง",
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  _kanit,
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 20),
+                                                        ),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              this.context);
+                                                        },
+                                                        color: Colors.green,
+                                                      ),
+                                                    ]).show();
                                               } else {
                                                 Alert(
                                                   context: context,
