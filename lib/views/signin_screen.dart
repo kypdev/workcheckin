@@ -49,10 +49,6 @@ class _SigninScreenState extends State<SigninScreen> {
     }
   }
 
-  getUserMsg() {
-    var msg = sharedPreferences.getString('userMsg');
-  }
-
   Future _login() async {
     if (_formKey.currentState.validate()) {
       setState(() => visible = true);
