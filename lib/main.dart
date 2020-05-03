@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
         '/splash': (BuildContext context) => SplashScreen(),
       },
       theme: ThemeData(
-        primaryColor: Colors.blue,
+        primaryColor: Color(0xff07395A),
       ),
     );
   }

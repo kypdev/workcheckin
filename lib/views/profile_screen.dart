@@ -14,10 +14,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   SharedPreferences sharedPreferences;
   var message;
   var resProfile;
+
   getMsg() async {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = await jsonDecode(sharedPreferences.getString('userMsg'));
-
     var userID = msg['cwiUser']['modelid'].toString();
     var url = 'http://159.138.232.139/service/cwi/v1/user/get_profile';
     var data = {"userId": userID};
