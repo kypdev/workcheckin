@@ -98,12 +98,14 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    height: MediaQuery.of(context).size.height / 17.2,
+                    height: MediaQuery.of(context).size.height / 22.0,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/nav.png'),
-                      ),
+                      color: Color(0xff07395A),
+                    ),
+                    child: Image.asset(
+                      'assets/images/tot.png',
+                      alignment: Alignment.topRight,
                     ),
                   ),
                   Row(
