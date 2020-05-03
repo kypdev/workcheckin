@@ -51,8 +51,6 @@ class _SigninScreenState extends State<SigninScreen> {
 
   Future _login() async {
     if (_formKey.currentState.validate()) {
-
-      
       setState(() => visible = true);
       String user = _username.text.trim();
       String pass = _password.text;
@@ -306,7 +304,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                   SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height /
-                                              16.0),
+                                              36.0),
                                   Form(
                                     key: _formKey,
                                     child: Column(
