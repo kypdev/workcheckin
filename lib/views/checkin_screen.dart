@@ -72,7 +72,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
       },
     );
     Map<String, dynamic> messages = jsonDecode(response.body);
-    print(messages);
     setState(() => _item = 0);
     setState(() => resLocationLists = messages);
     setState(() => locationListIndexDD = 0);
@@ -85,8 +84,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
     setState(
         () => longtitude = messages['locationList'][0]['longitude'].toString());
 
-    print('$latitude, $longtitude');
-
     if (resLocationLists['locationList'].toString() == '[]') {
       locationItem.add('ไม่พบข้อมูล');
     } else {
@@ -96,7 +93,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
         }
       }
     }
-    print(locationItem);
   }
 
   Future<void> initDeviceId() async {
