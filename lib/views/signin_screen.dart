@@ -79,7 +79,6 @@ class _SigninScreenState extends State<SigninScreen> {
         setState(() {
           sharedPreferences.setString('userMsg', jsonEncode(message));
           userData = sharedPreferences.setString('userData', jsonEncode(data));
-
           visible = false;
         });
 
