@@ -75,11 +75,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     for (int i = 0; i < orgData.length; i++) {
       for (int j = i; j <= i; j++) {
-        print(i);
         orgItem.add(orgData[i]['name']);
       }
     }
-    print(orgItem);
     _getBranch();
   }
 
@@ -110,7 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
       }
     } catch (e) {
-      print(e);
+      debugPrint('ErrBrch: $e');
     }
   }
 
@@ -147,7 +145,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
       }
     } catch (e) {
-      print(e);
+      debugPrint('ErrBossList: ${e.message}');
     }
   }
 
@@ -158,7 +156,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       positionIndexDD = 0;
       positionId = '3';
     });
-    print(positionItem);
   }
 
   Future<void> initDeviceId() async {
@@ -168,7 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     try {
       // todo
     } on PlatformException catch (e) {
-      print(e.message);
+      debugPrint('ErrDeviceID: ${e.message}');
     }
 
     if (!mounted) return;
@@ -176,7 +173,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() {
       _deviceid = '$deviceid';
     });
-    print('deviceid: $_deviceid');
   }
 
   _register() async {
@@ -225,9 +221,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           "deviceId": _deviceid
         };
 
-        print('ok');
-        print('data: $data');
-
         var url = 'http://159.138.232.139/service/cwi/v1/user/register';
 
         var response = await http.post(
@@ -240,8 +233,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
 
         Map<String, dynamic> message = jsonDecode(response.body);
-
-        print(message);
 
         if (message['responseCode'] == '000') {
           setState(() => visible = false);
@@ -369,8 +360,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 });
                                 _getBranch();
                                 _getBossList();
-                                print('orgId: $orgId');
-                                print('branchId: $branchid');
                               },
                             ),
                           ),
@@ -405,7 +394,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           [branchIndex]['modelid']
                                       .toString();
                                 });
-                                print('$branchName, $branchid');
                               },
                             ),
                           ),
@@ -582,8 +570,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     positionId = 1;
                                   }
                                 });
-                                print('positionindex: $positionIndexDD');
-                                print(positionId);
                               },
                             ),
                           ),
@@ -610,14 +596,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 );
                               }).toList(),
                               onChanged: (value) {
-                                print(value);
                                 setState(() {
                                   bossIndexDD = bossItem.indexOf(value);
                                   bossId = resBossList['bossList'][bossIndexDD]
                                           ['modelid']
                                       .toString();
                                 });
-                                print('bossid: $bossId');
                               },
                             ),
                           ),
