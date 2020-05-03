@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:workcheckin/models/size_config.dart';
 
 final _kanit = 'Kanit';
 
@@ -208,6 +209,9 @@ class _LeaveScreenState extends State<LeaveScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    var sizeHor = SizeConfig.safeBlockHorizontal;
+    var sizeVer = SizeConfig.safeBlockVertical;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -237,20 +241,29 @@ class _LeaveScreenState extends State<LeaveScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
+                    SizedBox(height: sizeVer * 1.5),
                     showDate(
                       date: dateStr,
                       action: _showDateTimePicker,
                     ),
+                    SizedBox(height: sizeVer * 4),
                     getTypeLeave(
                       action: () {},
                       leaveType: leaveTypeStr,
                     ),
+                    SizedBox(height: sizeVer * 4),
                     hoursLeave(
                       hrsCtrl: hrCtrl,
                       remarkCtrl: remarkCtrl,
                       hours: _currentInfIntValue.toString(),
                     ),
+                    SizedBox(height: sizeVer * 4),
                     RaisedButton(
+                      elevation: 5.0,
+                      padding: EdgeInsets.symmetric(vertical: sizeVer * 1.2),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
                       color: Colors.blueAccent,
                       onPressed: sendLeave,
                       child: Row(
@@ -263,11 +276,13 @@ class _LeaveScreenState extends State<LeaveScreen> {
                             style: TextStyle(
                               color: Colors.white,
                               fontFamily: _kanit,
+                              fontSize: sizeHor * 5.5,
                             ),
                           ),
                         ],
                       ),
                     ),
+                    SizedBox(height: sizeVer * 10),
                   ],
                 ),
               ),
@@ -288,6 +303,9 @@ class _LeaveScreenState extends State<LeaveScreen> {
     date,
     action,
   }) {
+    SizeConfig().init(context);
+    var sizeHor = SizeConfig.safeBlockHorizontal;
+    var sizeVer = SizeConfig.safeBlockVertical;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -295,23 +313,30 @@ class _LeaveScreenState extends State<LeaveScreen> {
         Text(
           'วันที่',
           style: TextStyle(
-              fontFamily: _kanit, fontSize: 20, fontWeight: FontWeight.bold),
+            fontFamily: _kanit,
+            fontSize: sizeHor * 5,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         GestureDetector(
           onTap: action,
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  date,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: _kanit,
-                    color: Colors.black54,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: sizeVer * 6.5,
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    date,
+                    style: TextStyle(
+                      fontSize: sizeHor * 4,
+                      fontFamily: _kanit,
+                      color: Colors.black54,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         Divider(
@@ -326,6 +351,9 @@ class _LeaveScreenState extends State<LeaveScreen> {
     action,
     leaveType,
   }) {
+    SizeConfig().init(context);
+    var sizeHor = SizeConfig.safeBlockHorizontal;
+    var sizeVer = SizeConfig.safeBlockVertical;
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -336,18 +364,22 @@ class _LeaveScreenState extends State<LeaveScreen> {
             textAlign: TextAlign.start,
             style: TextStyle(
               fontFamily: _kanit,
-              fontSize: 20,
+              fontSize: sizeHor * 5,
               fontWeight: FontWeight.bold,
             ),
           ),
           DropdownButton<String>(
+            underline: Container(),
             isExpanded: true,
             hint: new Text(leaveTypeStr),
             value: _item == null ? null : item[_item],
             items: item.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value),
+                child: Text(
+                  value,
+                  style: TextStyle(fontSize: sizeHor * 4, fontFamily: _kanit),
+                ),
               );
             }).toList(),
             onChanged: (value) {
@@ -376,7 +408,9 @@ class _LeaveScreenState extends State<LeaveScreen> {
     hours,
   }) {
     List<String> hourItems = ['1', '2', '3', '4', '5', '6', '7', '8'];
-
+    SizeConfig().init(context);
+    var sizeHor = SizeConfig.safeBlockHorizontal;
+    var sizeVer = SizeConfig.safeBlockVertical;
     return Form(
       key: _formKey,
       child: Column(
@@ -387,7 +421,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
             textAlign: TextAlign.start,
             style: TextStyle(
               fontFamily: _kanit,
-              fontSize: 20,
+              fontSize: sizeHor * 5,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -396,12 +430,12 @@ class _LeaveScreenState extends State<LeaveScreen> {
             value: _currentInfIntValue,
             iconSize: 24,
             elevation: 16,
-            style: TextStyle(fontFamily: _kanit, color: Colors.black54),
+            style: TextStyle(
+                fontSize: sizeHor * 4, fontFamily: _kanit, color: Colors.black),
             onChanged: (String newValue) {
               setState(() {
                 _currentInfIntValue = newValue;
               });
-              print(newValue);
             },
             items: hourItems.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
@@ -414,17 +448,37 @@ class _LeaveScreenState extends State<LeaveScreen> {
             color: Colors.black54,
             thickness: 1,
           ),
+          SizedBox(height: sizeVer * 4),
           Text(
             'รายละเอียดการลา',
             textAlign: TextAlign.start,
             style: TextStyle(
               fontFamily: _kanit,
-              fontSize: 20,
+              fontSize: sizeHor * 5,
               fontWeight: FontWeight.bold,
             ),
           ),
+          SizedBox(height: sizeVer * 2),
           TextFormField(
             controller: remarkCtrl,
+            decoration: InputDecoration(
+              fillColor: Colors.black12.withOpacity(0.059),
+              filled: true,
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue, width: 1.5),
+                borderRadius: BorderRadius.circular(100),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(100),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.transparent,
+                ),
+                borderRadius: BorderRadius.circular(100),
+              ),
+            ),
             validator: (value) {
               if (value.isEmpty) {
                 return 'รายละเอียดการลาห้ามว่าง!!';
