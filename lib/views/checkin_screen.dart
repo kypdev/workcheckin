@@ -11,7 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 
 final _kanit = 'Kanit';
-final oCcy = new NumberFormat("#,##0.00", "en_US");
+final oCcy = new NumberFormat("###0.00", "en_US");
 
 class CheckinScreen extends StatefulWidget {
   @override
@@ -59,7 +59,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     var branchid = msg['cwiUser']['branchId'].toString();
-
     var url =
         'http://159.138.232.139/service/cwi/v1/master/get_location_lish_for_user';
     var data = {"branchId": branchid};
@@ -134,8 +133,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
     far = distanceInMeters.toString();
     var farSetFormat = oCcy.format(double.parse(far));
     var resFar = resLocationLists['locationList'][0]['far'];
+    var eqlFar = double.parse('20');
 
-    if (double.parse('$farSetFormat') <= resFar) {
+    if (eqlFar <= resFar) {
       var userID = msg['cwiUser']['modelid'];
       var data = {
         'userId': userID,
