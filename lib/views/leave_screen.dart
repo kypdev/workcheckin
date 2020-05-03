@@ -80,7 +80,6 @@ class _LeaveScreenState extends State<LeaveScreen> {
   }
 
   _setDDdata() {
-    print(msgStr['leaveTypeList'][0]['name']);
     setState(() {
       msgobj = msgStr['leaveTypeList'];
     });
@@ -118,10 +117,6 @@ class _LeaveScreenState extends State<LeaveScreen> {
     setState(() {
       msgStr = messages;
     });
-  }
-
-  getUserid() {
-    print(message['cwiUser']['modelid'].toString());
   }
 
   sendLeave() async {
