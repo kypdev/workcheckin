@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workcheckin/models/leave_model.dart';
+import 'package:workcheckin/models/size_config.dart';
 
 final _kanit = 'Kanit';
 final AlertStyle _alertStyle = AlertStyle(
@@ -87,6 +88,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -126,7 +129,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           padding: const EdgeInsets.only(left: 20, right: 20),
                           child: Column(
                             children: <Widget>[
+                              SizedBox(
+                                  height: SizeConfig.safeBlockVertical * 2),
                               Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
                                 elevation: 5.0,
                                 child: Padding(
                                   padding: const EdgeInsets.only(
