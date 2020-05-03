@@ -12,6 +12,11 @@ import 'package:intl/intl.dart';
 
 final _kanit = 'Kanit';
 final oCcy = new NumberFormat("###0.00", "en_US");
+final AlertStyle _alertStyle = AlertStyle(
+  titleStyle: TextStyle(
+    fontFamily: _kanit,
+  ),
+);
 
 class CheckinScreen extends StatefulWidget {
   @override
@@ -155,15 +160,12 @@ class _CheckinScreenState extends State<CheckinScreen> {
       Map<String, dynamic> resMsgCheckin = jsonDecode(response.body);
       var checkinResOk = resMsgCheckin['responseCode'].toString();
       if (checkinResOk == '000') {
+        // Alert Save Success
         Alert(
           context: context,
           type: AlertType.success,
           title: 'บันทึกสำเร็จ',
-          style: AlertStyle(
-            titleStyle: TextStyle(
-              fontFamily: _kanit,
-            ),
-          ),
+          style: _alertStyle,
           desc: '',
           buttons: [
             DialogButton(
@@ -178,15 +180,12 @@ class _CheckinScreenState extends State<CheckinScreen> {
           ],
         ).show();
       } else {
+        // Alert Cannot Save
         Alert(
           context: context,
           type: AlertType.error,
           title: resMsgCheckin['responseDesc'].toString(),
-          style: AlertStyle(
-            titleStyle: TextStyle(
-              fontFamily: _kanit,
-            ),
-          ),
+          style: _alertStyle,
           desc: '',
           buttons: [
             DialogButton(
@@ -205,8 +204,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
       Alert(
         context: context,
         type: AlertType.warning,
-        title: "",
-        desc: "เกิน $resFar เมตร",
+        title: 'คุณห่างเกินรัศมี 100 เมตร',
+        desc: '',
+        style: _alertStyle,
         buttons: [
           DialogButton(
             child: Text(
@@ -254,11 +254,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
           context: context,
           type: AlertType.success,
           title: 'บันทึกสำเร็จ',
-          style: AlertStyle(
-            titleStyle: TextStyle(
-              fontFamily: _kanit,
-            ),
-          ),
+          style: _alertStyle,
           desc: '',
           buttons: [
             DialogButton(
@@ -277,11 +273,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
           context: context,
           type: AlertType.error,
           title: resMsgCheckin['responseDesc'].toString(),
-          style: AlertStyle(
-            titleStyle: TextStyle(
-              fontFamily: _kanit,
-            ),
-          ),
+          style: _alertStyle,
           desc: '',
           buttons: [
             DialogButton(
@@ -297,11 +289,13 @@ class _CheckinScreenState extends State<CheckinScreen> {
         ).show();
       }
     } else {
+      // Alert Distance More Than Far from service
       Alert(
         context: context,
         type: AlertType.warning,
-        title: "",
-        desc: "เกิน $resFar เมตร",
+        title: 'คุณห่างเกินรัศมี 100 เมตร',
+        style: _alertStyle,
+        desc: '',
         buttons: [
           DialogButton(
             child: Text(
