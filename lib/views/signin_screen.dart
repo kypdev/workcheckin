@@ -4,12 +4,19 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:workcheckin/views/home_screen.dart';
 import 'package:device_id/device_id.dart';
 import 'package:flutter/services.dart';
 import 'package:workcheckin/views/register_screen.dart';
 
+import 'home_screen.dart';
+
 final String _kanit = 'kanit';
+AlertStyle alertStyle = AlertStyle(
+  titleStyle: TextStyle(
+    fontFamily: _kanit,
+  ),
+);
+AlertType alertType;
 
 class SigninScreen extends StatefulWidget {
   @override
@@ -44,7 +51,6 @@ class _SigninScreenState extends State<SigninScreen> {
 
   getUserMsg() {
     var msg = sharedPreferences.getString('userMsg');
-    print('pref: $msg');
   }
 
   Future _login() async {
@@ -54,9 +60,10 @@ class _SigninScreenState extends State<SigninScreen> {
       String pass = _password.text;
 
       try {
+        setState(() => visible = true);
+        // todo process login
         var url = 'http://159.138.232.139/service/cwi/v1/user/login';
         var data = {'username': user, 'password': pass};
-
         var response = await http.post(
           url,
           body: json.encode(data),
@@ -65,39 +72,36 @@ class _SigninScreenState extends State<SigninScreen> {
             "Content-Type": "application/json"
           },
         );
-
         Map<String, dynamic> message = jsonDecode(response.body);
-        var userData;
         sharedPreferences = await SharedPreferences.getInstance();
-        setState(() {});
-
-        var msg = message['responseCode'];
-        setState(() {
-          locationlist = message;
-        });
-        print(message);
+        var msgCode = message['responseCode'];
+        setState(() => locationlist = message);
         setState(() {
           sharedPreferences.setString('userMsg', jsonEncode(message));
-          userData = sharedPreferences.setString('userData', jsonEncode(data));
+          sharedPreferences.setString('userData', jsonEncode(data));
           visible = false;
         });
 
-        if (msg == '000') {
-          if (message['cwiUser']['changeDeviceFlag'] == 0) {
+        // if resCode == 000 => OK
+        if (msgCode == '000') {
+          setState(() => visible = false);
+          // Check approveFlag
+          if (message['cwiUser']['changeDeviceFlag'].toString() == '0') {
             setState(() {
               sharedPreferences.setInt('loginFlag', 1);
               visible = false;
             });
+
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => HomeScreen()));
           } else {
-            setState(() {
-              visible = false;
-            });
+            setState(() => visible = false);
+            // Alert Change DeviceID
             Alert(
               context: context,
               type: AlertType.warning,
               title: "คุณต้องการเปลี่ยนโทรศัพท์ใช่หรือไม่ ?",
+              style: alertStyle,
               desc: "",
               buttons: [
                 DialogButton(
@@ -108,11 +112,8 @@ class _SigninScreenState extends State<SigninScreen> {
                   ),
                   onPressed: () async {
                     var changdvid = await _changeDeviceID();
-                    print(changdvid);
                     if (changdvid['responseCode'] == '000') {
-                      print('change ok');
                       sharedPreferences.setInt('loginFlag', 1);
-                      print(sharedPreferences.getInt('loginFlag'));
                       Navigator.pop(context);
                       Navigator.pushReplacement(
                           context,
@@ -123,8 +124,9 @@ class _SigninScreenState extends State<SigninScreen> {
                       Alert(
                         context: context,
                         type: AlertType.error,
-                        title: "",
-                        desc: changdvid['responseDesc'].toString(),
+                        style: alertStyle,
+                        title: changdvid['responseDesc'].toString(),
+                        desc: '',
                         buttons: [
                           DialogButton(
                             child: Text(
@@ -162,13 +164,15 @@ class _SigninScreenState extends State<SigninScreen> {
             ).show();
           }
         } else {
-          print('error');
+          // ResCode != 000 => cannot login
           setState(() => visible = false);
+
           Alert(
             context: context,
             type: AlertType.error,
-            title: "",
-            desc: message['responseDesc'].toString(),
+            title: message['responseDesc'].toString(),
+            desc: '',
+            style: alertStyle,
             buttons: [
               DialogButton(
                 child: Text(
@@ -183,7 +187,7 @@ class _SigninScreenState extends State<SigninScreen> {
           ).show();
         }
       } catch (e) {
-        print('message error: $e');
+        debugPrint('login Err: $e');
       }
     }
   }
@@ -195,7 +199,7 @@ class _SigninScreenState extends State<SigninScreen> {
     try {
       // todo
     } on PlatformException catch (e) {
-      print(e.message);
+      debugPrint('DeviceID Err: $e');
     }
 
     if (!mounted) return;
@@ -221,12 +225,9 @@ class _SigninScreenState extends State<SigninScreen> {
 
     Map<String, dynamic> message = jsonDecode(response.body);
 
-    print(message);
-
     if (message['responseCode'] == '000') {
       return message;
     } else {
-      print('no change');
       return message;
     }
   }
@@ -241,8 +242,6 @@ class _SigninScreenState extends State<SigninScreen> {
     setState(() {
       appVersion = sharedPreferences.getString('app_version');
     });
-
-    print('app_version: $appVersion');
   }
 
   @override
