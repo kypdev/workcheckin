@@ -387,61 +387,74 @@ class _BossScreenState extends State<BossScreen> {
         elevation: 5,
         child: Padding(
           padding: const EdgeInsets.only(top: 20, bottom: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 20,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'วันที่ลา : $leaveDate',
-                      style: TextStyle(
-                        fontFamily: _kanit,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'ประเภทการลา : $leaveTypeName',
-                      style: TextStyle(
-                        fontFamily: _kanit,
-                        fontSize: 13.0,
-                      ),
-                    ),
-                    Text(
-                      'ชื่อ : $userid',
-                      style: TextStyle(
-                        fontFamily: _kanit,
-                        fontSize: 13.0,
-                      ),
-                    ),
-                    Text(
-                      'ชั่วโมง : $leaveHour',
-                      style: TextStyle(
-                        fontFamily: _kanit,
-                        fontSize: 13.0,
-                      ),
-                    ),
-                    Row(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                  ),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 2.2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'สถานะการลา : ',
+                          'วันที่ลา : $leaveDate',
+                          style: TextStyle(
+                            fontFamily: _kanit,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'ประเภทการลา : $leaveTypeName',
                           style: TextStyle(
                             fontFamily: _kanit,
                             fontSize: 13.0,
                           ),
                         ),
                         Text(
-                          approveFlag == '1'
-                              ? 'อนุมัติการลา'
-                              : approveFlag == '2'
-                                  ? 'ไม่อนุมัติการลา'
-                                  : 'รอการอนุมัติ',
+                          'ชื่อ : $userid',
+                          style: TextStyle(
+                            fontFamily: _kanit,
+                            fontSize: 13.0,
+                          ),
+                        ),
+                        Text(
+                          'ชั่วโมง : $leaveHour',
+                          style: TextStyle(
+                            fontFamily: _kanit,
+                            fontSize: 13.0,
+                          ),
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              'สถานะการลา : ',
+                              style: TextStyle(
+                                fontFamily: _kanit,
+                                fontSize: 13.0,
+                              ),
+                            ),
+                            Text(
+                              approveFlag == '1'
+                                  ? 'อนุมัติการลา'
+                                  : approveFlag == '2'
+                                      ? 'ไม่อนุมัติการลา'
+                                      : 'รอการอนุมัติ',
+                              style: TextStyle(
+                                fontFamily: _kanit,
+                                fontSize: 13.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          'เหตุผล : $remark',
                           style: TextStyle(
                             fontFamily: _kanit,
                             fontSize: 13.0,
@@ -449,59 +462,53 @@ class _BossScreenState extends State<BossScreen> {
                         ),
                       ],
                     ),
-                    Text(
-                      'เหตุผล : $remark',
-                      style: TextStyle(
-                        fontFamily: _kanit,
-                        fontSize: 13.0,
+                  ),
+                ),
+                SizedBox(width: MediaQuery.of(context).size.width / 11.0),
+                Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 4, right: 8),
+                      child: Container(
+                        width: 35.0,
+                        height: 35.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.blue,
+                        ),
+                        child: RawMaterialButton(
+                          onPressed: actionOk,
+                          child: Icon(
+                            FontAwesomeIcons.check,
+                            color: Colors.white,
+                            size: 25.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 4, right: 14),
+                      child: Container(
+                        width: 35.0,
+                        height: 35.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red,
+                        ),
+                        child: RawMaterialButton(
+                          onPressed: actionNo,
+                          child: Icon(
+                            FontAwesomeIcons.times,
+                            size: 25.0,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ],
                 ),
-              ),
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 4, right: 8),
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.blue,
-                      ),
-                      child: RawMaterialButton(
-                        onPressed: actionOk,
-                        child: Icon(
-                          FontAwesomeIcons.check,
-                          color: Colors.white,
-                          size: 30.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 4, right: 14),
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.red,
-                      ),
-                      child: RawMaterialButton(
-                        onPressed: actionNo,
-                        child: Icon(
-                          FontAwesomeIcons.times,
-                          size: 30.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
