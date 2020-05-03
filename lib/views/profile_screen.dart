@@ -137,13 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           fontSize: 18.0,
                                         ),
                                       ),
-                                      // Text(
-                                      //   'ตำแหน่ง : ' + resProfile['cwiUser']['position'].toString(),
-                                      //   style: TextStyle(
-                                      //     fontFamily: _kanit,
-                                      //     fontSize: 18.0,
-                                      //   ),
-                                      // ),
+                                     
                                       Row(
                                         children: <Widget>[
                                           Text(
