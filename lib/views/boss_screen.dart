@@ -393,7 +393,7 @@ class _BossScreenState extends State<BossScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
                   child: Container(
-                    width: MediaQuery.of(context).size.width / 2.2,
+                    width: MediaQuery.of(context).size.width / 1.82,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -459,11 +459,13 @@ class _BossScreenState extends State<BossScreen> {
                     ),
                   ),
                 ),
-                SizedBox(width: MediaQuery.of(context).size.width / 11.0),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 20.0,
+                ),
                 Row(
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 4, right: 8),
+                      padding: const EdgeInsets.only(bottom: 4),
                       child: Container(
                         width: 35.0,
                         height: 35.0,
@@ -481,7 +483,9 @@ class _BossScreenState extends State<BossScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(width: MediaQuery.of(context).size.width / 40.0),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 60.0,
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 4, right: 14),
                       child: Container(
