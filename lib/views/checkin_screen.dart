@@ -133,7 +133,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
         13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
     far = distanceInMeters.toString();
     var farSetFormat = oCcy.format(double.parse(far));
-    print('farsetformat: $farSetFormat');
 
     if (far == null) {
       Alert(
@@ -167,7 +166,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
           'osMobile': platform,
           'locationId': loctionID,
         };
-        print(data);
+
         var url = 'http://159.138.232.139/service/cwi/v2/user/checkin';
 
         var response = await http.post(
@@ -283,7 +282,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
           'osMobile': platform,
           'locationId': loctionID,
         };
-        print(data);
 
         var url = 'http://159.138.232.139/service/cwi/v2/user/checkout';
 
@@ -444,8 +442,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                         [_item]['modelid']
                                     .toString();
                               });
-
-                              print('$place $latitude, $longtitude $loctionID');
                             },
                           ),
                         ),
