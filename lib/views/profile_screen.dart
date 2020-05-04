@@ -43,140 +43,147 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'ข้อมูลส่วนตัว',
-          style: TextStyle(fontFamily: _kanit),
+    var scrSize = MediaQuery.of(context).size;
+
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'ข้อมูลส่วนตัว',
+            style: TextStyle(fontFamily: _kanit),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: Stack(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                  'assets/images/bg.jpg',
+        body: Stack(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/bg.jpg',
+                  ),
+                  fit: BoxFit.cover,
                 ),
-                fit: BoxFit.cover,
               ),
             ),
-          ),
-          SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).size.width / 20.0),
-                resProfile == null
-                    ? Center(
-                        child: Visibility(
-                          visible: true,
-                          child: CircularProgressIndicator(),
-                        ),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 20),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
+            SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(height: MediaQuery.of(context).size.width / 20.0),
+                  resProfile == null
+                      ? Center(
+                          child: Visibility(
+                            visible: true,
+                            child: CircularProgressIndicator(),
                           ),
-                          elevation: 5.0,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 20, bottom: 20),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        'องค์กร : ' +
-                                            resProfile['cwiUser']['orgName']
-                                                .toString(),
-                                        style: TextStyle(
-                                          fontFamily: _kanit,
-                                          fontSize: 18.0,
-                                        ),
-                                      ),
-                                      Text(
-                                        'สาขา : ' +
-                                            resProfile['cwiUser']['branchName']
-                                                .toString(),
-                                        style: TextStyle(
-                                          fontFamily: _kanit,
-                                          fontSize: 18.0,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Username : ' +
-                                            resProfile['cwiUser']['username']
-                                                .toString(),
-                                        style: TextStyle(
-                                          fontFamily: _kanit,
-                                          fontSize: 18.0,
-                                        ),
-                                      ),
-                                      Text(
-                                        'ชื่อ : ' +
-                                            resProfile['cwiUser']['name']
-                                                .toString() +
-                                            ' ' +
-                                            resProfile['cwiUser']['lastname']
-                                                .toString(),
-                                        style: TextStyle(
-                                          fontFamily: _kanit,
-                                          fontSize: 18.0,
-                                        ),
-                                      ),
-                                      Text(
-                                        'รหัสพนักงาน : ' +
-                                            resProfile['cwiUser']['employeeId']
-                                                .toString(),
-                                        style: TextStyle(
-                                          fontFamily: _kanit,
-                                          fontSize: 18.0,
-                                        ),
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Text(
-                                            'หัวหน้า : ',
-                                            style: TextStyle(
-                                              fontFamily: _kanit,
-                                              fontSize: 18.0,
-                                            ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            elevation: 5.0,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 20, bottom: 20),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          'องค์กร : ' +
+                                              resProfile['cwiUser']['orgName']
+                                                  .toString(),
+                                          style: TextStyle(
+                                            fontFamily: _kanit,
+                                            fontSize: scrSize.width / 22,
                                           ),
-                                          Text(
-                                            resProfile['cwiUser']['bossId']
-                                                        .toString() ==
-                                                    '0'
-                                                ? ''
-                                                : resProfile['cwiUser']
-                                                        ['bossName']
-                                                    .toString(),
-                                            style: TextStyle(
-                                              fontFamily: _kanit,
-                                              fontSize: 18.0,
-                                            ),
+                                        ),
+                                        Text(
+                                          'สาขา : ' +
+                                              resProfile['cwiUser']
+                                                      ['branchName']
+                                                  .toString(),
+                                          style: TextStyle(
+                                            fontFamily: _kanit,
+                                            fontSize: scrSize.width / 22,
                                           ),
-                                        ],
-                                      ),
-                                    ],
+                                        ),
+                                        Text(
+                                          'Username : ' +
+                                              resProfile['cwiUser']['username']
+                                                  .toString(),
+                                          style: TextStyle(
+                                            fontFamily: _kanit,
+                                            fontSize: scrSize.width / 22,
+                                          ),
+                                        ),
+                                        Text(
+                                          'ชื่อ : ' +
+                                              resProfile['cwiUser']['name']
+                                                  .toString() +
+                                              ' ' +
+                                              resProfile['cwiUser']['lastname']
+                                                  .toString(),
+                                          style: TextStyle(
+                                            fontFamily: _kanit,
+                                            fontSize: scrSize.width / 22,
+                                          ),
+                                        ),
+                                        Text(
+                                          'รหัสพนักงาน : ' +
+                                              resProfile['cwiUser']
+                                                      ['employeeId']
+                                                  .toString(),
+                                          style: TextStyle(
+                                            fontFamily: _kanit,
+                                            fontSize: scrSize.width / 22,
+                                          ),
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            Text(
+                                              'หัวหน้า : ',
+                                              style: TextStyle(
+                                                fontFamily: _kanit,
+                                                fontSize: scrSize.width / 22,
+                                              ),
+                                            ),
+                                            Text(
+                                              resProfile['cwiUser']['bossId']
+                                                          .toString() ==
+                                                      '0'
+                                                  ? ''
+                                                  : resProfile['cwiUser']
+                                                          ['bossName']
+                                                      .toString(),
+                                              style: TextStyle(
+                                                fontFamily: _kanit,
+                                                fontSize: scrSize.width / 22,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
