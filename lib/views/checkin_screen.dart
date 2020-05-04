@@ -413,24 +413,30 @@ class _CheckinScreenState extends State<CheckinScreen> {
                         excludeFromSemantics: true,
                         fit: BoxFit.fill,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          InkWell(
-                            onTap: _checkin,
-                            child: Image.asset(
-                              'assets/images/checkin.png',
-                              width: sizeHor * 30,
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: sizeHor * 14,
+                          right: sizeHor * 14,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            InkWell(
+                              onTap: _checkin,
+                              child: Image.asset(
+                                'assets/images/checkin.png',
+                                width: sizeHor * 30,
+                              ),
                             ),
-                          ),
-                          InkWell(
-                            onTap: _checkout,
-                            child: Image.asset(
-                              'assets/images/checkout.png',
-                              width: sizeHor * 30,
+                            InkWell(
+                              onTap: _checkout,
+                              child: Image.asset(
+                                'assets/images/checkout.png',
+                                width: sizeHor * 30,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       )
                     ],
                   ),
