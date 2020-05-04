@@ -146,11 +146,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         fit: BoxFit.fill,
                       ),
                       Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
+                          SizedBox(height: sizeVer * 8),
                           Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               InkWell(
@@ -160,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   width: sizeHor * 30,
                                 ),
                               ),
-                              SizedBox(width: sizeHor * 4),
+                              SizedBox(width: sizeHor * 0.2),
                               InkWell(
                                 onTap: _historyCheckin,
                                 child: Image.asset(
@@ -170,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(height: sizeVer * 4),
+                          SizedBox(height: sizeVer * 0.2),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -192,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(height: sizeVer * 4),
+                          SizedBox(height: sizeVer * 0.2),
                           InkWell(
                             onTap: _showProfile,
                             child: Image.asset(
