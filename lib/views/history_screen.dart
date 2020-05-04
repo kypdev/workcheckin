@@ -132,7 +132,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           padding: EdgeInsets.only(
                               left: sizeHor * 2,
                               right: sizeHor * 2,
-                              bottom: sizeVer * 0.7),
+                              bottom: sizeVer * 1.2),
                           child: Card(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20.0),
