@@ -76,7 +76,7 @@ class _BossScreenState extends State<BossScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('ใบลา(หัวหน้า)', style: TextStyle(fontFamily: _kanit)),
+          title: Text('รายงานการลา', style: TextStyle(fontFamily: _kanit)),
           centerTitle: true,
         ),
         body: Stack(
