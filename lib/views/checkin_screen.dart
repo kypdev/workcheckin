@@ -407,8 +407,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                     children: <Widget>[
                       Image.asset(
                         'assets/images/card-check.png',
-                        width: sizeHor * 90,
-                        height: sizeVer * 60,
+                        width: sizeHor * 99,
+                        height: sizeVer * 45,
                         filterQuality: FilterQuality.high,
                         excludeFromSemantics: true,
                         fit: BoxFit.fill,
