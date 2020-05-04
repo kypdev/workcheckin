@@ -113,26 +113,31 @@ class _HomeScreenState extends State<HomeScreen> {
                       alignment: Alignment.topRight,
                     ),
                   ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      InkWell(
-                        onTap: _notiBoss,
-                        child: Image.asset(
-                          'assets/images/noti.png',
-                          width: sizeHor * 30,
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: sizeHor * 4,
+                      right: sizeHor * 4,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        InkWell(
+                          onTap: _notiBoss,
+                          child: Image.asset(
+                            'assets/images/noti.png',
+                            width: sizeHor * 30,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: sizeHor * 4),
-                      InkWell(
-                        onTap: _logout,
-                        child: Image.asset(
-                          'assets/images/logout.png',
-                          width: sizeHor * 30,
+                        InkWell(
+                          onTap: _logout,
+                          child: Image.asset(
+                            'assets/images/logout.png',
+                            width: sizeHor * 30,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   Stack(
                     alignment: Alignment.center,
@@ -140,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Image.asset(
                         'assets/images/card-menu.png',
                         width: sizeHor * 90,
-                        height: sizeVer * 60,
+                        height: sizeVer * 48,
                         filterQuality: FilterQuality.high,
                         excludeFromSemantics: true,
                         fit: BoxFit.fill,
@@ -148,47 +153,54 @@ class _HomeScreenState extends State<HomeScreen> {
                       Column(
                         children: <Widget>[
                           SizedBox(height: sizeVer * 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              InkWell(
-                                onTap: _employee,
-                                child: Image.asset(
-                                  'assets/images/check.png',
-                                  width: sizeHor * 30,
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: sizeHor * 14, right: sizeHor * 14),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                InkWell(
+                                  onTap: _employee,
+                                  child: Image.asset(
+                                    'assets/images/check.png',
+                                    width: sizeHor * 30,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(width: sizeHor * 2.5),
-                              InkWell(
-                                onTap: _historyCheckin,
-                                child: Image.asset(
-                                  'assets/images/his-time.png',
-                                  width: sizeHor * 30,
+                                SizedBox(width: sizeHor * 2.5),
+                                InkWell(
+                                  onTap: _historyCheckin,
+                                  child: Image.asset(
+                                    'assets/images/his-time.png',
+                                    width: sizeHor * 30,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           SizedBox(height: sizeVer * 2.5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              InkWell(
-                                onTap: _leave,
-                                child: Image.asset(
-                                  'assets/images/leave.png',
-                                  width: sizeHor * 30,
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: sizeHor * 14, right: sizeHor * 14),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                InkWell(
+                                  onTap: _leave,
+                                  child: Image.asset(
+                                    'assets/images/leave.png',
+                                    width: sizeHor * 30,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(width: sizeHor * 4),
-                              InkWell(
-                                onTap: _history,
-                                child: Image.asset(
-                                  'assets/images/his-leave.png',
-                                  width: sizeHor * 30,
+                                SizedBox(width: sizeHor * 4),
+                                InkWell(
+                                  onTap: _history,
+                                  child: Image.asset(
+                                    'assets/images/his-leave.png',
+                                    width: sizeHor * 30,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           SizedBox(height: sizeVer * 2.5),
                           InkWell(
@@ -209,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Image.asset(
                         'assets/images/boss-card.png',
                         width: sizeHor * 90,
-                        height: sizeVer * 30,
+                        height: sizeVer * 28,
                         filterQuality: FilterQuality.high,
                         excludeFromSemantics: true,
                         fit: BoxFit.fill,
@@ -220,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: _bossLeave,
                           child: Image.asset(
                             'assets/images/report.png',
-                            width: sizeHor * 32,
+                            width: sizeHor * 30,
                             filterQuality: FilterQuality.high,
                             excludeFromSemantics: true,
                             fit: BoxFit.fill,

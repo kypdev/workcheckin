@@ -273,12 +273,9 @@ class _SigninScreenState extends State<SigninScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Container(
-                    width: sizeHor * 55,
-                    child: Image.asset(
-                      'assets/images/logos.png',
-                      alignment: Alignment.center,
-                    ),
+                  Image.asset(
+                    'assets/images/logos.png',
+                    height: sizeVer * 30,
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height / 60.0,
