@@ -8,6 +8,7 @@ import 'package:workcheckin/views/history_screen.dart';
 import 'package:workcheckin/views/noti_boss_screen.dart';
 import 'package:workcheckin/views/profile_screen.dart';
 import 'package:workcheckin/views/signin_screen.dart';
+import 'package:workcheckin/models/size_config.dart';
 import 'leave_screen.dart';
 
 final _kanit = 'Kanit';
@@ -80,6 +81,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    var sizeHor = SizeConfig.safeBlockHorizontal;
+    var sizeVer = SizeConfig.safeBlockVertical;
     return SafeArea(
       child: Scaffold(
         body: Stack(
@@ -96,9 +100,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SingleChildScrollView(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    height: MediaQuery.of(context).size.height / 22.0,
+                    height: sizeVer * 5.8,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       color: Color(0xff07395A),
@@ -108,157 +113,125 @@ class _HomeScreenState extends State<HomeScreen> {
                       alignment: Alignment.topRight,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: MediaQuery.of(context).size.height / 30.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: _notiBoss,
-                          child: Container(
-                            width: 100.0,
-                            height: 100.0,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage('assets/images/noti.png'),
-                              ),
-                            ),
-                          ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      InkWell(
+                        onTap: _notiBoss,
+                        child: Image.asset(
+                          'assets/images/noti.png',
+                          width: sizeHor * 30,
                         ),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width / 4.0),
-                        GestureDetector(
-                          onTap: _logout,
-                          child: Container(
-                            width: 100.0,
-                            height: 100.0,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage('assets/images/logout.png'),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width / 1.1,
-                    height: MediaQuery.of(context).size.height / 2.2,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/card-menu.png'),
-                        fit: BoxFit.cover,
                       ),
-                    ),
-                    child: SingleChildScrollView(
-                      child: Column(
+                      SizedBox(width: sizeHor * 4),
+                      InkWell(
+                        onTap: _logout,
+                        child: Image.asset(
+                          'assets/images/logout.png',
+                          width: sizeHor * 30,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      Image.asset(
+                        'assets/images/card-menu.png',
+                        width: sizeHor * 90,
+                        height: sizeVer * 60,
+                        filterQuality: FilterQuality.high,
+                        excludeFromSemantics: true,
+                        fit: BoxFit.fill,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 60, left: 50),
-                                child: GestureDetector(
-                                  onTap: _employee,
-                                  child: Container(
-                                    width: 80,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/check.png'),
-                                      ),
-                                    ),
-                                  ),
+                              InkWell(
+                                onTap: _employee,
+                                child: Image.asset(
+                                  'assets/images/check.png',
+                                  width: sizeHor * 30,
                                 ),
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 60, right: 50),
-                                child: GestureDetector(
-                                  onTap: _historyCheckin,
-                                  child: Container(
-                                    width: 80,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/his-time.png'),
-                                      ),
-                                    ),
-                                  ),
+                              SizedBox(width: sizeHor * 4),
+                              InkWell(
+                                onTap: _historyCheckin,
+                                child: Image.asset(
+                                  'assets/images/his-time.png',
+                                  width: sizeHor * 30,
                                 ),
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 50, right: 50),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                GestureDetector(
-                                  onTap: _leave,
-                                  child: Container(
-                                    width: 80,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/leave.png'),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: _history,
-                                  child: Container(
-                                    width: 80,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/his-leave.png'),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: _showProfile,
-                            child: Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/images/pro.png'),
+                          SizedBox(height: sizeVer * 4),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              InkWell(
+                                onTap: _leave,
+                                child: Image.asset(
+                                  'assets/images/leave.png',
+                                  width: sizeHor * 30,
                                 ),
                               ),
+                              SizedBox(width: sizeHor * 4),
+                              InkWell(
+                                onTap: _history,
+                                child: Image.asset(
+                                  'assets/images/his-leave.png',
+                                  width: sizeHor * 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: sizeVer * 4),
+                          InkWell(
+                            onTap: _showProfile,
+                            child: Image.asset(
+                              'assets/images/pro.png',
+                              width: sizeHor * 30,
                             ),
                           ),
                         ],
                       ),
-                    ),
+                    ],
                   ),
-                  GestureDetector(
-                    onTap: _bossLeave,
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 3.15,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/boss-menu.png'),
+                  SizedBox(height: sizeVer * 3),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      Image.asset(
+                        'assets/images/boss-card.png',
+                        width: sizeHor * 90,
+                        height: sizeVer * 30,
+                        filterQuality: FilterQuality.high,
+                        excludeFromSemantics: true,
+                        fit: BoxFit.fill,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: sizeVer * 4),
+                        child: InkWell(
+                          onTap: _bossLeave,
+                          child: Image.asset(
+                            'assets/images/report.png',
+                            width: sizeHor * 32,
+                            filterQuality: FilterQuality.high,
+                            excludeFromSemantics: true,
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
-                      child: Column(
-                        children: <Widget>[],
-                      ),
-                    ),
+                    ],
                   ),
+                  SizedBox(height: sizeVer * 4),
                 ],
               ),
             ),
