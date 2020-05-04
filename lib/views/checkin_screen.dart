@@ -9,6 +9,7 @@ import 'dart:io' show Platform;
 import 'package:device_id/device_id.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:workcheckin/models/size_config.dart';
 
 final _kanit = 'Kanit';
 final oCcy = new NumberFormat("###0.00", "en_US");
@@ -313,6 +314,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    var sizeHor = SizeConfig.safeBlockHorizontal;
+    var sizeVer = SizeConfig.safeBlockVertical;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -337,6 +341,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 place == ''
                     ? Center(
@@ -396,52 +401,38 @@ class _CheckinScreenState extends State<CheckinScreen> {
                         ),
                       ),
                 SizedBox(height: 50),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height / 3,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/card-check.png'),
+                Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/card-check.png',
+                      width: sizeHor * 90,
+                      height: sizeVer * 60,
+                      filterQuality: FilterQuality.high,
+                      excludeFromSemantics: true,
+                      fit: BoxFit.fill,
                     ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 70, right: 70),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        GestureDetector(
+                        InkWell(
                           onTap: _checkin,
-                          child: Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  'assets/images/checkin.png',
-                                ),
-                              ),
-                            ),
+                          child: Image.asset(
+                            'assets/images/checkin.png',
+                            width: sizeHor * 30,
                           ),
                         ),
-                        GestureDetector(
+                        InkWell(
                           onTap: _checkout,
-                          child: Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  'assets/images/checkout.png',
-                                ),
-                              ),
-                            ),
+                          child: Image.asset(
+                            'assets/images/checkout.png',
+                            width: sizeHor * 30,
                           ),
                         ),
                       ],
-                    ),
-                  ),
+                    )
+                  ],
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height / 4),
               ],
             ),
             Container(
