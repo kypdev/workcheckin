@@ -213,7 +213,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width /
-                                                1.5,
+                                                2,
                                             child: Text(
                                               'เหตุผล : ' +
                                                   snapshot.data[index].remark
@@ -228,201 +228,183 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       ),
                                     ],
                                   ),
-                                  Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Container(
-                                      width: sizeHor * 7,
-                                      height: sizeVer * 7,
-                                      child: RawMaterialButton(
-                                        shape: CircleBorder(
-                                          side: BorderSide(
-                                              color: Colors.transparent),
-                                        ),
-                                        fillColor: Colors.blue,
-                                        child: Icon(
-                                          FontAwesomeIcons.trashAlt,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed: () async {
-                                          var apprFlag = snapshot
-                                              .data[index].approveFlag
-                                              .toString();
-
-                                          int apprvFlagInt =
-                                              int.parse(apprFlag);
-
-                                          if (apprvFlagInt == 1) {
-                                            // Cannot delete leave letter
-                                            Alert(
-                                                context: context,
-                                                type: AlertType.warning,
-                                                title:
-                                                    'ไม่สามารถลบใบลนี้ได้!!!',
-                                                desc: "",
-                                                style: _alertStyle,
-                                                buttons: [
-                                                  DialogButton(
-                                                    child: Text(
-                                                      "ตกลง",
-                                                      style: TextStyle(
-                                                          fontFamily: _kanit,
-                                                          color: Colors.white,
-                                                          fontSize: 20),
-                                                    ),
-                                                    onPressed: () {
-                                                      Navigator.pop(
-                                                          this.context);
-                                                    },
-                                                    color: Colors.green,
-                                                  ),
-                                                ]).show();
-                                          } else {
-                                            // Can delte leave letter
-                                            Alert(
-                                              context: context,
-                                              type: AlertType.warning,
-                                              title:
-                                                  "คุณต้องการลบใบลาหรือไม่ ?",
-                                              style: _alertStyle,
-                                              buttons: [
-                                                DialogButton(
-                                                  child: Text(
-                                                    "ใช่",
-                                                    style: TextStyle(
-                                                        fontFamily: _kanit,
-                                                        color: Colors.white,
-                                                        fontSize: 20),
-                                                  ),
-                                                  onPressed: () async {
-                                                    setState(
-                                                        () => visible = true);
-                                                    var leaveid = snapshot
-                                                        .data[index].modelid
-                                                        .toString();
-                                                    var url =
-                                                        'http://159.138.232.139/service/cwi/v1/user/delete_leave';
-
-                                                    var jsonData = {
-                                                      "leaveId": leaveid
-                                                    };
-
-                                                    var response =
-                                                        await http.post(
-                                                      url,
-                                                      body:
-                                                          jsonEncode(jsonData),
-                                                      headers: {
-                                                        "Authorization":
-                                                            "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-                                                        "Content-Type":
-                                                            "application/json"
-                                                      },
-                                                    );
-
-                                                    Map<String, dynamic>
-                                                        message = json.decode(
-                                                            response.body);
-
-                                                    if (message[
-                                                            'responseCode'] ==
-                                                        '000') {
-                                                      // Success
-                                                      setState(() =>
-                                                          visible = false);
-                                                      Navigator.pop(context);
-
-                                                      Alert(
-                                                          context: context,
-                                                          type:
-                                                              AlertType.success,
-                                                          title: message[
-                                                                  'responseDesc']
-                                                              .toString(),
-                                                          desc: "",
-                                                          buttons: [
-                                                            DialogButton(
-                                                              child: Text(
-                                                                "ตกลง",
-                                                                style: TextStyle(
-                                                                    fontFamily:
-                                                                        _kanit,
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        20),
-                                                              ),
-                                                              onPressed: () {
-                                                                Navigator.pop(
-                                                                    this.context);
-                                                              },
-                                                              color:
-                                                                  Colors.green,
-                                                            ),
-                                                          ]).show();
-                                                    } else {
-                                                      // Failed to process
-                                                      Navigator.maybePop(
-                                                          context);
-                                                      setState(() {
-                                                        visible = false;
-                                                      });
-                                                      Alert(
-                                                        context: context,
-                                                        type: AlertType.warning,
-                                                        title: message[
-                                                                'responseDesc']
-                                                            .toString(),
-                                                        desc: "",
-                                                        buttons: [
-                                                          DialogButton(
-                                                            child: Text(
-                                                              "ตกลง",
-                                                              style: TextStyle(
-                                                                  fontFamily:
-                                                                      _kanit,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize: 20),
-                                                            ),
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                    context),
-                                                            color: Colors.red,
-                                                          )
-                                                        ],
-                                                      ).show();
-                                                    }
-                                                  },
-                                                  color: Color.fromRGBO(
-                                                      0, 179, 134, 1.0),
-                                                ),
-                                                DialogButton(
-                                                  child: Text(
-                                                    "ไม่ใช่",
-                                                    style: TextStyle(
-                                                        fontFamily: _kanit,
-                                                        color: Colors.white,
-                                                        fontSize: 20),
-                                                  ),
-                                                  onPressed: () {
-                                                    setState(
-                                                        () => visible = false);
-                                                    Navigator.pop(context);
-                                                  },
-                                                  gradient: LinearGradient(
-                                                      colors: [
-                                                        Color.fromRGBO(
-                                                            116, 116, 191, 1.0),
-                                                        Color.fromRGBO(
-                                                            52, 138, 199, 1.0)
-                                                      ]),
-                                                )
-                                              ],
-                                            ).show();
-                                          }
-                                        },
+                                  RawMaterialButton(
+                                    padding: EdgeInsets.all(14),
+                                    shape: CircleBorder(
+                                      side: BorderSide(
+                                        style: BorderStyle.none,
+                                        color: Colors.transparent,
                                       ),
                                     ),
+                                    fillColor: Colors.blue,
+                                    child: Icon(
+                                      FontAwesomeIcons.trashAlt,
+                                      size: sizeHor * 8,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () async {
+                                      var apprFlag = snapshot
+                                          .data[index].approveFlag
+                                          .toString();
+
+                                      int apprvFlagInt = int.parse(apprFlag);
+
+                                      if (apprvFlagInt == 1) {
+                                        // Cannot delete leave letter
+                                        Alert(
+                                            context: context,
+                                            type: AlertType.warning,
+                                            title: 'ไม่สามารถลบใบลนี้ได้!!!',
+                                            desc: "",
+                                            style: _alertStyle,
+                                            buttons: [
+                                              DialogButton(
+                                                child: Text(
+                                                  "ตกลง",
+                                                  style: TextStyle(
+                                                      fontFamily: _kanit,
+                                                      color: Colors.white,
+                                                      fontSize: 20),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.pop(this.context);
+                                                },
+                                                color: Colors.green,
+                                              ),
+                                            ]).show();
+                                      } else {
+                                        // Can delte leave letter
+                                        Alert(
+                                          context: context,
+                                          type: AlertType.warning,
+                                          title: "คุณต้องการลบใบลาหรือไม่ ?",
+                                          style: _alertStyle,
+                                          buttons: [
+                                            DialogButton(
+                                              child: Text(
+                                                "ใช่",
+                                                style: TextStyle(
+                                                    fontFamily: _kanit,
+                                                    color: Colors.white,
+                                                    fontSize: 20),
+                                              ),
+                                              onPressed: () async {
+                                                setState(() => visible = true);
+                                                var leaveid = snapshot
+                                                    .data[index].modelid
+                                                    .toString();
+                                                var url =
+                                                    'http://159.138.232.139/service/cwi/v1/user/delete_leave';
+
+                                                var jsonData = {
+                                                  "leaveId": leaveid
+                                                };
+
+                                                var response = await http.post(
+                                                  url,
+                                                  body: jsonEncode(jsonData),
+                                                  headers: {
+                                                    "Authorization":
+                                                        "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+                                                    "Content-Type":
+                                                        "application/json"
+                                                  },
+                                                );
+
+                                                Map<String, dynamic> message =
+                                                    json.decode(response.body);
+
+                                                if (message['responseCode'] ==
+                                                    '000') {
+                                                  // Success
+                                                  setState(
+                                                      () => visible = false);
+                                                  Navigator.pop(context);
+
+                                                  Alert(
+                                                      context: context,
+                                                      type: AlertType.success,
+                                                      title: message[
+                                                              'responseDesc']
+                                                          .toString(),
+                                                      desc: "",
+                                                      buttons: [
+                                                        DialogButton(
+                                                          child: Text(
+                                                            "ตกลง",
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    _kanit,
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 20),
+                                                          ),
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                this.context);
+                                                          },
+                                                          color: Colors.green,
+                                                        ),
+                                                      ]).show();
+                                                } else {
+                                                  // Failed to process
+                                                  Navigator.maybePop(context);
+                                                  setState(() {
+                                                    visible = false;
+                                                  });
+                                                  Alert(
+                                                    context: context,
+                                                    type: AlertType.warning,
+                                                    title:
+                                                        message['responseDesc']
+                                                            .toString(),
+                                                    desc: "",
+                                                    buttons: [
+                                                      DialogButton(
+                                                        child: Text(
+                                                          "ตกลง",
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  _kanit,
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 20),
+                                                        ),
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                context),
+                                                        color: Colors.red,
+                                                      )
+                                                    ],
+                                                  ).show();
+                                                }
+                                              },
+                                              color: Color.fromRGBO(
+                                                  0, 179, 134, 1.0),
+                                            ),
+                                            DialogButton(
+                                              child: Text(
+                                                "ไม่ใช่",
+                                                style: TextStyle(
+                                                    fontFamily: _kanit,
+                                                    color: Colors.white,
+                                                    fontSize: 20),
+                                              ),
+                                              onPressed: () {
+                                                setState(() => visible = false);
+                                                Navigator.pop(context);
+                                              },
+                                              gradient: LinearGradient(colors: [
+                                                Color.fromRGBO(
+                                                    116, 116, 191, 1.0),
+                                                Color.fromRGBO(
+                                                    52, 138, 199, 1.0)
+                                              ]),
+                                            )
+                                          ],
+                                        ).show();
+                                      }
+                                    },
                                   ),
                                   SizedBox(
                                     width: sizeHor * 2,
