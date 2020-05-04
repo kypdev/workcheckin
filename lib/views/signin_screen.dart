@@ -274,8 +274,7 @@ class _SigninScreenState extends State<SigninScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    // width: sizeHor * 80,
-                    // height: sizeVer * 50,
+                    width: sizeHor * 55,
                     child: Image.asset(
                       'assets/images/logos.png',
                       alignment: Alignment.center,
