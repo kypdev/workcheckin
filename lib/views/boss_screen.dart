@@ -503,31 +503,6 @@ class _BossScreenState extends State<BossScreen> {
                         ),
                       ),
                     ),
-
-                    // Container(
-                    //   color: Colors.amber,
-                    //   child: RawMaterialButton(
-                    //     fillColor: Colors.blue,
-                    //     shape: CircleBorder(),
-                    //     padding: EdgeInsets.all(sizeVer * 1.3),
-                    //     onPressed: actionOk,
-                    //     child: Icon(
-                    //       FontAwesomeIcons.check,
-                    //       color: Colors.white,
-                    //       size: sizeHor * 6,
-                    //     ),
-                    //   ),
-                    // ),
-
-                    // SizedBox(width: sizeHor * 2),
-                    // RawMaterialButton(
-                    //   onPressed: actionNo,
-                    //   child: Icon(
-                    //     FontAwesomeIcons.times,
-                    //     size: sizeHor * 2,
-                    //     color: Colors.white,
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
