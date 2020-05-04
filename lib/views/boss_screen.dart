@@ -19,8 +19,6 @@ class _BossScreenState extends State<BossScreen> {
   SharedPreferences sharedPreferences;
   bool visible = false;
 
-  getMsg() async {}
-
   @override
   void initState() {
     super.initState();
@@ -70,9 +68,6 @@ class _BossScreenState extends State<BossScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    var sizeHor = SizeConfig.safeBlockHorizontal;
-    var sizeVer = SizeConfig.safeBlockVertical;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -382,6 +377,7 @@ class _BossScreenState extends State<BossScreen> {
     SizeConfig().init(context);
     var sizeHor = SizeConfig.safeBlockHorizontal;
     var sizeVer = SizeConfig.safeBlockVertical;
+    var screenSize = MediaQuery.of(context).size;
 
     return Padding(
       padding: EdgeInsets.only(
@@ -392,14 +388,19 @@ class _BossScreenState extends State<BossScreen> {
         ),
         elevation: 5.0,
         child: Padding(
-          padding: EdgeInsets.only(top: sizeVer * 2, bottom: sizeVer * 2),
+          padding: EdgeInsets.only(
+              top: sizeVer * 2,
+              bottom: sizeVer * 2,
+              right: sizeHor * 3,
+              left: sizeHor * 3),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(left: sizeHor * 3),
                 child: Container(
-                  width: sizeHor * 70,
+                  width: sizeHor * 50,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -407,7 +408,8 @@ class _BossScreenState extends State<BossScreen> {
                         'วันที่ลา : $leaveDate',
                         style: TextStyle(
                           fontFamily: _kanit,
-                          fontSize: 16.0,
+                          fontSize: screenSize.width / 22,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       SizedBox(height: 10),
@@ -415,21 +417,21 @@ class _BossScreenState extends State<BossScreen> {
                         'ประเภทการลา : $leaveTypeName',
                         style: TextStyle(
                           fontFamily: _kanit,
-                          fontSize: 13.0,
+                          fontSize: screenSize.width / 24,
                         ),
                       ),
                       Text(
                         'ชื่อ : $userid',
                         style: TextStyle(
                           fontFamily: _kanit,
-                          fontSize: 13.0,
+                          fontSize: screenSize.width / 24,
                         ),
                       ),
                       Text(
                         'ชั่วโมง : $leaveHour',
                         style: TextStyle(
                           fontFamily: _kanit,
-                          fontSize: 13.0,
+                          fontSize: screenSize.width / 24,
                         ),
                       ),
                       Row(
@@ -438,7 +440,7 @@ class _BossScreenState extends State<BossScreen> {
                             'สถานะการลา : ',
                             style: TextStyle(
                               fontFamily: _kanit,
-                              fontSize: 13.0,
+                              fontSize: screenSize.width / 24,
                             ),
                           ),
                           Text(
@@ -449,7 +451,7 @@ class _BossScreenState extends State<BossScreen> {
                                     : 'รอการอนุมัติ',
                             style: TextStyle(
                               fontFamily: _kanit,
-                              fontSize: 13.0,
+                              fontSize: screenSize.width / 24,
                             ),
                           ),
                         ],
@@ -458,50 +460,75 @@ class _BossScreenState extends State<BossScreen> {
                         'เหตุผล : $remark',
                         style: TextStyle(
                           fontFamily: _kanit,
-                          fontSize: 13.0,
+                          fontSize: screenSize.width / 24,
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(width: sizeHor * 4),
+              SizedBox(width: sizeHor * 2),
               Container(
                 child: Row(
                   children: <Widget>[
-                    Container(
-                      width: sizeHor * 6.5,
-                      height: sizeVer * 6.5,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.blue,
-                      ),
-                      child: RawMaterialButton(
-                        onPressed: actionOk,
+                    InkWell(
+                      onTap: actionOk,
+                      child: Container(
+                        width: screenSize.width / 8,
+                        height: screenSize.height / 16,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.blue,
+                        ),
                         child: Icon(
                           FontAwesomeIcons.check,
                           color: Colors.white,
-                          size: sizeHor * 3.5,
+                          size: screenSize.width / 13,
                         ),
                       ),
                     ),
-                    SizedBox(width: sizeHor * 1.2),
-                    Container(
-                      width: sizeHor * 6.5,
-                      height: sizeVer * 6.5,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.red,
-                      ),
-                      child: RawMaterialButton(
-                        onPressed: actionNo,
+                    SizedBox(width: screenSize.width / 50),
+                    InkWell(
+                      onTap: actionNo,
+                      child: Container(
+                        width: screenSize.width / 8,
+                        height: screenSize.height / 16,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red,
+                        ),
                         child: Icon(
                           FontAwesomeIcons.times,
-                          size: sizeHor * 3.5,
                           color: Colors.white,
+                          size: screenSize.width / 13,
                         ),
                       ),
                     ),
+
+                    // Container(
+                    //   color: Colors.amber,
+                    //   child: RawMaterialButton(
+                    //     fillColor: Colors.blue,
+                    //     shape: CircleBorder(),
+                    //     padding: EdgeInsets.all(sizeVer * 1.3),
+                    //     onPressed: actionOk,
+                    //     child: Icon(
+                    //       FontAwesomeIcons.check,
+                    //       color: Colors.white,
+                    //       size: sizeHor * 6,
+                    //     ),
+                    //   ),
+                    // ),
+
+                    // SizedBox(width: sizeHor * 2),
+                    // RawMaterialButton(
+                    //   onPressed: actionNo,
+                    //   child: Icon(
+                    //     FontAwesomeIcons.times,
+                    //     size: sizeHor * 2,
+                    //     color: Colors.white,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

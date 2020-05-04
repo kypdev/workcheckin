@@ -239,7 +239,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     fillColor: Colors.blue,
                                     child: Icon(
                                       FontAwesomeIcons.trashAlt,
-                                      size: sizeHor * 8,
+                                      size: sizeHor * 7,
                                       color: Colors.white,
                                     ),
                                     onPressed: () async {
