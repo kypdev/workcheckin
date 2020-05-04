@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_id/device_id.dart';
 import 'package:flutter/services.dart';
 import 'package:workcheckin/views/register_screen.dart';
+import 'package:workcheckin/models/size_config.dart';
 
 import 'home_screen.dart';
 
@@ -250,6 +251,9 @@ class _SigninScreenState extends State<SigninScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    var sizeHor = SizeConfig.safeBlockHorizontal;
+    var sizeVer = SizeConfig.safeBlockVertical;
     return SafeArea(
       child: Scaffold(
         body: Stack(
@@ -270,8 +274,8 @@ class _SigninScreenState extends State<SigninScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height / 4.0,
+                    // width: sizeHor * 80,
+                    // height: sizeVer * 50,
                     child: Image.asset(
                       'assets/images/logos.png',
                       alignment: Alignment.center,
@@ -312,8 +316,9 @@ class _SigninScreenState extends State<SigninScreen> {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, right: 20, top: 20),
+                                          padding: EdgeInsets.only(
+                                              left: sizeHor * 6,
+                                              right: sizeHor * 6),
                                           child: TextFormField(
                                             validator: (value) => value.length <
                                                     3
@@ -357,9 +362,11 @@ class _SigninScreenState extends State<SigninScreen> {
                                             ),
                                           ),
                                         ),
+                                        SizedBox(height: sizeVer * 2),
                                         Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, right: 20, top: 20),
+                                          padding: EdgeInsets.only(
+                                              left: sizeHor * 6,
+                                              right: sizeHor * 6),
                                           child: TextFormField(
                                             obscureText: securePWD,
                                             validator: (value) => value.length <
@@ -414,26 +421,26 @@ class _SigninScreenState extends State<SigninScreen> {
                                       ],
                                     ),
                                   ),
-                                  SizedBox(height: 20),
+                                  SizedBox(height: sizeVer * 2),
                                   Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Expanded(
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
+                                          padding: EdgeInsets.only(
+                                              left: sizeHor * 6),
                                           child: RaisedButton(
                                             padding: EdgeInsets.symmetric(
-                                                vertical: MediaQuery.of(context)
-                                                        .size
-                                                        .height /
-                                                    50.0),
+                                                vertical: sizeVer * 1.6),
                                             child: Text(
                                               'เข้าสู่ระบบ',
                                               style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontFamily: _kanit),
+                                                color: Colors.white,
+                                                fontFamily: _kanit,
+                                                fontSize: sizeHor * 2.5,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                             elevation: 10,
                                             shape: RoundedRectangleBorder(
@@ -445,21 +452,22 @@ class _SigninScreenState extends State<SigninScreen> {
                                           ),
                                         ),
                                       ),
+                                      SizedBox(width: sizeHor * 8),
                                       Expanded(
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
+                                          padding: EdgeInsets.only(
+                                              right: sizeHor * 6),
                                           child: RaisedButton(
                                             padding: EdgeInsets.symmetric(
-                                                vertical: MediaQuery.of(context)
-                                                        .size
-                                                        .height /
-                                                    50.0),
+                                                vertical: sizeVer * 1.6),
                                             child: Text(
                                               'สมัครสมาชิก',
                                               style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontFamily: _kanit),
+                                                color: Colors.white,
+                                                fontFamily: _kanit,
+                                                fontSize: sizeHor * 2.5,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                             elevation: 10,
                                             shape: RoundedRectangleBorder(
