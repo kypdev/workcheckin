@@ -114,7 +114,6 @@ class _BossScreenState extends State<BossScreen> {
                               context: context,
                               type: AlertType.warning,
                               title: "คุณแน่ใจว่าจะอนุมัติการลานี้?",
-                              desc: "",
                               buttons: [
                                 DialogButton(
                                   child: Text(
