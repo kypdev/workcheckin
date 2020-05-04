@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workcheckin/models/checkin_history.dart';
+import 'package:workcheckin/models/size_config.dart';
 
 final _kanit = 'Kanit';
 
@@ -78,16 +79,19 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'ประวัติลงเวลา',
-          style: TextStyle(fontFamily: _kanit),
+    SizeConfig().init(context);
+    var sizeHor = SizeConfig.safeBlockHorizontal;
+    var sizeVer = SizeConfig.safeBlockVertical;
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'ประวัติลงเวลา',
+            style: TextStyle(fontFamily: _kanit),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Stack(
+        body: Stack(
           children: <Widget>[
             Container(
               decoration: BoxDecoration(
@@ -107,6 +111,8 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
                 } else {
                   return Container(
                     height: MediaQuery.of(context).size.height,
+                    padding:
+                        EdgeInsets.only(top: sizeVer * 2, bottom: sizeVer * 2),
                     child: ListView.builder(
                       itemCount: snapshot.data.length,
                       itemBuilder: (BuildContext context, int index) {
@@ -145,21 +151,38 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
     lateFlag,
     earlyFlag,
   }) {
-    TextStyle styleLate =
-        TextStyle(fontFamily: _kanit, color: Colors.red, fontSize: 18.0);
-    TextStyle styleNoLate =
-        TextStyle(fontFamily: _kanit, color: Colors.green, fontSize: 18.0);
-    TextStyle styleNoLateTitle =
-        TextStyle(fontFamily: _kanit, color: Colors.green, fontSize: 12.0);
+    SizeConfig().init(context);
+    var sizeHor = SizeConfig.safeBlockHorizontal;
+    var sizeVer = SizeConfig.safeBlockVertical;
+
+    TextStyle styleLate = TextStyle(
+      fontFamily: _kanit,
+      color: Colors.red,
+      fontSize: sizeHor * 4.2,
+    );
+    TextStyle styleNoLate = TextStyle(
+      fontFamily: _kanit,
+      color: Colors.green,
+      fontSize: sizeHor * 4.2,
+    );
+    TextStyle styleNoLateTitle = TextStyle(
+      fontFamily: _kanit,
+      color: Colors.green,
+      fontSize: sizeHor * 2.8,
+    );
 
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20),
+      padding: EdgeInsets.only(
+          left: sizeHor * 5, right: sizeHor * 5, bottom: sizeVer * 0.2),
       child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
         elevation: 5,
         child: Padding(
           padding: const EdgeInsets.only(top: 20, bottom: 20),
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.8,
+            width: sizeHor * 30,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -168,11 +191,11 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(
-                        left: 20,
+                      padding: EdgeInsets.only(
+                        left: sizeHor * 1.2,
                       ),
                       child: Container(
-                        width: MediaQuery.of(context).size.width * 0.8,
+                        width: sizeHor * 85,
                         child: Column(
                           children: <Widget>[
                             Table(
