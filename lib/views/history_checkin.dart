@@ -154,21 +154,22 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
     SizeConfig().init(context);
     var sizeHor = SizeConfig.safeBlockHorizontal;
     var sizeVer = SizeConfig.safeBlockVertical;
+    var scrSize = MediaQuery.of(context).size;
 
     TextStyle styleLate = TextStyle(
       fontFamily: _kanit,
       color: Colors.red,
-      fontSize: sizeHor * 4.2,
+      fontSize: scrSize.width / 23,
     );
     TextStyle styleNoLate = TextStyle(
       fontFamily: _kanit,
       color: Colors.green,
-      fontSize: sizeHor * 4.2,
+      fontSize: scrSize.width / 23,
     );
     TextStyle styleNoLateTitle = TextStyle(
       fontFamily: _kanit,
       color: Colors.green,
-      fontSize: sizeHor * 2.8,
+      fontSize: scrSize.width / 30,
     );
 
     return Padding(
@@ -178,7 +179,7 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
-        elevation: 5,
+        elevation: 5.0,
         child: Padding(
           padding: const EdgeInsets.only(top: 20, bottom: 20),
           child: Container(

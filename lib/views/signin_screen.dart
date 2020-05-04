@@ -169,7 +169,13 @@ class _SigninScreenState extends State<SigninScreen> {
             type: AlertType.error,
             title: message['responseDesc'].toString(),
             desc: '',
-            style: alertStyle,
+            // style: alertStyle,
+            style: AlertStyle(
+              animationDuration: Duration(milliseconds: 450),
+              animationType: AnimationType.fromBottom,
+              isCloseButton: false,
+              isOverlayTapDismiss: false,
+            ),
             buttons: [
               DialogButton(
                 child: Text(
