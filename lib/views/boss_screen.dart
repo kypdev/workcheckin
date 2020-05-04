@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workcheckin/models/request_by_boss.dart';
+import 'package:workcheckin/models/size_config.dart';
 
 final _kanit = 'Kanit';
 
@@ -69,6 +70,9 @@ class _BossScreenState extends State<BossScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    var sizeHor = SizeConfig.safeBlockHorizontal;
+    var sizeVer = SizeConfig.safeBlockVertical;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -375,140 +379,133 @@ class _BossScreenState extends State<BossScreen> {
     Function actionOk,
     Function actionNo,
   }) {
+    SizeConfig().init(context);
+    var sizeHor = SizeConfig.safeBlockHorizontal;
+    var sizeVer = SizeConfig.safeBlockVertical;
+
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+      padding: EdgeInsets.only(
+          left: sizeHor * 2, right: sizeHor * 2, top: sizeVer * 0.9),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
         elevation: 5.0,
         child: Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 20),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 1.82,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'วันที่ลา : $leaveDate',
-                          style: TextStyle(
-                            fontFamily: _kanit,
-                            fontSize: 16.0,
-                          ),
+          padding: EdgeInsets.only(top: sizeVer * 2, bottom: sizeVer * 2),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: sizeHor * 3),
+                child: Container(
+                  width: sizeHor * 70,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'วันที่ลา : $leaveDate',
+                        style: TextStyle(
+                          fontFamily: _kanit,
+                          fontSize: 16.0,
                         ),
-                        SizedBox(height: 10),
-                        Text(
-                          'ประเภทการลา : $leaveTypeName',
-                          style: TextStyle(
-                            fontFamily: _kanit,
-                            fontSize: 13.0,
-                          ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'ประเภทการลา : $leaveTypeName',
+                        style: TextStyle(
+                          fontFamily: _kanit,
+                          fontSize: 13.0,
                         ),
-                        Text(
-                          'ชื่อ : $userid',
-                          style: TextStyle(
-                            fontFamily: _kanit,
-                            fontSize: 13.0,
-                          ),
+                      ),
+                      Text(
+                        'ชื่อ : $userid',
+                        style: TextStyle(
+                          fontFamily: _kanit,
+                          fontSize: 13.0,
                         ),
-                        Text(
-                          'ชั่วโมง : $leaveHour',
-                          style: TextStyle(
-                            fontFamily: _kanit,
-                            fontSize: 13.0,
-                          ),
+                      ),
+                      Text(
+                        'ชั่วโมง : $leaveHour',
+                        style: TextStyle(
+                          fontFamily: _kanit,
+                          fontSize: 13.0,
                         ),
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              'สถานะการลา : ',
-                              style: TextStyle(
-                                fontFamily: _kanit,
-                                fontSize: 13.0,
-                              ),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            'สถานะการลา : ',
+                            style: TextStyle(
+                              fontFamily: _kanit,
+                              fontSize: 13.0,
                             ),
-                            Text(
-                              approveFlag == '1'
-                                  ? 'อนุมัติการลา'
-                                  : approveFlag == '2'
-                                      ? 'ไม่อนุมัติการลา'
-                                      : 'รอการอนุมัติ',
-                              style: TextStyle(
-                                fontFamily: _kanit,
-                                fontSize: 13.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          'เหตุผล : $remark',
-                          style: TextStyle(
-                            fontFamily: _kanit,
-                            fontSize: 13.0,
                           ),
+                          Text(
+                            approveFlag == '1'
+                                ? 'อนุมัติการลา'
+                                : approveFlag == '2'
+                                    ? 'ไม่อนุมัติการลา'
+                                    : 'รอการอนุมัติ',
+                            style: TextStyle(
+                              fontFamily: _kanit,
+                              fontSize: 13.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        'เหตุผล : $remark',
+                        style: TextStyle(
+                          fontFamily: _kanit,
+                          fontSize: 13.0,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 20.0,
-                ),
-                Row(
+              ),
+              SizedBox(width: sizeHor * 4),
+              Container(
+                child: Row(
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Container(
-                        width: 35.0,
-                        height: 35.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.blue,
-                        ),
-                        child: RawMaterialButton(
-                          onPressed: actionOk,
-                          child: Icon(
-                            FontAwesomeIcons.check,
-                            color: Colors.white,
-                            size: 25.0,
-                          ),
+                    Container(
+                      width: sizeHor * 6.5,
+                      height: sizeVer * 6.5,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.blue,
+                      ),
+                      child: RawMaterialButton(
+                        onPressed: actionOk,
+                        child: Icon(
+                          FontAwesomeIcons.check,
+                          color: Colors.white,
+                          size: sizeHor * 3.5,
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 60.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 4, right: 14),
-                      child: Container(
-                        width: 35.0,
-                        height: 35.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.red,
-                        ),
-                        child: RawMaterialButton(
-                          onPressed: actionNo,
-                          child: Icon(
-                            FontAwesomeIcons.times,
-                            size: 25.0,
-                            color: Colors.white,
-                          ),
+                    SizedBox(width: sizeHor * 1.2),
+                    Container(
+                      width: sizeHor * 6.5,
+                      height: sizeVer * 6.5,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.red,
+                      ),
+                      child: RawMaterialButton(
+                        onPressed: actionNo,
+                        child: Icon(
+                          FontAwesomeIcons.times,
+                          size: sizeHor * 3.5,
+                          color: Colors.white,
                         ),
                       ),
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

@@ -339,101 +339,103 @@ class _CheckinScreenState extends State<CheckinScreen> {
                 ),
               ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                place == ''
-                    ? Center(
-                        child: Visibility(
-                          visible: true,
-                          child: CircularProgressIndicator(),
-                        ),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 20),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
+            SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  place == ''
+                      ? Center(
+                          child: Visibility(
+                            visible: true,
+                            child: CircularProgressIndicator(),
                           ),
-                          child: DropdownButton<String>(
-                            focusColor: Colors.white,
-                            isExpanded: true,
-                            hint: new Text(
-                              place,
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                            value: _item == null ? null : locationItem[_item],
-                            items: locationItem.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Center(
-                                  child: Text(
-                                    value,
-                                    style: TextStyle(
-                                      fontFamily: _kanit,
-                                      fontSize: 20,
+                            child: DropdownButton<String>(
+                              focusColor: Colors.white,
+                              isExpanded: true,
+                              hint: new Text(
+                                place,
+                              ),
+                              value: _item == null ? null : locationItem[_item],
+                              items: locationItem.map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Center(
+                                    child: Text(
+                                      value,
+                                      style: TextStyle(
+                                        fontFamily: _kanit,
+                                        fontSize: 20,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                // get index
-                                _item = locationItem.indexOf(value);
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  // get index
+                                  _item = locationItem.indexOf(value);
 
-                                place = resLocationLists['locationList'][_item]
-                                        ['name']
-                                    .toString();
-                                latitude = resLocationLists['locationList']
-                                        [_item]['latitude']
-                                    .toString();
-                                longtitude = resLocationLists['locationList']
-                                        [_item]['longitude']
-                                    .toString();
-                                loctionID = resLocationLists['locationList']
-                                        [_item]['modelid']
-                                    .toString();
-                              });
-                            },
+                                  place = resLocationLists['locationList']
+                                          [_item]['name']
+                                      .toString();
+                                  latitude = resLocationLists['locationList']
+                                          [_item]['latitude']
+                                      .toString();
+                                  longtitude = resLocationLists['locationList']
+                                          [_item]['longitude']
+                                      .toString();
+                                  loctionID = resLocationLists['locationList']
+                                          [_item]['modelid']
+                                      .toString();
+                                });
+                              },
+                            ),
                           ),
                         ),
+                  SizedBox(height: 50),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      Image.asset(
+                        'assets/images/card-check.png',
+                        width: sizeHor * 90,
+                        height: sizeVer * 60,
+                        filterQuality: FilterQuality.high,
+                        excludeFromSemantics: true,
+                        fit: BoxFit.fill,
                       ),
-                SizedBox(height: 50),
-                Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    Image.asset(
-                      'assets/images/card-check.png',
-                      width: sizeHor * 90,
-                      height: sizeVer * 60,
-                      filterQuality: FilterQuality.high,
-                      excludeFromSemantics: true,
-                      fit: BoxFit.fill,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        InkWell(
-                          onTap: _checkin,
-                          child: Image.asset(
-                            'assets/images/checkin.png',
-                            width: sizeHor * 30,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          InkWell(
+                            onTap: _checkin,
+                            child: Image.asset(
+                              'assets/images/checkin.png',
+                              width: sizeHor * 30,
+                            ),
                           ),
-                        ),
-                        InkWell(
-                          onTap: _checkout,
-                          child: Image.asset(
-                            'assets/images/checkout.png',
-                            width: sizeHor * 30,
+                          InkWell(
+                            onTap: _checkout,
+                            child: Image.asset(
+                              'assets/images/checkout.png',
+                              width: sizeHor * 30,
+                            ),
                           ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ],
+                        ],
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
             Container(
               child: Visibility(
