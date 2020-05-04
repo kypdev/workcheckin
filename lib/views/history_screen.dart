@@ -7,6 +7,7 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workcheckin/models/leave_model.dart';
 import 'package:workcheckin/models/size_config.dart';
+import 'package:workcheckin/models/size_config.dart';
 
 final _kanit = 'Kanit';
 final AlertStyle _alertStyle = AlertStyle(
@@ -89,6 +90,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    var sizeHor = SizeConfig.safeBlockHorizontal;
+    var sizeVer = SizeConfig.safeBlockVertical;
 
     return SafeArea(
       child: Scaffold(
@@ -121,329 +124,294 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   return Container();
                 } else {
                   return Container(
+                    padding: EdgeInsets.only(top: sizeVer * 1.2),
                     height: MediaQuery.of(context).size.height,
                     child: ListView.builder(
                       itemCount: snapshot.data.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: Column(
-                            children: <Widget>[
-                              SizedBox(
-                                  height: SizeConfig.safeBlockVertical * 2),
-                              Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                elevation: 5.0,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 20, bottom: 20, left: 20, right: 20),
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                          padding: EdgeInsets.only(
+                              left: sizeHor * 2,
+                              right: sizeHor * 2,
+                              bottom: sizeVer * 0.7),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            elevation: 5.0,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: sizeHor * 4,
+                                  top: sizeVer * 1.2,
+                                  bottom: sizeVer * 1.2),
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    width: sizeHor * 75,
+                                    child: Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                          CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              2.0,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(
-                                                'วันที่ลา : ' +
-                                                    snapshot
-                                                        .data[index].leaveDate
-                                                        .toString(),
-                                                style: TextStyle(
-                                                  fontFamily: _kanit,
-                                                  fontSize: 16.0,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      20.0),
-                                              Text(
-                                                'ประเภทการลา : ' +
-                                                    snapshot.data[index]
-                                                        .leaveTypeName
-                                                        .toString(),
-                                                style: TextStyle(
-                                                  fontFamily: _kanit,
-                                                  fontSize: 13.0,
-                                                ),
-                                              ),
-                                              Text(
-                                                'ชั่วโมง : ' +
-                                                    snapshot
-                                                        .data[index].leaveHour
-                                                        .toString(),
-                                                style: TextStyle(
-                                                  fontFamily: _kanit,
-                                                  fontSize: 13.0,
-                                                ),
-                                              ),
-                                              Row(
-                                                children: <Widget>[
-                                                  Text(
-                                                    'สถานะการลา : ',
-                                                    style: TextStyle(
-                                                      fontFamily: _kanit,
-                                                      fontSize: 13.0,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    snapshot.data[index]
-                                                                .approveFlag
-                                                                .toString() ==
-                                                            '0'
-                                                        ? 'รอการอนุมัติ'
-                                                        : snapshot.data[index]
-                                                                    .approveFlag
-                                                                    .toString() ==
-                                                                '1'
-                                                            ? 'อนุมัติการลา'
-                                                            : 'ไม่อนุมัติการลา',
-                                                    style: TextStyle(
-                                                      fontFamily: _kanit,
-                                                      fontSize: 13.0,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Text(
-                                                'เหตุผล : ' +
-                                                    snapshot.data[index].remark
-                                                        .toString(),
-                                                style: TextStyle(
-                                                  fontFamily: _kanit,
-                                                  fontSize: 13.0,
-                                                ),
-                                              ),
-                                            ],
+                                        Text(
+                                          'วันที่ลา : ' +
+                                              snapshot.data[index].leaveDate
+                                                  .toString(),
+                                          style: TextStyle(
+                                            fontFamily: _kanit,
+                                            fontSize: 16.0,
                                           ),
                                         ),
                                         SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width /
-                                                27.0),
-                                        Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: RawMaterialButton(
-                                            padding: EdgeInsets.all(10),
-                                            shape: CircleBorder(
-                                              side: BorderSide(
-                                                  color: Colors.transparent),
+                                                20.0),
+                                        Text(
+                                          'ประเภทการลา : ' +
+                                              snapshot.data[index].leaveTypeName
+                                                  .toString(),
+                                          style: TextStyle(
+                                            fontFamily: _kanit,
+                                            fontSize: 13.0,
+                                          ),
+                                        ),
+                                        Text(
+                                          'ชั่วโมง : ' +
+                                              snapshot.data[index].leaveHour
+                                                  .toString(),
+                                          style: TextStyle(
+                                            fontFamily: _kanit,
+                                            fontSize: 13.0,
+                                          ),
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            Text(
+                                              'สถานะการลา : ',
+                                              style: TextStyle(
+                                                fontFamily: _kanit,
+                                                fontSize: 13.0,
+                                              ),
                                             ),
-                                            fillColor: Colors.blue,
-                                            child: Icon(
-                                              FontAwesomeIcons.trashAlt,
-                                              color: Colors.white,
+                                            Text(
+                                              snapshot.data[index].approveFlag
+                                                          .toString() ==
+                                                      '0'
+                                                  ? 'รอการอนุมัติ'
+                                                  : snapshot.data[index]
+                                                              .approveFlag
+                                                              .toString() ==
+                                                          '1'
+                                                      ? 'อนุมัติการลา'
+                                                      : 'ไม่อนุมัติการลา',
+                                              style: TextStyle(
+                                                fontFamily: _kanit,
+                                                fontSize: 13.0,
+                                              ),
                                             ),
-                                            onPressed: () async {
-                                              var apprFlag = snapshot
-                                                  .data[index].approveFlag
-                                                  .toString();
-
-                                              int apprvFlagInt =
-                                                  int.parse(apprFlag);
-
-                                              if (apprvFlagInt == 1) {
-                                                // Cannot delete leave letter
-                                                Alert(
-                                                    context: context,
-                                                    type: AlertType.warning,
-                                                    title:
-                                                        'ไม่สามารถลบใบลนี้ได้!!!',
-                                                    desc: "",
-                                                    style: _alertStyle,
-                                                    buttons: [
-                                                      DialogButton(
-                                                        child: Text(
-                                                          "ตกลง",
-                                                          style: TextStyle(
-                                                              fontFamily:
-                                                                  _kanit,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 20),
-                                                        ),
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              this.context);
-                                                        },
-                                                        color: Colors.green,
-                                                      ),
-                                                    ]).show();
-                                              } else {
-                                                // Can delte leave letter
-                                                Alert(
-                                                  context: context,
-                                                  type: AlertType.warning,
-                                                  title:
-                                                      "คุณต้องการลบใบลาหรือไม่ ?",
-                                                  style: _alertStyle,
-                                                  buttons: [
-                                                    DialogButton(
-                                                      child: Text(
-                                                        "ใช่",
-                                                        style: TextStyle(
-                                                            fontFamily: _kanit,
-                                                            color: Colors.white,
-                                                            fontSize: 20),
-                                                      ),
-                                                      onPressed: () async {
-                                                        setState(() =>
-                                                            visible = true);
-                                                        var leaveid = snapshot
-                                                            .data[index].modelid
-                                                            .toString();
-                                                        var url =
-                                                            'http://159.138.232.139/service/cwi/v1/user/delete_leave';
-
-                                                        var jsonData = {
-                                                          "leaveId": leaveid
-                                                        };
-
-                                                        var response =
-                                                            await http.post(
-                                                          url,
-                                                          body: jsonEncode(
-                                                              jsonData),
-                                                          headers: {
-                                                            "Authorization":
-                                                                "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-                                                            "Content-Type":
-                                                                "application/json"
-                                                          },
-                                                        );
-
-                                                        Map<String, dynamic>
-                                                            message =
-                                                            json.decode(
-                                                                response.body);
-
-                                                        if (message[
-                                                                'responseCode'] ==
-                                                            '000') {
-                                                          // Success
-                                                          setState(() =>
-                                                              visible = false);
-                                                          Navigator.pop(
-                                                              context);
-
-                                                          Alert(
-                                                              context: context,
-                                                              type: AlertType
-                                                                  .success,
-                                                              title: message[
-                                                                      'responseDesc']
-                                                                  .toString(),
-                                                              desc: "",
-                                                              buttons: [
-                                                                DialogButton(
-                                                                  child: Text(
-                                                                    "ตกลง",
-                                                                    style: TextStyle(
-                                                                        fontFamily:
-                                                                            _kanit,
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontSize:
-                                                                            20),
-                                                                  ),
-                                                                  onPressed:
-                                                                      () {
-                                                                    Navigator
-                                                                        .pop(this
-                                                                            .context);
-                                                                  },
-                                                                  color: Colors
-                                                                      .green,
-                                                                ),
-                                                              ]).show();
-                                                        } else {
-                                                          // Failed to process
-                                                          Navigator.maybePop(
-                                                              context);
-                                                          setState(() {
-                                                            visible = false;
-                                                          });
-                                                          Alert(
-                                                            context: context,
-                                                            type: AlertType
-                                                                .warning,
-                                                            title: message[
-                                                                    'responseDesc']
-                                                                .toString(),
-                                                            desc: "",
-                                                            buttons: [
-                                                              DialogButton(
-                                                                child: Text(
-                                                                  "ตกลง",
-                                                                  style: TextStyle(
-                                                                      fontFamily:
-                                                                          _kanit,
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          20),
-                                                                ),
-                                                                onPressed: () =>
-                                                                    Navigator.pop(
-                                                                        context),
-                                                                color:
-                                                                    Colors.red,
-                                                              )
-                                                            ],
-                                                          ).show();
-                                                        }
-                                                      },
-                                                      color: Color.fromRGBO(
-                                                          0, 179, 134, 1.0),
-                                                    ),
-                                                    DialogButton(
-                                                      child: Text(
-                                                        "ไม่ใช่",
-                                                        style: TextStyle(
-                                                            fontFamily: _kanit,
-                                                            color: Colors.white,
-                                                            fontSize: 20),
-                                                      ),
-                                                      onPressed: () {
-                                                        setState(() =>
-                                                            visible = false);
-                                                        Navigator.pop(context);
-                                                      },
-                                                      gradient: LinearGradient(
-                                                          colors: [
-                                                            Color.fromRGBO(116,
-                                                                116, 191, 1.0),
-                                                            Color.fromRGBO(52,
-                                                                138, 199, 1.0)
-                                                          ]),
-                                                    )
-                                                  ],
-                                                ).show();
-                                              }
-                                            },
+                                          ],
+                                        ),
+                                        Text(
+                                          'เหตุผล : ' +
+                                              snapshot.data[index].remark
+                                                  .toString(),
+                                          style: TextStyle(
+                                            fontFamily: _kanit,
+                                            fontSize: 13.0,
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ),
+                                  SizedBox(
+                                    width: sizeHor * 4,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: RawMaterialButton(
+                                      padding: EdgeInsets.all(10),
+                                      shape: CircleBorder(
+                                        side: BorderSide(
+                                            color: Colors.transparent),
+                                      ),
+                                      fillColor: Colors.blue,
+                                      child: Icon(
+                                        FontAwesomeIcons.trashAlt,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () async {
+                                        var apprFlag = snapshot
+                                            .data[index].approveFlag
+                                            .toString();
+
+                                        int apprvFlagInt = int.parse(apprFlag);
+
+                                        if (apprvFlagInt == 1) {
+                                          // Cannot delete leave letter
+                                          Alert(
+                                              context: context,
+                                              type: AlertType.warning,
+                                              title: 'ไม่สามารถลบใบลนี้ได้!!!',
+                                              desc: "",
+                                              style: _alertStyle,
+                                              buttons: [
+                                                DialogButton(
+                                                  child: Text(
+                                                    "ตกลง",
+                                                    style: TextStyle(
+                                                        fontFamily: _kanit,
+                                                        color: Colors.white,
+                                                        fontSize: 20),
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.pop(this.context);
+                                                  },
+                                                  color: Colors.green,
+                                                ),
+                                              ]).show();
+                                        } else {
+                                          // Can delte leave letter
+                                          Alert(
+                                            context: context,
+                                            type: AlertType.warning,
+                                            title: "คุณต้องการลบใบลาหรือไม่ ?",
+                                            style: _alertStyle,
+                                            buttons: [
+                                              DialogButton(
+                                                child: Text(
+                                                  "ใช่",
+                                                  style: TextStyle(
+                                                      fontFamily: _kanit,
+                                                      color: Colors.white,
+                                                      fontSize: 20),
+                                                ),
+                                                onPressed: () async {
+                                                  setState(
+                                                      () => visible = true);
+                                                  var leaveid = snapshot
+                                                      .data[index].modelid
+                                                      .toString();
+                                                  var url =
+                                                      'http://159.138.232.139/service/cwi/v1/user/delete_leave';
+
+                                                  var jsonData = {
+                                                    "leaveId": leaveid
+                                                  };
+
+                                                  var response =
+                                                      await http.post(
+                                                    url,
+                                                    body: jsonEncode(jsonData),
+                                                    headers: {
+                                                      "Authorization":
+                                                          "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+                                                      "Content-Type":
+                                                          "application/json"
+                                                    },
+                                                  );
+
+                                                  Map<String, dynamic> message =
+                                                      json.decode(
+                                                          response.body);
+
+                                                  if (message['responseCode'] ==
+                                                      '000') {
+                                                    // Success
+                                                    setState(
+                                                        () => visible = false);
+                                                    Navigator.pop(context);
+
+                                                    Alert(
+                                                        context: context,
+                                                        type: AlertType.success,
+                                                        title: message[
+                                                                'responseDesc']
+                                                            .toString(),
+                                                        desc: "",
+                                                        buttons: [
+                                                          DialogButton(
+                                                            child: Text(
+                                                              "ตกลง",
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      _kanit,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 20),
+                                                            ),
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  this.context);
+                                                            },
+                                                            color: Colors.green,
+                                                          ),
+                                                        ]).show();
+                                                  } else {
+                                                    // Failed to process
+                                                    Navigator.maybePop(context);
+                                                    setState(() {
+                                                      visible = false;
+                                                    });
+                                                    Alert(
+                                                      context: context,
+                                                      type: AlertType.warning,
+                                                      title: message[
+                                                              'responseDesc']
+                                                          .toString(),
+                                                      desc: "",
+                                                      buttons: [
+                                                        DialogButton(
+                                                          child: Text(
+                                                            "ตกลง",
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    _kanit,
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 20),
+                                                          ),
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context),
+                                                          color: Colors.red,
+                                                        )
+                                                      ],
+                                                    ).show();
+                                                  }
+                                                },
+                                                color: Color.fromRGBO(
+                                                    0, 179, 134, 1.0),
+                                              ),
+                                              DialogButton(
+                                                child: Text(
+                                                  "ไม่ใช่",
+                                                  style: TextStyle(
+                                                      fontFamily: _kanit,
+                                                      color: Colors.white,
+                                                      fontSize: 20),
+                                                ),
+                                                onPressed: () {
+                                                  setState(
+                                                      () => visible = false);
+                                                  Navigator.pop(context);
+                                                },
+                                                gradient: LinearGradient(
+                                                    colors: [
+                                                      Color.fromRGBO(
+                                                          116, 116, 191, 1.0),
+                                                      Color.fromRGBO(
+                                                          52, 138, 199, 1.0)
+                                                    ]),
+                                              )
+                                            ],
+                                          ).show();
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         );
                       },
