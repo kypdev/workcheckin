@@ -134,14 +134,15 @@ class _NotiBossScreenState extends State<NotiBossScreen> {
           height: sizeVer * 0.9,
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
+          padding: EdgeInsets.symmetric(horizontal: sizeHor * 5),
           child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
             ),
             elevation: 5,
             child: Padding(
-              padding: const EdgeInsets.only(top: 20, bottom: 20),
+              padding: EdgeInsets.only(
+                  left: sizeHor * 2, top: sizeVer * 4, bottom: sizeVer * 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
@@ -149,12 +150,12 @@ class _NotiBossScreenState extends State<NotiBossScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(left: sizeHor * 2),
+                            child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Icon(
@@ -178,23 +179,29 @@ class _NotiBossScreenState extends State<NotiBossScreen> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 10),
-                            Text(
+                          ),
+                          SizedBox(height: sizeVer * 2),
+                          Padding(
+                            padding: EdgeInsets.only(left: sizeHor * 4),
+                            child: Text(
                               'ชื่อ : $userid',
                               style: TextStyle(
                                 fontFamily: _kanit,
                                 fontSize: sizeHor * 3.1,
                               ),
                             ),
-                            Text(
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: sizeHor * 4),
+                            child: Text(
                               'วันที่ : $leaveDate',
                               style: TextStyle(
                                 fontFamily: _kanit,
                                 fontSize: sizeHor * 3.1,
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
