@@ -56,9 +56,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
     getPT();
     visible = false;
     selectPlace();
-    _getLocation().then((position) {
-      userLocation = position;
-    });
+    // _getLocation().then((position) {
+    //   userLocation = position;
+    // });
   }
 
   getMsg() async {
@@ -158,7 +158,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
     var eqlFar = double.parse(farSetFormat);
 
     debugPrint(
-        'devla: ${deviceLa.runtimeType}, devlong: ${deviceLong.runtimeType}, far: ${resFar.runtimeType} dist: ${distanceInMeters}');
+        'devla: ${deviceLa}, devlong: ${deviceLong}, far: ${resFar.runtimeType} dist: ${distanceInMeters}');
     setState(() => visible = false);
 
     if (eqlFar <= resFar) {
@@ -245,8 +245,17 @@ class _CheckinScreenState extends State<CheckinScreen> {
   }
 
   _checkout() async {
+    var deviceLa, deviceLong;
+    setState(() => visible = true);
+    await _getLocation().then((value) {
+      setState(() {
+        userLocation = value;
+        deviceLa = userLocation.latitude;
+        deviceLong = userLocation.longitude;
+      });
+    });
     double distanceInMeters = await Geolocator().distanceBetween(
-        13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
+        deviceLa, deviceLong, double.parse(latitude), double.parse(longtitude));
     far = distanceInMeters.toString();
     var farSetFormat = oCcy.format(double.parse(far));
     var resFar = resLocationLists['locationList'][0]['far'];
@@ -386,12 +395,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    child: Text('test'),
-                    onPressed: () {
-                      _getLocationPoint();
-                    },
-                  ),
                   place == ''
                       ? Center(
                           child: Visibility(
