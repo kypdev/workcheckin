@@ -85,7 +85,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
         deviceLong = userLocation.longitude;
       });
     });
+    print('do add item location');
 
+    print('chk: ${deviceLa}');
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     var branchid = msg['cwiUser']['branchId'].toString();
@@ -101,6 +103,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
       },
     );
     Map<String, dynamic> messages = jsonDecode(response.body);
+    print('msg: $messages');
     setState(() => _item = 0);
     setState(() => resLocationLists = messages);
     setState(() => locationListIndexDD = 0);
@@ -184,6 +187,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
       dvLong = deviceLong.toString();
       distance = distFm.format(distanceInMeters).toString();
     });
+    print('$distanceInMeters');
 
     setState(() => visible = false);
 
@@ -285,7 +289,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
     double distanceInMeters = await Geolocator().distanceBetween(
         deviceLa, deviceLong, double.parse(latitude), double.parse(longtitude));
     var resFar = resLocationLists['locationList'][0]['far'];
-
+    print('$distanceInMeters');
     if (distanceInMeters <= resFar) {
       var userID = msg['cwiUser']['modelid'];
       var data = {
