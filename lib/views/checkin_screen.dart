@@ -49,6 +49,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
   var dvLa = '';
   var dvLong = '';
   var distance = '';
+  var resFarSer = '';
 
   @override
   void initState() {
@@ -118,6 +119,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
       dvLa = deviceLa.toString();
       dvLong = deviceLong.toString();
       distance = oCcy.format(distanceInMeters).toString();
+      resFarSer = messages['locationList'][0]['far'].toString();
     });
 
     if (resLocationLists['locationList'].toString() == '[]') {
@@ -251,7 +253,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
       Alert(
         context: context,
         type: AlertType.warning,
-        title: 'คุณห่างเกินรัศมี $resFar เมตร',
+        title: 'คุณห่างเกินรัศมี $resFarSer เมตร',
         desc: '',
         style: _alertStyle,
         buttons: [
@@ -351,7 +353,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
       Alert(
         context: context,
         type: AlertType.warning,
-        title: 'คุณห่างเกินรัศมี 100 เมตร',
+        title: 'คุณห่างเกินรัศมี $resFarSer เมตร',
         style: _alertStyle,
         desc: '',
         buttons: [
@@ -463,6 +465,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                       .toString();
                                   loctionID = resLocationLists['locationList']
                                           [_item]['modelid']
+                                      .toString();
+                                  resFarSer = resLocationLists['locationList']
+                                          [_item]['far']
                                       .toString();
                                 });
                                 double distanceInMeters = await Geolocator()

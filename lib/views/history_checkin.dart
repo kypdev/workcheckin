@@ -80,7 +80,6 @@ class _HistoryCheckinState extends State<HistoryCheckin> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    var sizeHor = SizeConfig.safeBlockHorizontal;
     var sizeVer = SizeConfig.safeBlockVertical;
     return SafeArea(
       child: Scaffold(
