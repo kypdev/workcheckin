@@ -13,6 +13,7 @@ import 'package:workcheckin/models/size_config.dart';
 
 final _kanit = 'Kanit';
 final oCcy = new NumberFormat("###0.00", "en_US");
+final distFm = new NumberFormat("#,###.00");
 final AlertStyle _alertStyle = AlertStyle(
   titleStyle: TextStyle(
     fontFamily: _kanit,
@@ -175,105 +176,97 @@ class _CheckinScreenState extends State<CheckinScreen> {
     });
     double distanceInMeters = await Geolocator().distanceBetween(
         deviceLa, deviceLong, double.parse(latitude), double.parse(longtitude));
-    far = distanceInMeters.toString();
-    var farSetFormat = oCcy.format(double.parse(far));
     var resFar = resLocationLists['locationList'][0]['far'];
-    var eqlFar = double.parse(farSetFormat);
     setState(() {
       dvLa = deviceLa.toString();
       dvLong = deviceLong.toString();
-      distance = distanceInMeters.toString();
+      distance = distFm.format(distanceInMeters).toString();
     });
-
-    debugPrint(
-        'devla: ${deviceLa}, devlong: ${deviceLong}, far: ${resFar} dist: ${distanceInMeters}');
-
-    var selectLocation = resLocationLists['locationList'];
-    print('lo: ${latitude}, ${longtitude}');
 
     setState(() => visible = false);
 
-    // if (eqlFar <= resFar) {
-    //   debugPrint('checkin ok');
-    //   var userID = msg['cwiUser']['modelid'];
-    //   var data = {
-    //     'userId': userID,
-    //     'deviceId': _deviceid,
-    //     'osMobile': platform,
-    //     'locationId': loctionID
-    //   };
-    //   var url = 'http://159.138.232.139/service/cwi/v2/user/checkin';
-    //   var response = await http.post(
-    //     url,
-    //     body: json.encode(data),
-    //     headers: {
-    //       "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
-    //       "Content-Type": "application/json"
-    //     },
-    //   );
-    //   Map<String, dynamic> resMsgCheckin = jsonDecode(response.body);
-    //   var checkinResOk = resMsgCheckin['responseCode'].toString();
-    //   if (checkinResOk == '000') {
-    //     // Alert Save Success
-    //     Alert(
-    //       context: context,
-    //       type: AlertType.success,
-    //       title: 'บันทึกสำเร็จ',
-    //       style: _alertStyle,
-    //       desc: '',
-    //       buttons: [
-    //         DialogButton(
-    //           child: Text(
-    //             "ตกลง",
-    //             style: TextStyle(
-    //                 fontFamily: _kanit, color: Colors.white, fontSize: 20),
-    //           ),
-    //           onPressed: () => Navigator.pop(context),
-    //           width: 120,
-    //         )
-    //       ],
-    //     ).show();
-    //   } else {
-    //     // Alert Cannot Save
-    //     Alert(
-    //       context: context,
-    //       type: AlertType.error,
-    //       title: resMsgCheckin['responseDesc'].toString(),
-    //       style: _alertStyle,
-    //       desc: '',
-    //       buttons: [
-    //         DialogButton(
-    //           child: Text(
-    //             "ตกลง",
-    //             style: TextStyle(
-    //                 fontFamily: _kanit, color: Colors.white, fontSize: 20),
-    //           ),
-    //           onPressed: () => Navigator.pop(context),
-    //           width: 120,
-    //         )
-    //       ],
-    //     ).show();
-    //   }
-    // } else {
-    //   Alert(
-    //     context: context,
-    //     type: AlertType.warning,
-    //     title: 'คุณห่างเกินรัศมี 100 เมตร',
-    //     desc: '',
-    //     style: _alertStyle,
-    //     buttons: [
-    //       DialogButton(
-    //         child: Text(
-    //           "ตกลง",
-    //           style: TextStyle(
-    //               fontFamily: _kanit, color: Colors.white, fontSize: 20),
-    //         ),
-    //         onPressed: () => Navigator.pop(context),
-    //         width: 120,
-    //       )
-    //     ],
-    //   ).show();
-    // }
+    if (distanceInMeters <= resFar) {
+      debugPrint('Cal far less far fom service');
+      var userID = msg['cwiUser']['modelid'];
+      var data = {
+        'userId': userID,
+        'deviceId': _deviceid,
+        'osMobile': platform,
+        'locationId': loctionID
+      };
+      var url = 'http://159.138.232.139/service/cwi/v2/user/checkin';
+      var response = await http.post(
+        url,
+        body: json.encode(data),
+        headers: {
+          "Authorization": "Basic bWluZGFvbm91YjpidTBuMEByQGRyZWU=",
+          "Content-Type": "application/json"
+        },
+      );
+      Map<String, dynamic> resMsgCheckin = jsonDecode(response.body);
+      var checkinResOk = resMsgCheckin['responseCode'].toString();
+
+      if (checkinResOk == '000') {
+        // Alert Save Success
+        Alert(
+          context: context,
+          type: AlertType.success,
+          title: 'บันทึกสำเร็จ',
+          style: _alertStyle,
+          desc: '',
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            )
+          ],
+        ).show();
+      } else {
+        // Alert Cannot Save
+        Alert(
+          context: context,
+          type: AlertType.error,
+          title: resMsgCheckin['responseDesc'].toString(),
+          style: _alertStyle,
+          desc: '',
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(
+                    fontFamily: _kanit, color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            )
+          ],
+        ).show();
+      }
+    } else {
+      Alert(
+        context: context,
+        type: AlertType.warning,
+        title: 'คุณห่างเกินรัศมี $resFar เมตร',
+        desc: '',
+        style: _alertStyle,
+        buttons: [
+          DialogButton(
+            child: Text(
+              "ตกลง",
+              style: TextStyle(
+                  fontFamily: _kanit, color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            width: 120,
+          )
+        ],
+      ).show();
+    }
   }
 
   _checkout() async {
@@ -477,7 +470,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                         double.parse(latitude),
                                         double.parse(longtitude));
                                 setState(() {
-                                  distance = distanceInMeters.toString();
+                                  distance = distFm
+                                      .format(distanceInMeters)
+                                      .toString();
                                 });
                               },
                             ),
@@ -513,7 +508,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                       //     ? Container()
                       //     :
                       Text(
-                        'ห่างจากพิกัด: $distance',
+                        'ห่างจากพิกัด: $distance เมตร',
                         style: TextStyle(
                           fontFamily: _kanit,
                           fontSize: MediaQuery.of(context).size.width / 20,
