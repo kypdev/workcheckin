@@ -434,6 +434,7 @@ class _BossScreenState extends State<BossScreen> {
                         ),
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
                             'สถานะการลา : ',
@@ -442,15 +443,22 @@ class _BossScreenState extends State<BossScreen> {
                               fontSize: screenSize.width / 24,
                             ),
                           ),
-                          Text(
-                            approveFlag == '1'
-                                ? 'อนุมัติการลา'
-                                : approveFlag == '2'
-                                    ? 'ไม่อนุมัติการลา'
-                                    : 'รอการอนุมัติ',
-                            style: TextStyle(
-                              fontFamily: _kanit,
-                              fontSize: screenSize.width / 24,
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.24,
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  approveFlag == '1'
+                                      ? 'อนุมัติการลา'
+                                      : approveFlag == '2'
+                                          ? 'ไม่อนุมัติการลา'
+                                          : 'รอการอนุมัติ',
+                                  style: TextStyle(
+                                    fontFamily: _kanit,
+                                    fontSize: screenSize.width / 24,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
