@@ -270,6 +270,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
   }
 
   _checkout() async {
+    setState(() => visible = true);
     var deviceLa, deviceLong;
     setState(() => visible = true);
     await _getLocation().then((value) {
@@ -281,11 +282,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
     });
     double distanceInMeters = await Geolocator().distanceBetween(
         deviceLa, deviceLong, double.parse(latitude), double.parse(longtitude));
-    far = distanceInMeters.toString();
-    var farSetFormat = oCcy.format(double.parse(far));
     var resFar = resLocationLists['locationList'][0]['far'];
 
-    if (double.parse('$farSetFormat') <= resFar) {
+    if (distanceInMeters <= resFar) {
       var userID = msg['cwiUser']['modelid'];
       var data = {
         'userId': userID,
@@ -306,6 +305,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
       var checkinResOk = resMsgCheckin['responseCode'].toString();
 
       if (checkinResOk == '000') {
+        setState(() => visible = false);
         Alert(
           context: context,
           type: AlertType.success,
@@ -325,6 +325,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
           ],
         ).show();
       } else {
+        setState(() => visible = false);
         Alert(
           context: context,
           type: AlertType.error,
@@ -345,6 +346,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
         ).show();
       }
     } else {
+      setState(() => visible = false);
       // Alert Distance More Than Far from service
       Alert(
         context: context,
