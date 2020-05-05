@@ -116,7 +116,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
     setState(() {
       dvLa = deviceLa.toString();
       dvLong = deviceLong.toString();
-      distance = distanceInMeters.toString();
+      distance = oCcy.format(distanceInMeters).toString();
     });
 
     if (resLocationLists['locationList'].toString() == '[]') {
@@ -479,12 +479,13 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             ),
                           ),
                         ),
-                  SizedBox(height: 50),
+                  SizedBox(height: 30),
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'พิกัดปัจจุบัน: $place',
+                        'พิกัดปัจจุบัน',
                         style: TextStyle(
                           fontFamily: _kanit,
                           fontSize: MediaQuery.of(context).size.width / 20,
@@ -504,8 +505,11 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           fontSize: MediaQuery.of(context).size.width / 20,
                         ),
                       ),
+                      // distance == ''
+                      //     ? Container()
+                      //     :
                       Text(
-                        'ห่างจากพิกัด: $distance เมตร',
+                        'ห่างจากพิกัด: $distance',
                         style: TextStyle(
                           fontFamily: _kanit,
                           fontSize: MediaQuery.of(context).size.width / 20,
@@ -513,7 +517,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 50),
+                  SizedBox(height: 30),
                   Stack(
                     alignment: Alignment.center,
                     children: <Widget>[
