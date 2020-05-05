@@ -10,6 +10,8 @@ import 'package:device_id/device_id.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:workcheckin/models/size_config.dart';
+import 'package:geolocator/geolocator.dart';
+import 'dart:async';
 
 final _kanit = 'Kanit';
 final oCcy = new NumberFormat("###0.00", "en_US");
@@ -43,6 +45,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
   List<String> locationItem = [];
   var locationId;
   int _item;
+  Geolocator geolocator = Geolocator();
+  Position userLocation;
 
   @override
   void initState() {
@@ -52,6 +56,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
     getPT();
     visible = false;
     selectPlace();
+    _getLocation().then((position) {
+      userLocation = position;
+    });
   }
 
   getMsg() async {
@@ -134,14 +141,28 @@ class _CheckinScreenState extends State<CheckinScreen> {
   }
 
   _checkin() async {
+    var deviceLa, deviceLong;
+    setState(() => visible = true);
+    await _getLocation().then((value) {
+      setState(() {
+        userLocation = value;
+        deviceLa = userLocation.latitude;
+        deviceLong = userLocation.longitude;
+      });
+    });
     double distanceInMeters = await Geolocator().distanceBetween(
-        13.524517, 99.809289, double.parse(latitude), double.parse(longtitude));
+        deviceLa, deviceLong, double.parse(latitude), double.parse(longtitude));
     far = distanceInMeters.toString();
     var farSetFormat = oCcy.format(double.parse(far));
     var resFar = resLocationLists['locationList'][0]['far'];
     var eqlFar = double.parse(farSetFormat);
 
+    debugPrint(
+        'devla: ${deviceLa.runtimeType}, devlong: ${deviceLong.runtimeType}, far: ${resFar.runtimeType} dist: ${distanceInMeters}');
+    setState(() => visible = false);
+
     if (eqlFar <= resFar) {
+      debugPrint('checkin ok');
       var userID = msg['cwiUser']['modelid'];
       var data = {
         'userId': userID,
@@ -312,6 +333,27 @@ class _CheckinScreenState extends State<CheckinScreen> {
     }
   }
 
+  Future<Position> _getLocation() async {
+    var currentLocation;
+    try {
+      currentLocation = await geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+    } catch (e) {
+      currentLocation = null;
+    }
+    return currentLocation;
+  }
+
+  _getLocationPoint() {
+    debugPrint('get lo');
+    _getLocation().then((value) {
+      setState(() {
+        userLocation = value;
+      });
+    });
+    debugPrint('la: ${userLocation.latitude} long: ${userLocation.longitude}');
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -344,6 +386,12 @@ class _CheckinScreenState extends State<CheckinScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  RaisedButton(
+                    child: Text('test'),
+                    onPressed: () {
+                      _getLocationPoint();
+                    },
+                  ),
                   place == ''
                       ? Center(
                           child: Visibility(
