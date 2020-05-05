@@ -353,7 +353,6 @@ class _LeaveScreenState extends State<LeaveScreen> {
   }) {
     SizeConfig().init(context);
     var sizeHor = SizeConfig.safeBlockHorizontal;
-    var sizeVer = SizeConfig.safeBlockVertical;
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

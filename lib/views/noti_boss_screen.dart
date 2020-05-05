@@ -63,7 +63,6 @@ class _NotiBossScreenState extends State<NotiBossScreen> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    var sizeHor = SizeConfig.safeBlockHorizontal;
     var sizeVer = SizeConfig.safeBlockVertical;
     return Scaffold(
       appBar: AppBar(

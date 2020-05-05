@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'dart:async';
 import 'package:device_id/device_id.dart';
 import 'package:workcheckin/views/signin_screen.dart';
-import 'package:workcheckin/models/size_config.dart';
 
 final _kanit = 'Kanit';
 
@@ -265,7 +264,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           },
         );
         Map<String, dynamic> message = jsonDecode(response.body);
-        debugPrint('debug: ${data}');
 
         if (message['responseCode'] == '000') {
           setState(() => visible = false);
@@ -328,9 +326,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    var sizeHor = SizeConfig.safeBlockHorizontal;
-    var sizeVer = SizeConfig.safeBlockVertical;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
