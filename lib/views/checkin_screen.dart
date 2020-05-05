@@ -10,8 +10,6 @@ import 'package:device_id/device_id.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:workcheckin/models/size_config.dart';
-import 'package:geolocator/geolocator.dart';
-import 'dart:async';
 
 final _kanit = 'Kanit';
 final oCcy = new NumberFormat("###0.00", "en_US");
@@ -47,7 +45,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
   int _item;
   Geolocator geolocator = Geolocator();
   Position userLocation;
-  var dvLa, dvLong, distance;
+  var dvLa = '';
+  var dvLong = '';
+  var distance = '';
 
   @override
   void initState() {
@@ -57,6 +57,11 @@ class _CheckinScreenState extends State<CheckinScreen> {
     getPT();
     visible = false;
     selectPlace();
+
+    // Future.delayed(Duration(seconds: 5), () {
+    //   selectPlace();
+    // });
+
     // _getLocation().then((position) {
     //   userLocation = position;
     // });
@@ -70,6 +75,15 @@ class _CheckinScreenState extends State<CheckinScreen> {
   }
 
   selectPlace() async {
+    var deviceLa, deviceLong;
+    await _getLocation().then((value) async {
+      setState(() {
+        userLocation = value;
+        deviceLa = userLocation.latitude;
+        deviceLong = userLocation.longitude;
+      });
+    });
+
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     var branchid = msg['cwiUser']['branchId'].toString();
@@ -96,6 +110,14 @@ class _CheckinScreenState extends State<CheckinScreen> {
         () => latitude = messages['locationList'][0]['latitude'].toString());
     setState(
         () => longtitude = messages['locationList'][0]['longitude'].toString());
+
+    double distanceInMeters = await Geolocator().distanceBetween(
+        deviceLa, deviceLong, double.parse(latitude), double.parse(longtitude));
+    setState(() {
+      dvLa = deviceLa.toString();
+      dvLong = deviceLong.toString();
+      distance = distanceInMeters.toString();
+    });
 
     if (resLocationLists['locationList'].toString() == '[]') {
       locationItem.add('ไม่พบข้อมูล');
@@ -359,16 +381,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
     return currentLocation;
   }
 
-  _getLocationPoint() {
-    debugPrint('get lo');
-    _getLocation().then((value) {
-      setState(() {
-        userLocation = value;
-      });
-    });
-    debugPrint('la: ${userLocation.latitude} long: ${userLocation.longitude}');
-  }
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -436,7 +448,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   ),
                                 );
                               }).toList(),
-                              onChanged: (value) {
+                              onChanged: (value) async {
                                 setState(() {
                                   // get index
                                   _item = locationItem.indexOf(value);
@@ -454,13 +466,53 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                           [_item]['modelid']
                                       .toString();
                                 });
+                                double distanceInMeters = await Geolocator()
+                                    .distanceBetween(
+                                        double.parse(dvLa),
+                                        double.parse(dvLong),
+                                        double.parse(latitude),
+                                        double.parse(longtitude));
+                                setState(() {
+                                  distance = distanceInMeters.toString();
+                                });
                               },
                             ),
                           ),
                         ),
                   SizedBox(height: 50),
-                  Text(
-                      'latitude: $dvLa / longitude: $dvLong / distance: $distance'),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'พิกัดปัจจุบัน: $place',
+                        style: TextStyle(
+                          fontFamily: _kanit,
+                          fontSize: MediaQuery.of(context).size.width / 20,
+                        ),
+                      ),
+                      Text(
+                        'Latitude: $dvLa',
+                        style: TextStyle(
+                          fontFamily: _kanit,
+                          fontSize: MediaQuery.of(context).size.width / 20,
+                        ),
+                      ),
+                      Text(
+                        'Longitude: $dvLong',
+                        style: TextStyle(
+                          fontFamily: _kanit,
+                          fontSize: MediaQuery.of(context).size.width / 20,
+                        ),
+                      ),
+                      Text(
+                        'ห่างจากพิกัด: $distance เมตร',
+                        style: TextStyle(
+                          fontFamily: _kanit,
+                          fontSize: MediaQuery.of(context).size.width / 20,
+                        ),
+                      ),
+                    ],
+                  ),
                   SizedBox(height: 50),
                   Stack(
                     alignment: Alignment.center,

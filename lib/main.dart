@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:workcheckin/views/splash_screen.dart';
 
-void main() => runApp(
-      MyApp(),
-    );
+void main() {
+  ErrorWidget.builder = (FlutterErrorDetails details) => Container();
+
+  runApp(
+    MyApp(),
+  );
+}
 
 class MyApp extends StatelessWidget {
   @override
