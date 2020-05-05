@@ -47,6 +47,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
   int _item;
   Geolocator geolocator = Geolocator();
   Position userLocation;
+  var dvLa, dvLong, distance;
 
   @override
   void initState() {
@@ -156,9 +157,14 @@ class _CheckinScreenState extends State<CheckinScreen> {
     var farSetFormat = oCcy.format(double.parse(far));
     var resFar = resLocationLists['locationList'][0]['far'];
     var eqlFar = double.parse(farSetFormat);
+    setState(() {
+      dvLa = deviceLa.toString();
+      dvLong = deviceLong.toString();
+      distance = distanceInMeters.toString();
+    });
 
     debugPrint(
-        'devla: ${deviceLa}, devlong: ${deviceLong}, far: ${resFar.runtimeType} dist: ${distanceInMeters}');
+        'devla: ${deviceLa}, devlong: ${deviceLong}, far: ${resFar} dist: ${distanceInMeters}');
     setState(() => visible = false);
 
     if (eqlFar <= resFar) {
@@ -452,6 +458,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             ),
                           ),
                         ),
+                  SizedBox(height: 50),
+                  Text(
+                      'latitude: $dvLa / longitude: $dvLong / distance: $distance'),
                   SizedBox(height: 50),
                   Stack(
                     alignment: Alignment.center,
