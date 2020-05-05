@@ -48,6 +48,7 @@ class _BossScreenState extends State<BossScreen> {
         RequestByBoss requestByBoss = RequestByBoss(
             n['modelid'],
             n['userId'],
+            n['employeeName'],
             n['leaveTypeCode'],
             n['leaveTypeName'],
             n['leaveDate'],
@@ -109,6 +110,7 @@ class _BossScreenState extends State<BossScreen> {
                           id: sn.data[index].modelid.toString(),
                           leaveTypeName:
                               sn.data[index].leaveTypeName.toString(),
+                          empName: sn.data[index].employeeName.toString(),
                           actionOk: () {
                             Alert(
                               context: context,
@@ -370,6 +372,7 @@ class _BossScreenState extends State<BossScreen> {
     id,
     userid,
     leaveTypeName,
+    empName,
     Function actionOk,
     Function actionNo,
   }) {
@@ -412,6 +415,13 @@ class _BossScreenState extends State<BossScreen> {
                         ),
                       ),
                       SizedBox(height: 10),
+                      Text(
+                        'ชื่อ : $empName',
+                        style: TextStyle(
+                          fontFamily: _kanit,
+                          fontSize: screenSize.width / 24,
+                        ),
+                      ),
                       Text(
                         'ประเภทการลา : $leaveTypeName',
                         style: TextStyle(

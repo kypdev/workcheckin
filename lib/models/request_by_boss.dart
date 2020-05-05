@@ -1,6 +1,7 @@
 class RequestByBoss {
   int modelid;
   int userId;
+  String employeeName;
   int leaveTypeCode;
   String leaveTypeName;
   String leaveDate;
@@ -17,6 +18,7 @@ class RequestByBoss {
   RequestByBoss(
       this.modelid,
       this.userId,
+      this.employeeName,
       this.leaveTypeCode,
       this.leaveTypeName,
       this.leaveDate,
@@ -33,6 +35,7 @@ class RequestByBoss {
   RequestByBoss.fromJson(Map<String, dynamic> json) {
     modelid = json['modelid'];
     userId = json['userId'];
+    userId = json['employeeName'];
     leaveTypeCode = json['leaveTypeCode'];
     leaveTypeName = json['leaveTypeName'];
     leaveDate = json['leaveDate'];
@@ -51,6 +54,7 @@ class RequestByBoss {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['modelid'] = this.modelid;
     data['userId'] = this.userId;
+    data['employeeName'] = this.userId;
     data['leaveTypeCode'] = this.leaveTypeCode;
     data['leaveTypeName'] = this.leaveTypeName;
     data['leaveDate'] = this.leaveDate;
