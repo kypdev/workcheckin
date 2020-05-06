@@ -391,137 +391,153 @@ class _BossScreenState extends State<BossScreen> {
         elevation: 5.0,
         child: Padding(
           padding: EdgeInsets.only(
-              top: sizeVer * 2,
-              bottom: sizeVer * 2,
-              right: sizeHor * 3,
-              left: sizeHor * 3),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
+            top: screenSize.height * 0.03,
+            bottom: screenSize.height * 0.03,
+            right: screenSize.width * 0.05,
+            left: screenSize.width * 0.05,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(left: sizeHor * 3),
-                child: Container(
-                  width: sizeHor * 50,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'วันที่ลา : $leaveDate',
-                        style: TextStyle(
-                          fontFamily: _kanit,
-                          fontSize: screenSize.width / 22,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'ชื่อ : $empName',
-                        style: TextStyle(
-                          fontFamily: _kanit,
-                          fontSize: screenSize.width / 24,
-                        ),
-                      ),
-                      Text(
-                        'ประเภทการลา : $leaveTypeName',
-                        style: TextStyle(
-                          fontFamily: _kanit,
-                          fontSize: screenSize.width / 24,
-                        ),
-                      ),
-                      Text(
-                        'ชื่อ : $userid',
-                        style: TextStyle(
-                          fontFamily: _kanit,
-                          fontSize: screenSize.width / 24,
-                        ),
-                      ),
-                      Text(
-                        'ชั่วโมง : $leaveHour',
-                        style: TextStyle(
-                          fontFamily: _kanit,
-                          fontSize: screenSize.width / 24,
-                        ),
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'สถานะการลา : ',
-                            style: TextStyle(
-                              fontFamily: _kanit,
-                              fontSize: screenSize.width / 24,
-                            ),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.24,
-                            child: Column(
-                              children: <Widget>[
-                                Text(
-                                  approveFlag == '1'
-                                      ? 'อนุมัติการลา'
-                                      : approveFlag == '2'
-                                          ? 'ไม่อนุมัติการลา'
-                                          : 'รอการอนุมัติ',
-                                  style: TextStyle(
-                                    fontFamily: _kanit,
-                                    fontSize: screenSize.width / 24,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        'เหตุผล : $remark',
-                        style: TextStyle(
-                          fontFamily: _kanit,
-                          fontSize: screenSize.width / 24,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(width: sizeHor * 2),
               Container(
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    InkWell(
-                      onTap: actionOk,
+                    Flexible(
+                      flex: 2,
                       child: Container(
-                        width: screenSize.width / 8,
-                        height: screenSize.height / 16,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.blue,
-                        ),
-                        child: Icon(
-                          FontAwesomeIcons.check,
-                          color: Colors.white,
-                          size: screenSize.width / 13,
+                        child: InkWell(
+                          onTap: actionOk,
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'วันที่ลา : $leaveDate',
+                              style: TextStyle(
+                                fontFamily: _kanit,
+                                fontSize: screenSize.width / 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(width: screenSize.width / 50),
-                    InkWell(
-                      onTap: actionNo,
-                      child: Container(
-                        width: screenSize.width / 8,
-                        height: screenSize.height / 16,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.red,
-                        ),
-                        child: Icon(
-                          FontAwesomeIcons.times,
-                          color: Colors.white,
-                          size: screenSize.width / 13,
-                        ),
-                      ),
-                    ),
+                    SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                    Flexible(
+                        flex: 1,
+                        child: Row(
+                          children: <Widget>[
+                            InkWell(
+                              onTap: actionOk,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.02,
+                                    color: Colors.blue,
+                                  ),
+                                  color: Colors.blue,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  FontAwesomeIcons.check,
+                                  color: Colors.white,
+                                  size:
+                                      MediaQuery.of(context).size.width * 0.09,
+                                ),
+                              ),
+                            ),
+                            Container(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.01),
+                            InkWell(
+                              onTap: actionNo,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.02,
+                                    color: Colors.red,
+                                  ),
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  FontAwesomeIcons.times,
+                                  color: Colors.white,
+                                  size:
+                                      MediaQuery.of(context).size.width * 0.09,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
                   ],
+                ),
+              ),
+              Text(
+                'ชื่อ : $empName',
+                style: TextStyle(
+                  fontFamily: _kanit,
+                  fontSize: screenSize.width / 24,
+                ),
+              ),
+              Text(
+                'ประเภทการลา : $leaveTypeName',
+                style: TextStyle(
+                  fontFamily: _kanit,
+                  fontSize: screenSize.width / 24,
+                ),
+              ),
+              Text(
+                'ชื่อ : $userid',
+                style: TextStyle(
+                  fontFamily: _kanit,
+                  fontSize: screenSize.width / 24,
+                ),
+              ),
+              Text(
+                'ชั่วโมง : $leaveHour',
+                style: TextStyle(
+                  fontFamily: _kanit,
+                  fontSize: screenSize.width / 24,
+                ),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'สถานะการลา : ',
+                    style: TextStyle(
+                      fontFamily: _kanit,
+                      fontSize: screenSize.width / 24,
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.24,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          approveFlag == '1'
+                              ? 'อนุมัติการลา'
+                              : approveFlag == '2'
+                                  ? 'ไม่อนุมัติการลา'
+                                  : 'รอการอนุมัติ',
+                          style: TextStyle(
+                            fontFamily: _kanit,
+                            fontSize: screenSize.width / 24,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                'เหตุผล : $remark',
+                style: TextStyle(
+                  fontFamily: _kanit,
+                  fontSize: screenSize.width / 24,
                 ),
               ),
             ],
