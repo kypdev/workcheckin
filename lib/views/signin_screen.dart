@@ -329,9 +329,16 @@ class _SigninScreenState extends State<SigninScreen> {
                                                 : null,
                                             style: TextStyle(
                                               color: Colors.black45,
+                                              fontSize: scrSize.width * 0.037,
                                             ),
                                             controller: _username,
                                             decoration: InputDecoration(
+                                              labelStyle: TextStyle(
+                                                fontSize: scrSize.width * 0.04,
+                                              ),
+                                              errorStyle: TextStyle(
+                                                fontSize: scrSize.width * 0.03,
+                                              ),
                                               labelText: 'Username',
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
@@ -378,9 +385,16 @@ class _SigninScreenState extends State<SigninScreen> {
                                                 : null,
                                             style: TextStyle(
                                               color: Colors.black45,
+                                              fontSize: scrSize.width * 0.037,
                                             ),
                                             controller: _password,
                                             decoration: InputDecoration(
+                                              labelStyle: TextStyle(
+                                                fontSize: scrSize.width * 0.04,
+                                              ),
+                                              errorStyle: TextStyle(
+                                                fontSize: scrSize.width * 0.03,
+                                              ),
                                               suffixIcon: IconButton(
                                                 onPressed: showPWD,
                                                 icon: securePWD

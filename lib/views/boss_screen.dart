@@ -68,6 +68,7 @@ class _BossScreenState extends State<BossScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var scrSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -94,6 +95,10 @@ class _BossScreenState extends State<BossScreen> {
                   return Container();
                 } else {
                   return Container(
+                    padding: EdgeInsets.only(
+                      top: scrSize.height * 0.01,
+                      bottom: scrSize.height * 0.01,
+                    ),
                     height: MediaQuery.of(context).size.height,
                     child: ListView.builder(
                       itemCount: sn.data.length,
@@ -399,6 +404,7 @@ class _BossScreenState extends State<BossScreen> {
             children: <Widget>[
               Container(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Flexible(
@@ -420,55 +426,62 @@ class _BossScreenState extends State<BossScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                    // Container(
+                    //   width: MediaQuery.of(context).size.width * 0.03,
+                    //   height: 10,
+                    //   color: Colors.green,
+                    // ),
                     Flexible(
                         flex: 1,
-                        child: Row(
-                          children: <Widget>[
-                            InkWell(
-                              onTap: actionOk,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.02,
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              InkWell(
+                                onTap: actionOk,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.01,
+                                      color: Colors.blue,
+                                    ),
                                     color: Colors.blue,
+                                    shape: BoxShape.circle,
                                   ),
-                                  color: Colors.blue,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  FontAwesomeIcons.check,
-                                  color: Colors.white,
-                                  size:
-                                      MediaQuery.of(context).size.width * 0.09,
+                                  child: Icon(
+                                    FontAwesomeIcons.check,
+                                    color: Colors.white,
+                                    size: MediaQuery.of(context).size.width *
+                                        0.09,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.01),
-                            InkWell(
-                              onTap: actionNo,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.02,
+                              Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.01),
+                              InkWell(
+                                onTap: actionNo,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.01,
+                                      color: Colors.red,
+                                    ),
                                     color: Colors.red,
+                                    shape: BoxShape.circle,
                                   ),
-                                  color: Colors.red,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  FontAwesomeIcons.times,
-                                  color: Colors.white,
-                                  size:
-                                      MediaQuery.of(context).size.width * 0.09,
+                                  child: Icon(
+                                    FontAwesomeIcons.times,
+                                    color: Colors.white,
+                                    size: MediaQuery.of(context).size.width *
+                                        0.09,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         )),
                   ],
                 ),

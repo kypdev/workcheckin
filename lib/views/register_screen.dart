@@ -457,6 +457,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Padding(
                             padding: const EdgeInsets.only(top: 20),
                             child: TextFormField(
+                              style: TextStyle(
+                                fontSize: scrSize.width * 0.037,
+                              ),
                               obscureText: false,
                               validator: (value) {
                                 if (value.isEmpty || value.length < 5) {
@@ -466,6 +469,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               },
                               controller: usernameCtrl,
                               decoration: InputDecoration(
+                                labelStyle: TextStyle(
+                                  fontSize: scrSize.width * 0.04,
+                                ),
+                                errorStyle: TextStyle(
+                                  fontSize: scrSize.width * 0.03,
+                                ),
                                 prefixIcon: Icon(Icons.person),
                                 suffix: Padding(
                                   padding: const EdgeInsets.only(right: 20),
@@ -696,13 +705,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
     sufficicon,
     visible,
   }) {
+    var scrSize = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: TextFormField(
+        style: TextStyle(
+          fontSize: scrSize.width * 0.037,
+        ),
         obscureText: visible,
         validator: val,
         controller: ctrl,
         decoration: InputDecoration(
+          labelStyle: TextStyle(
+            fontSize: scrSize.width * 0.04,
+          ),
+          errorStyle: TextStyle(
+            fontSize: scrSize.width * 0.03,
+          ),
           labelText: labeltext,
           prefixIcon: prefixicon,
           fillColor: Colors.black12.withOpacity(0.059),

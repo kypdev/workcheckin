@@ -124,7 +124,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   return Container();
                 } else {
                   return Container(
-                    padding: EdgeInsets.only(top: sizeVer * 1.2),
+                    padding: EdgeInsets.only(
+                      top: sizeVer * 1.2,
+                      bottom: sizeVer * 1.2,
+                    ),
                     height: MediaQuery.of(context).size.height,
                     child: ListView.builder(
                       itemCount: snapshot.data.length,
