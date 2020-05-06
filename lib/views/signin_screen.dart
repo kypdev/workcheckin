@@ -318,7 +318,6 @@ class _SigninScreenState extends State<SigninScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: <Widget>[
-                                        Text('Username'),
                                         Padding(
                                           padding: EdgeInsets.only(
                                               left: sizeHor * 6,
