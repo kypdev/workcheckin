@@ -87,7 +87,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
     });
     print('do add item location');
 
-    print('chk: ${deviceLa}');
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     var branchid = msg['cwiUser']['branchId'].toString();

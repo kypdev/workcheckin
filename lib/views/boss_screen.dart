@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workcheckin/models/request_by_boss.dart';
-import 'package:workcheckin/models/size_config.dart';
 
 final _kanit = 'Kanit';
 
