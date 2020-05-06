@@ -14,6 +14,7 @@ import 'package:workcheckin/models/size_config.dart';
 final _kanit = 'Kanit';
 final oCcy = new NumberFormat("###0.00", "en_US");
 final distFm = new NumberFormat("#,###.00");
+final lalongFm = new NumberFormat("###.000000");
 final AlertStyle _alertStyle = AlertStyle(
   titleStyle: TextStyle(
     fontFamily: _kanit,
@@ -58,15 +59,25 @@ class _CheckinScreenState extends State<CheckinScreen> {
     initDeviceId();
     getPT();
     visible = false;
+    _getLocation().then((position) async {
+      setState(() {
+        userLocation = position;
+        dvLa = lalongFm.format(userLocation.latitude).toString();
+        dvLong = lalongFm.format(userLocation.longitude).toString();
+      });
+      print('$userLocation, $dvLa, $dvLong');
+      double distanceInMeters = await Geolocator().distanceBetween(
+          double.parse(dvLa),
+          double.parse(dvLong),
+          double.parse(latitude),
+          double.parse(longtitude));
+      setState(() {
+        distance = distFm.format(distanceInMeters).toString();
+      });
+      print('distanceInMeters: $distanceInMeters');
+    });
+
     selectPlace();
-
-    // Future.delayed(Duration(seconds: 5), () {
-    //   selectPlace();
-    // });
-
-    // _getLocation().then((position) {
-    //   userLocation = position;
-    // });
   }
 
   getMsg() async {
@@ -77,16 +88,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
   }
 
   selectPlace() async {
-    var deviceLa, deviceLong;
-    await _getLocation().then((value) async {
-      setState(() {
-        userLocation = value;
-        deviceLa = userLocation.latitude;
-        deviceLong = userLocation.longitude;
-      });
-    });
-    print('do add item location');
-
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = jsonDecode(sharedPreferences.getString('userMsg'));
     var branchid = msg['cwiUser']['branchId'].toString();
@@ -102,7 +103,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
       },
     );
     Map<String, dynamic> messages = jsonDecode(response.body);
-    print('msg: $messages');
     setState(() => _item = 0);
     setState(() => resLocationLists = messages);
     setState(() => locationListIndexDD = 0);
@@ -115,15 +115,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
     setState(
         () => longtitude = messages['locationList'][0]['longitude'].toString());
 
-    double distanceInMeters = await Geolocator().distanceBetween(
-        deviceLa, deviceLong, double.parse(latitude), double.parse(longtitude));
-    setState(() {
-      dvLa = deviceLa.toString();
-      dvLong = deviceLong.toString();
-      distance = oCcy.format(distanceInMeters).toString();
-      resFarSer = messages['locationList'][0]['far'].toString();
-    });
-
     if (resLocationLists['locationList'].toString() == '[]') {
       locationItem.add('ไม่พบข้อมูล');
     } else {
@@ -133,6 +124,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
         }
       }
     }
+    print(locationItem);
   }
 
   Future<void> initDeviceId() async {
@@ -182,8 +174,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
         deviceLa, deviceLong, double.parse(latitude), double.parse(longtitude));
     var resFar = resLocationLists['locationList'][0]['far'];
     setState(() {
-      dvLa = deviceLa.toString();
-      dvLong = deviceLong.toString();
       distance = distFm.format(distanceInMeters).toString();
     });
     print('$distanceInMeters');
@@ -288,7 +278,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
     double distanceInMeters = await Geolocator().distanceBetween(
         deviceLa, deviceLong, double.parse(latitude), double.parse(longtitude));
     var resFar = resLocationLists['locationList'][0]['far'];
-    print('$distanceInMeters');
+    print('dist: $distanceInMeters');
     if (distanceInMeters <= resFar) {
       var userID = msg['cwiUser']['modelid'];
       var data = {
@@ -433,6 +423,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: DropdownButton<String>(
+                              underline: Container(),
                               focusColor: Colors.white,
                               isExpanded: true,
                               hint: new Text(
@@ -464,6 +455,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   latitude = resLocationLists['locationList']
                                           [_item]['latitude']
                                       .toString();
+                                  // latitude = lalongFm.format(
+                                  //     resLocationLists['locationList'][_item]
+                                  //         ['latitude']);
                                   longtitude = resLocationLists['locationList']
                                           [_item]['longitude']
                                       .toString();
@@ -474,12 +468,13 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                           [_item]['far']
                                       .toString();
                                 });
-                                double distanceInMeters = await Geolocator()
-                                    .distanceBetween(
-                                        double.parse(dvLa),
-                                        double.parse(dvLong),
-                                        double.parse(latitude),
-                                        double.parse(longtitude));
+                                double distanceInMeters =
+                                    await Geolocator().distanceBetween(
+                                  double.parse(dvLa),
+                                  double.parse(dvLong),
+                                  double.parse(latitude),
+                                  double.parse(longtitude),
+                                );
                                 setState(() {
                                   distance = distFm
                                       .format(distanceInMeters)
