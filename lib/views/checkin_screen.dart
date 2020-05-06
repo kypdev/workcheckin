@@ -103,17 +103,18 @@ class _CheckinScreenState extends State<CheckinScreen> {
       },
     );
     Map<String, dynamic> messages = jsonDecode(response.body);
-    setState(() => _item = 0);
-    setState(() => resLocationLists = messages);
-    setState(() => locationListIndexDD = 0);
-    setState(() => place = messages['locationList'][0]['name']);
-    setState(() => locationData = messages['locationList']);
-    setState(
-        () => loctionID = messages['locationList'][0]['modelid'].toString());
-    setState(
-        () => latitude = messages['locationList'][0]['latitude'].toString());
-    setState(
-        () => longtitude = messages['locationList'][0]['longitude'].toString());
+
+    setState(() {
+      _item = 0;
+      resLocationLists = messages;
+      locationListIndexDD = 0;
+      place = messages['locationList'][0]['name'];
+      locationData = messages['locationList'];
+      loctionID = messages['locationList'][0]['modelid'].toString();
+      latitude = messages['locationList'][0]['latitude'].toString();
+      longtitude = messages['locationList'][0]['longitude'].toString();
+      resFarSer = resLocationLists['locationList'][_item]['far'].toString();
+    });
 
     if (resLocationLists['locationList'].toString() == '[]') {
       locationItem.add('ไม่พบข้อมูล');
@@ -246,7 +247,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
       Alert(
         context: context,
         type: AlertType.warning,
-        title: 'คุณห่างเกินรัศมี $resFarSer เมตร',
+        title: 'คุณห่างเกินรัศมี $resFarSer  เมตร',
         desc: '',
         style: _alertStyle,
         buttons: [
@@ -380,7 +381,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
     SizeConfig().init(context);
     var sizeHor = SizeConfig.safeBlockHorizontal;
     var sizeVer = SizeConfig.safeBlockVertical;
-    var scrSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text(
