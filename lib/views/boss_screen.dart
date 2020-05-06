@@ -376,14 +376,13 @@ class _BossScreenState extends State<BossScreen> {
     Function actionOk,
     Function actionNo,
   }) {
-    SizeConfig().init(context);
-    var sizeHor = SizeConfig.safeBlockHorizontal;
-    var sizeVer = SizeConfig.safeBlockVertical;
     var screenSize = MediaQuery.of(context).size;
 
     return Padding(
       padding: EdgeInsets.only(
-          left: sizeHor * 2, right: sizeHor * 2, top: sizeVer * 0.9),
+          left: screenSize.width * 0.02,
+          right: screenSize.width * 0.02,
+          top: screenSize.height * 0.015),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
