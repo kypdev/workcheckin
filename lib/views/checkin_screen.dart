@@ -390,6 +390,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
     SizeConfig().init(context);
     var sizeHor = SizeConfig.safeBlockHorizontal;
     var sizeVer = SizeConfig.safeBlockVertical;
+    var scrSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text(

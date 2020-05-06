@@ -260,6 +260,7 @@ class _SigninScreenState extends State<SigninScreen> {
     SizeConfig().init(context);
     var sizeHor = SizeConfig.safeBlockHorizontal;
     var sizeVer = SizeConfig.safeBlockVertical;
+    var scrSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         body: Stack(
@@ -317,6 +318,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: <Widget>[
+                                        Text('Username'),
                                         Padding(
                                           padding: EdgeInsets.only(
                                               left: sizeHor * 6,
@@ -331,7 +333,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                             ),
                                             controller: _username,
                                             decoration: InputDecoration(
-                                              labelText: 'username',
+                                              labelText: 'Username',
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: Colors.transparent),
@@ -373,7 +375,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                             obscureText: securePWD,
                                             validator: (value) => value.length <
                                                     3
-                                                ? 'password must more than 3 character'
+                                                ? 'Password must more than 3 character'
                                                 : null,
                                             style: TextStyle(
                                               color: Colors.black45,
@@ -387,7 +389,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                                     : Icon(
                                                         Icons.visibility_off),
                                               ),
-                                              labelText: 'password',
+                                              labelText: 'Password',
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: Colors.transparent),
@@ -440,7 +442,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontFamily: _kanit,
-                                                fontSize: sizeHor * 2.5,
+                                                fontSize: scrSize.width * 0.038,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -467,7 +469,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontFamily: _kanit,
-                                                fontSize: sizeHor * 2.5,
+                                                fontSize: scrSize.width * 0.038,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),

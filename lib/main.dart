@@ -9,6 +9,8 @@ void main() {
   );
 }
 
+final _kanit = 'Kanit';
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -21,6 +23,16 @@ class MyApp extends StatelessWidget {
       },
       theme: ThemeData(
         primaryColor: Color(0xff07395A),
+        inputDecorationTheme: InputDecorationTheme(
+          labelStyle: TextStyle(
+            fontFamily: _kanit,
+          ),
+          errorStyle: TextStyle(
+            fontFamily: _kanit,
+          ),
+        ),
+        textTheme: TextTheme(),
+        fontFamily: _kanit,
       ),
     );
   }
