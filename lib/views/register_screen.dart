@@ -326,6 +326,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var scrSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -374,7 +375,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   value: value,
                                   child: Text(
                                     value,
-                                    style: TextStyle(fontFamily: _kanit),
+                                    style: TextStyle(
+                                      fontFamily: _kanit,
+                                      fontSize: scrSize.width * 0.039,
+                                    ),
                                   ),
                                 );
                               }).toList(),
@@ -414,7 +418,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   value: value,
                                   child: Text(
                                     value,
-                                    style: TextStyle(fontFamily: _kanit),
+                                    style: TextStyle(
+                                      fontFamily: _kanit,
+                                      fontSize: scrSize.width * 0.039,
+                                    ),
                                   ),
                                 );
                               }).toList(),
@@ -579,7 +586,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   value: value,
                                   child: Text(
                                     value,
-                                    style: TextStyle(fontFamily: _kanit),
+                                    style: TextStyle(
+                                      fontFamily: _kanit,
+                                      fontSize: scrSize.width * 0.039,
+                                    ),
                                   ),
                                 );
                               }).toList(),
@@ -616,7 +626,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   value: value,
                                   child: Text(
                                     value,
-                                    style: TextStyle(fontFamily: _kanit),
+                                    style: TextStyle(
+                                      fontFamily: _kanit,
+                                      fontSize: scrSize.width * 0.039,
+                                    ),
                                   ),
                                 );
                               }).toList(),
@@ -651,10 +664,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: Text(
                             'สมัครสมาชิก',
                             style: TextStyle(
-                              fontFamily: _kanit,
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
+                                fontFamily: _kanit,
+                                color: Colors.white,
+                                fontSize: scrSize.width * 0.045),
                           ),
                         ),
                       ),
@@ -714,6 +726,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget dropdown({
     title,
   }) {
+    var scrSize = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.only(left: 20, top: 20),
       child: Column(
@@ -723,7 +736,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             title,
             style: TextStyle(
               fontFamily: _kanit,
-              fontSize: 20.0,
+              fontSize: scrSize.width * 0.045,
               fontWeight: FontWeight.bold,
             ),
           ),
