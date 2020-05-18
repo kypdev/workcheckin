@@ -70,6 +70,7 @@ class _SigninScreenState extends State<SigninScreen> {
           },
         );
         Map<String, dynamic> message = jsonDecode(response.body);
+        print(message);
         sharedPreferences = await SharedPreferences.getInstance();
         var msgCode = message['responseCode'];
         setState(() => locationlist = message);

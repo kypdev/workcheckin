@@ -19,6 +19,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     sharedPreferences = await SharedPreferences.getInstance();
     var msg = await jsonDecode(sharedPreferences.getString('userMsg'));
     var userID = msg['cwiUser']['modelid'].toString();
+    print(userID);
     var url = 'http://159.138.232.139/service/cwi/v1/user/get_profile';
     var data = {"userId": userID};
     var response = await http.post(
@@ -30,6 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
     );
     Map<String, dynamic> messages = jsonDecode(response.body);
+    print(messages);
     setState(() {
       resProfile = messages;
     });
@@ -70,6 +72,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 children: <Widget>[
                   SizedBox(height: MediaQuery.of(context).size.width / 20.0),
+                  RaisedButton(
+                    child: Text('userid'),
+                    onPressed: (){
+                      getMsg();
+                    },
+                  ),
                   resProfile == null
                       ? Center(
                           child: Visibility(
@@ -179,6 +187,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         ),
+                
+                
                 ],
               ),
             ),
