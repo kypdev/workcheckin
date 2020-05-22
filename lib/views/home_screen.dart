@@ -145,14 +145,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       Image.asset(
                         'assets/images/card-menu.png',
                         width: sizeHor * 90,
-                        height: sizeVer * 48,
+                        height: sizeVer * 50,
                         filterQuality: FilterQuality.high,
                         excludeFromSemantics: true,
                         fit: BoxFit.fill,
                       ),
                       Column(
                         children: <Widget>[
-                          SizedBox(height: sizeVer * 5),
+                          SizedBox(height: sizeVer * 5.5),
                           Padding(
                             padding: EdgeInsets.only(
                                 left: sizeHor * 14, right: sizeHor * 14),
